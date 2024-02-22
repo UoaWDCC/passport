@@ -1,4 +1,4 @@
-app = 'react-template-api'
+app = 'wdcc-passport-api'
 primary_region = 'syd'
 
 [build]
