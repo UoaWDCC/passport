@@ -1,11 +1,11 @@
 import { twMerge } from 'tailwind-merge';
 
-interface LayoutProps {
-  children?: React.ReactNode;
-  className?: string;
-}
+// interface LayoutProps {
+//   children?: React.ReactNode;
+//   className?: string;
+// }
 
-export default function Layout({ children, className }: LayoutProps) {
+export default function Layout({ children, className }) {
   const mergedClassName = twMerge(
     'w-screen h-screen flex flex-col justify-center items-center bg-base-100',
     className
