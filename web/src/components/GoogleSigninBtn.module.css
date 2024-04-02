@@ -1,0 +1,17 @@
+.button {
+  padding: 10px 40px;
+  font-size: 1.5em;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  background-color: #03045e;
+  color: #fff;
+  border-radius: 6px;
+  align-items: center;
+  position: relative;
+  display: flex;
+  }
+
+  .icon {
+    margin-right: 15px;
+    height: 25px;
+  }

@@ -10,10 +10,16 @@
 //   },
 // ]);
 
+import GoogleSigninBtn from './components/GoogleSigninBtn.tsx';
+
 export default function App() {
+  const handleClick = (): void => {
+    console.log('Custom Button was clicked!');
+  };
+  
   return (
     <div>
-      <h1>Hello World!</h1>
+      <GoogleSigninBtn onClick={handleClick}></GoogleSigninBtn>
     </div>
   );
 }
