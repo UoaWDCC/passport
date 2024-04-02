@@ -1,19 +1,24 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
 // import { useState } from 'react';
-// import Home from '@pages/Home';
+// import Home from "@pages/Home";
 
-// const router = createBrowserRouter([
-//   {
-//     path: '/:name',
-//     element: <Home />,
-//   },
-// ]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <div>
+        <p>Hello World!</p>
+        <Link to="newpage">Other Page</Link>
+      </div>
+    ),
+  },
+  {
+    path: "/newpage",
+    element: <p>Insert element here</p>,
+  },
+]);
 
 export default function App() {
-  return (
-    <div>
-      <h1>Hello World!</h1>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
