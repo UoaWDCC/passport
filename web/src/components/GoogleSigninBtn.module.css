@@ -1,8 +1,8 @@
 .button {
-  padding: 10px 40px;
-  font-size: 1.5em;
+  padding: 10px 30px;
+  font-size: 1.4em;
   font-family: "Montserrat", sans-serif;
-  font-weight: 500;
+  font-weight: 550;
   background-color: #03045e;
   color: #fff;
   border-radius: 6px;
@@ -12,6 +12,11 @@
   }
 
   .icon {
-    margin-right: 15px;
-    height: 25px;
+    margin-right: 18px;
+    height: 35px;
+    background-color: #fff;    
+    border-radius: 50%;
+    border-width: 6px;
+    border-color: #fff;
   }
+
