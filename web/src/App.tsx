@@ -1,5 +1,6 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
+import Login from "@pages/Login"
+import { createBrowserRouter, RouterProvider, Link } from "react-router-dom"
 // import { useState } from 'react';
 // import Home from "@pages/Home";
 
@@ -10,6 +11,9 @@ const router = createBrowserRouter([
       <div>
         <p>Hello World!</p>
         <Link to="newpage">Other Page</Link>
+        <div>
+          <Link to="temp-login">Login</Link>
+        </div>
       </div>
     ),
   },
@@ -17,8 +21,12 @@ const router = createBrowserRouter([
     path: "/newpage",
     element: <p>Insert element here</p>,
   },
-]);
+  {
+    path: "/temp-login",
+    element: <Login />,
+  },
+])
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />
 }
