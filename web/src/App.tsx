@@ -13,8 +13,8 @@ const router = createBrowserRouter([
 export default function App() {
   const [queryClient] = useState(() => new QueryClient());
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <div>
+      <h1>hello</h1>
+    </div>
   );
 }
