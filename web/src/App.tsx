@@ -2,7 +2,7 @@
 import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
 // import { useState } from 'react';
 // import Home from "@pages/Home";
-
+// the intersection. 
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,3 +22,5 @@ const router = createBrowserRouter([
 export default function App() {
   return <RouterProvider router={router} />;
 }
+
+
