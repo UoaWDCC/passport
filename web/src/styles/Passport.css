@@ -3,5 +3,10 @@
 }
 
 .passport {
+  height: 35em;
+  width: 22em;
+}
+
+.passport-main {
   background-color: #03045e;
 }
