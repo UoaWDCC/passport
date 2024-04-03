@@ -27,10 +27,10 @@ export default function Passport() {
 
       <div className="text-black">
         {currentIndex > 0 && (
-          <button onClick={goToPreviousView}>Previous</button>
+          <button onClick={goToPreviousView}> ← </button>
         )}
         {currentIndex < views.length - 1 && (
-          <button onClick={goToNextView}>Next</button>
+          <button onClick={goToNextView}> → </button>
         )}
       </div>
 
