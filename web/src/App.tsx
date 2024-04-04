@@ -3,22 +3,23 @@ import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
 // import { useState } from 'react';
 // import Home from "@pages/Home";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <div>
-        <p>Hello World!</p>
-        <Link to="newpage">Other Page</Link>
-      </div>
-    ),
-  },
-  {
-    path: "/newpage",
-    element: <p>Insert element here</p>,
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: '/:name',
+//     element: <Home />,
+//   },
+// ]);
+
+import GoogleSigninBtn from './components/GoogleSigninBtn.tsx';
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  const handleClick = (): void => {
+    console.log('Custom Button was clicked!');
+  };
+  
+  return (
+    <div>
+      <GoogleSigninBtn onClick={handleClick}></GoogleSigninBtn>
+    </div>
+  );
 }
