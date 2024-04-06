@@ -7,8 +7,9 @@ import Passport from "@pages/Passport"
 import SignInPage from './pages/SignIn-Page/SignInPage';
 import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
 import AdminLogin from "./pages/Admin-Login";
+import Dashboard from './pages/Dashboard.tsx';
+import Form from './pages/Form.tsx';
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -29,7 +30,15 @@ const router = createBrowserRouter([
 {
   path: "/dashboard",
   element: <AdminLogin />,
-}
+},
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
+  {
+    path: "/form",
+    element: <Form />,
+  },
 ]);
 
 export default function App() {
