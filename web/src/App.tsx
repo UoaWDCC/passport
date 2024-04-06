@@ -4,7 +4,8 @@ import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
 // import Home from "@pages/Home";
 import Passport from "@pages/Passport";
 import GoogleSigninBtn from './components/GoogleSigninBtn.tsx';
-
+import Dashboard from './pages/Dashboard.tsx';
+import Form from './pages/Form.tsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,6 +19,14 @@ const router = createBrowserRouter([
   {
     path: "/passport",
     element: <Passport />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
+  {
+    path: "/form",
+    element: <Form />,
   },
 ]);
 
