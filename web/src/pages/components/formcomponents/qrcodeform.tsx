@@ -1,9 +1,10 @@
 import EventSection from "./eventsection";
 import StampSection from "./stampsection";
 
-function Form() {
+function QRCodeForm() {
   return (
-    <div className="form">
+    <div className="qr-code-form">
+        <h1 className="header">QR Code Generator</h1>
         <form>
           <EventSection /> 
           <StampSection /> 
@@ -12,4 +13,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default QRCodeForm;
