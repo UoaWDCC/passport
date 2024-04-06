@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+:root {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #ffffff;
+  background-color: #03045e;
+}
+
+/* Button Section */
+
+/* QR Code Button */
+
+.generate-qr-code-button {
+  margin: 0% 0% 0% 80%;
+  min-width: fit-content;
+  width: 13%;
+  border-radius: 15px;
+  border: 1px solid transparent;
+  padding: 0.6em 2.5em;
+  font-size: 1em;
+  font-weight: 100;
+  background-color: #e1ebff;
+  color: #03045e;
+  transition: border-color 0.5s;
+}
+.generate-qr-code-button:hover {
+  background-color: #f1f5fd;
+}
+.generate-qr-code-button:focus,
+.generate-qr-code-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.create-new-button {
+  margin-top: 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.3em 1.2em;
+  font-size: 1em;
+  font-weight: 0;
+  font-family: inherit;
+  background-color: #03045e;
+  cursor: pointer;
+  transition: border-color 0.5s;
+}
+
+.create-new-button:hover {
+  background-color: #0a0b76;
+}
+
+.create-new {
+  font-size: 1em;
+}
+
+.external-link {
+  margin-left: 2vh;
+  margin-bottom: 0.5vh;
+  width: 19%;
+}
+
+/* Header */
+.header {
+  margin-top: 0.1%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-title {
+  margin-left: 3.4%;
+  font-size: 3em;
+  line-height: 85px;
+  font-weight: 900;
+}
+
+.logo {
+  margin-right: 2%;
+  width: 10%;
+}
