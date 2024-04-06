@@ -1,8 +1,9 @@
+import Logo from "../../../assets/logo.png";
 
 function FormLogo() {
     return (
         <div className="form-logo">
-        <img src="/assets/logo.png" alt="WDCC logo" />
+        <img src={Logo} alt="WDCC logo" />
         </div>
     );
 }

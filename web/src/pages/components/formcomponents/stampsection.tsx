@@ -1,11 +1,18 @@
-import StampInput from "./stampinput";
+import { useState } from "react";
 
 
 function StampSection() {
+    const [stamp, setStamp] = useState('');
+
     return (
         <div className='stamp-section'>
-            <h3>Custom Stamp Image</h3>
-            <StampInput />
+            <label htmlFor='stamp'>Custom Stamp Image</label>
+            <input 
+                id='stamp' 
+                placeholder="Select Image To Upload" 
+                type='file' 
+                value={stamp} 
+                onChange={(e) => setStamp(e.target.value)} />
         </div>
     )
 }
