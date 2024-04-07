@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
+import HamburgerMenu from "@components/HamburgerMenu";
 import "../styles/Passport.css";
 
 export default function Passport() {
@@ -29,7 +30,8 @@ export default function Passport() {
 
   return (
     <div className="background flex flex-col h-screen justify-center items-center ">
-      <CurrentView isAdminPage={false}/>
+      <HamburgerMenu />
+      <CurrentView />
 
       <div className="text-black">
         {/* display arrows depending on the current page index */}
