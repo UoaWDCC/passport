@@ -2,12 +2,20 @@
   width: 22em;
 }
 
+.hamburger-menu.open {
+  background-color: #03045e;
+}
+
 .line {
   width: 25px;
   height: 3px;
   margin: 3px 0;
   background-color: #03045e;
   transition: all 0.3s ease;
+}
+
+.open .line {
+  background-color: white;
 }
 
 .open .line:nth-child(1) {
@@ -22,17 +30,14 @@
   transform: rotate(45deg) translate(-6px, -6px);
 }
 
-.menu-items {
-  display: none;
-}
-
 .menu-items.open {
   display: block;
+  padding-left: 2em;
 }
 
 .menu-items a {
   display: block;
   text-decoration: none;
-  padding-left: 5px;
-  color: #03045e;
+  padding: 2px 0;
+  color: white;
 }
