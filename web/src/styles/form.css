@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
+:root {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: #ffffff;
+  background-color: #03045e;
+}
+
+.form-logo {
+  width: 25%;
+  position: relative;
+  margin-left: 35%;
+  margin-right: 35%;
+}
+
+.qr-code-form {
+  width: max-content;
+  position: relative;
+  align-items: center;
+  margin-left: 35%;
+  margin-right: 35%;
+  background-color: #e1ebff;
+  border-radius: 30px;
+  padding: 1% 1%;
+}
+
+.header {
+  font-size: 1.5em;
+  color: #03045e;
+  margin: 0% 0% 10% 15%;
+}
+
+.input-section {
+  margin: 23% 13% 23% 18%;
+}
+
+.submit {
+  padding: 3% 15% 3% 15%;
+  margin: 5% 5% 5% 24%;
+  border-radius: 10px;
+  background-color: #03045e;
+  font-size: 1.5em;
+  width: 50%;
+}
+
+.input-label {
+  font-style: italic;
+  color: #03045e;
+}
+
+#event-name {
+  background-color: #d9d9d9;
+  border-radius: 12px;
+  width: 90%;
+  padding: 3% 1% 5% 5%;
+}
+
+#stamp {
+  display: inline-block;
+  background-color: #d9d9d9;
+  border-radius: 12px;
+  width: 90%;
+  padding: 3% 1% 5% 5%;
+}
+
+#stamp:hover {
+  cursor: pointer;
+}
+
+::file-selector-button {
+  display: none;
+}

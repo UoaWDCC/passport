@@ -1,18 +1,20 @@
 import { useState } from "react";
-
+import Upload from '../../../assets/upload.svg';
 
 function StampSection() {
     const [stamp, setStamp] = useState('');
 
     return (
-        <div className='stamp-section'>
-            <label htmlFor='stamp'>Custom Stamp Image</label>
-            <input 
+        <div className='input-section'>
+            <label className='input-label' htmlFor='stamp'>Custom Stamp Image</label>
+            <br />
+            <input
                 id='stamp' 
-                placeholder="Select Image To Upload" 
                 type='file' 
+                accept='.png'
                 value={stamp} 
                 onChange={(e) => setStamp(e.target.value)} />
+                <img src={Upload} alt="Stamp" />
         </div>
     )
 }
