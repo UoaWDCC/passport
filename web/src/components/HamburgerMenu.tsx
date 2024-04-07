@@ -9,7 +9,11 @@ export default function HamburgerMenu() {
   };
 
   return (
-    <div className="hamburger-menu relative flex mt-6">
+    <div
+      className={`hamburger-menu relative flex mt-6 p-3 ${
+        isOpen ? "open" : ""
+      }`}
+    >
       <div
         className={`hamburger-icon flex flex-col cursor-pointer ${
           isOpen ? "open" : ""
@@ -21,7 +25,7 @@ export default function HamburgerMenu() {
         <div className="line"></div>
       </div>
 
-      <div className={`menu-items ${isOpen ? "open" : ""}`}>
+      <div className={`menu-items hidden ${isOpen ? "open" : ""}`}>
         <a href="#">Passport Page</a>
         <a href="#">Leaderboard Page</a>
       </div>
