@@ -1,5 +1,8 @@
 .hamburger-menu {
   width: 22em;
+  height: 6em;
+  margin-bottom: 5em;
+  transition: background-color 0.2s ease;
 }
 
 .hamburger-menu.open {
