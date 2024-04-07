@@ -5,8 +5,9 @@ function EventSection() {
     const [event, setEvent] = useState('');
 
     return (
-        <div className='event-section'>
-            <label htmlFor='event-name'>Event Name</label>
+        <div className='input-section'>
+            <label className='input-label' htmlFor='event-name'>Event Name</label>
+            <br />
             <input 
             id='event-name' 
             type='text' 

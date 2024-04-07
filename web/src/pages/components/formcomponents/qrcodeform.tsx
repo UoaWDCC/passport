@@ -1,5 +1,6 @@
 import EventSection from "./eventsection";
 import StampSection from "./stampsection";
+import Submit from "./submit";
 
 function QRCodeForm() {
   return (
@@ -8,6 +9,7 @@ function QRCodeForm() {
         <form>
           <EventSection /> 
           <StampSection /> 
+          <Submit />
         </form>
     </div>
   );
