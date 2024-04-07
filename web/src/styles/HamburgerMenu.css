@@ -9,6 +9,7 @@
   background-color: #03045e;
 }
 
+/* Hamburger Button */
 .line {
   width: 25px;
   height: 3px;
@@ -21,6 +22,7 @@
   background-color: white;
 }
 
+/* Button Animation */
 .open .line:nth-child(1) {
   transform: rotate(-45deg) translate(-6px, 6px);
 }
@@ -33,6 +35,7 @@
   transform: rotate(45deg) translate(-6px, -6px);
 }
 
+/* Menu Items */
 .menu-items.open {
   display: block;
   padding-left: 2em;
