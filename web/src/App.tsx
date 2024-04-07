@@ -3,6 +3,8 @@ import Login from "@pages/Login"
 import { createBrowserRouter, RouterProvider, Link } from "react-router-dom"
 // import { useState } from 'react';
 // import Home from "@pages/Home";
+import Passport from "@pages/Passport"
+import GoogleSigninBtn from "./components/GoogleSigninBtn.tsx"
 
 const router = createBrowserRouter([
   {
@@ -18,8 +20,8 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/newpage",
-    element: <p>Insert element here</p>,
+    path: "/passport",
+    element: <Passport />,
   },
   {
     path: "/temp-login",
@@ -28,5 +30,14 @@ const router = createBrowserRouter([
 ])
 
 export default function App() {
-  return <RouterProvider router={router} />
+  const handleClick = (): void => {
+    console.log("Custom Button was clicked!")
+  }
+
+  return (
+    <div>
+      <GoogleSigninBtn onClick={handleClick} />
+      <RouterProvider router={router} />;
+    </div>
+  )
 }
