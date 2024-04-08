@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-
 function EventSection() {
     const [event, setEvent] = useState('');
 

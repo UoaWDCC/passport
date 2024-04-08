@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Upload from '../../../assets/Upload.svg';
-import Bin from '../../../assets/bin.svg';
+import Upload from '../../assets/upload.svg';
+import Bin from '../../assets/bin.svg';
 
 function StampSection() {
     const [stamp, setStamp] = useState('');

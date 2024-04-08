@@ -1,5 +1,5 @@
-import EventSection from "./eventsection";
-import StampSection from "./stampsection";
+import EventSection from "./event-section";
+import StampSection from "./stamp-section";
 import Submit from "./submit";
 
 function QRCodeForm() {
