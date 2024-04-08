@@ -26,7 +26,7 @@ body {
   width: 90%;
   background-color: #e1ebff;
   border-radius: 30px;
-  padding: 1% 1%;
+  padding: 1% 0%;
 }
 
 .header {
@@ -47,12 +47,12 @@ input:focus {
   outline: none;
 }
 .input-section {
-  margin: 10% 10% 10% 15%;
+  margin: 10% 10% 15% 15%;
   font-size: 1em;
 }
 
 .submit {
-  margin: 0% 23% 0% 23%;
+  margin: 0% 23% 5% 23%;
   padding: 3% 20%;
   border-radius: 10px;
   background-color: #03045e;
@@ -85,7 +85,7 @@ input:focus {
   color: #9b9b9b;
   border-radius: 12px;
   width: 90%;
-  padding: 3% 1% 6% 6%;
+  padding: 5.203% 1% 6% 6%;
 }
 
 #event-name::placeholder {
@@ -121,6 +121,7 @@ input:focus {
 }
 
 .stamp-text {
+  padding-top: 1%;
   color: #9b9b9b;
   font-size: 1em;
   font-weight: 500;
@@ -128,6 +129,7 @@ input:focus {
 
 input {
   font-size: 1em;
+  font-family: "Montserrat", sans-serif;
   color: #9b9b9b;
   font-weight: 500;
 }
