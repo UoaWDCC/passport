@@ -3,13 +3,10 @@
 import { createBrowserRouter, RouterProvider, Link } from "react-router-dom"
 // import { useState } from 'react';
 // import Home from "@pages/Home";
-import Passport from "@pages/Passport"
-import SignInPage from '@pages/SignInPage';
-import SignInErrorPage from "@pages/SignInErrorPage";
-import AdminLogin from "@pages/Admin-Login";
-import Dashboard from "@pages/Dashboard";
-import Form from "@pages/Form";
-// import GoogleSigninBtn from "@components/GoogleSigninBtn";
+import Passport from "@pages/Passport";
+import Dashboard from './pages/Dashboard.tsx';
+import Form from './pages/Form.tsx';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -17,12 +14,7 @@ const router = createBrowserRouter([
       <div>
         <p>Hello World!</p>
         <Link to="passport">Other Page</Link>
-        <br />
-        <Link to="dashboard">Admin Login</Link>
-        <br />
-        <Link to="dashboard/events">Admin Dashboard</Link>
-        <br />
-        <Link to="form">Form</Link>
+        <Link to="passport">Dashboard</Link>
       </div>
     ),
   },
@@ -55,6 +47,7 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <div>
+      <RouterProvider router={router} />
       <RouterProvider router={router} />
     </div>
   )
