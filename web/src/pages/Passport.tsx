@@ -1,6 +1,8 @@
 import { useState } from "react";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
+import { ReactComponent as LeftButton } from "../assets/LeftButton.svg";
+import { ReactComponent as RightButton } from "../assets/RightButton.svg";
 import "../styles/Passport.css";
 
 export default function Passport() {
@@ -30,12 +32,19 @@ export default function Passport() {
   return (
     <div className="background flex flex-col h-screen justify-center items-center ">
       <CurrentView />
-
-      <div className="text-black">
-        {/* display arrows depending on the current page index */}
-        {currentIndex > 0 && <button onClick={goToPreviousView}> ← </button>}
+  
+        {/* Display navigation buttons */}
+      <div className="text-black flex justify-center gap-4">
+        {/* Display arrows depending on the current page index */}
+        {currentIndex > 0 && (
+          <button onClick={goToPreviousView} className="svg-button">
+            <LeftButton />
+          </button>
+        )}
         {currentIndex < views.length - 1 && (
-          <button onClick={goToNextView}> → </button>
+          <button onClick={goToNextView} className="svg-button">
+            <RightButton />
+          </button>
         )}
       </div>
 
