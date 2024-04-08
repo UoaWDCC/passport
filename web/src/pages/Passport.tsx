@@ -1,10 +1,9 @@
 import { useState } from "react";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
-import LeftButton from "../components/LeftButton.tsx";
-import RightButton from "../components/RightButton.tsx";
-import HamburgerMenu from "@components/HamburgerMenu";
-import "../styles/page styles/Passport.css";
+import { ReactComponent as LeftButton } from "../assets/LeftButton.svg";
+import { ReactComponent as RightButton } from "../assets/RightButton.svg";
+import "../styles/Passport.css";
 
 export default function Passport() {
   // initialise index state
@@ -32,21 +31,21 @@ export default function Passport() {
 
   return (
     <div className="background flex flex-col h-screen justify-center items-center ">
-      <HamburgerMenu />
-      <CurrentView/>
-
-      <div className="text-black w-88">
-        {/* display arrows depending on the current page index */}
+      <CurrentView />
+  
+        {/* Display navigation buttons */}
+      <div className="text-black flex justify-center gap-4">
+        {/* Display arrows depending on the current page index */}
         {currentIndex > 0 && (
-          <button className="nav-button float-left" onClick={goToPreviousView}>
+          <button onClick={goToPreviousView} className="svg-button">
             <LeftButton />
           </button>
         )}
         {currentIndex < views.length - 1 && (
-          <button className="nav-button float-right" onClick={goToNextView}>
+          <button onClick={goToNextView} className="svg-button">
             <RightButton />
           </button>
-        )}  
+        )}
       </div>
 
       <p>Page {currentIndex + 1}</p>
