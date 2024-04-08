@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 
 function Submit() {
   return (
-    <div className="submit">
-        <Link to='/dashboard'>
-            <button type="submit">Finish!</button>
-        </Link>
-    </div>
+    <Link to='/dashboard'>
+    <button className="submit" type="submit">
+      Finish!
+    </button>
+    </Link>
   );
 }
 export default Submit;
