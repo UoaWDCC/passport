@@ -3,19 +3,24 @@ import Upload from '../../../assets/Upload.svg';
 import Bin from '../../../assets/bin.svg';
 
 function StampSection() {
-    const [stamp, setStamp] = useState(null);
+    const [stamp, setStamp] = useState('');
     const [fileSize, setFileSize] = useState('');
-    const HandleChange = (e) => {
-        setFileSize((e.target.files[0].size / 1000).toFixed(2) + ' kb');
-        setStamp(e.target.value);
+    const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files) {
+            setFileSize((e.target.files[0].size / 1000).toFixed(2) + ' kb');
+            setStamp(e.target.value);
+        }
     }
 
 
     const handleUploadClick = () => {
-        document.getElementById('stamp').click();
+        const stampElement = document.getElementById('stamp');
+        if (stampElement) {
+            stampElement.click();
+        }
     };
 
-    const handleBinClick = (e) => {
+    const handleBinClick = (e: React.MouseEvent<HTMLImageElement>) => {
         e.stopPropagation();
         setStamp('');
     };
