@@ -30,8 +30,9 @@ const router = createBrowserRouter([
 ])
 
 export default function App() {
+
   const handleClick = (): void => {
-    console.log("Custom Button was clicked!")
+    console.log("Custom Button was clicked!");
   }
 
   return (
