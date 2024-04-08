@@ -1,8 +1,11 @@
+import { Link } from "react-router-dom";
 
 function Submit() {
   return (
     <div className="submit">
-      <button type="submit">Finish!</button>
+        <Link to='/dashboard'>
+            <button type="submit">Finish!</button>
+        </Link>
     </div>
   );
 }

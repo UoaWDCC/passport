@@ -3,7 +3,7 @@ import DashboardTitle from './dashboard-title';
 
 function Header() {
     return (
-        <div className='header'>
+        <div className='dashboard-header'>
             <DashboardTitle />
             <Logo />
         </div>
