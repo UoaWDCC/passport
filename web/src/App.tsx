@@ -13,7 +13,10 @@ const router = createBrowserRouter([
       <div>
         <p>Hello World!</p>
         <Link to="passport">Other Page</Link>
-        <Link to="passport">Dashboard</Link>
+        <br />
+        <Link to="dashboard">Dashboard</Link>
+        <br />
+        <Link to="form">Form</Link>
       </div>
     ),
   },
