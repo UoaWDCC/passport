@@ -32,19 +32,20 @@ export default function Passport() {
     <div className="background flex flex-col h-screen justify-center items-center ">
       <HamburgerMenu />
       <CurrentView />
-
-      <div className="text-black w-88">
-        {/* display arrows depending on the current page index */}
+  
+        {/* Display navigation buttons */}
+      <div className="text-black flex justify-center gap-4">
+        {/* Display arrows depending on the current page index */}
         {currentIndex > 0 && (
-          <button className="nav-button float-left" onClick={goToPreviousView}>
+          <button onClick={goToPreviousView} className="svg-button">
             <LeftButton />
           </button>
         )}
         {currentIndex < views.length - 1 && (
-          <button className="nav-button float-right" onClick={goToNextView}>
+          <button onClick={goToNextView} className="svg-button">
             <RightButton />
           </button>
-        )}  
+        )}
       </div>
 
       <p>Page {currentIndex + 1}</p>
