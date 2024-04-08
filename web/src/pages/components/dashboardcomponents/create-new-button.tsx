@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import externalLink from '../../../assets/externalLink.svg';
 
 function CreateNewButton() {
