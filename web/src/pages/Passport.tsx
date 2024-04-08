@@ -38,12 +38,12 @@ export default function Passport() {
       <div className="text-black">
         {/* display arrows depending on the current page index */}
         {currentIndex > 0 && (
-          <button onClick={goToPreviousView}>
+          <button className="nav-button" onClick={goToPreviousView}>
             <LeftButton />
           </button>
         )}
         {currentIndex < views.length - 1 && (
-          <button onClick={goToNextView}>
+          <button className="nav-button" onClick={goToNextView}>
             <RightButton />
           </button>
         )}
@@ -53,3 +53,4 @@ export default function Passport() {
     </div>
   );
 }
+
