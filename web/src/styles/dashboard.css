@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
-
 * {
   padding: 0;
   margin: 0%;
@@ -35,7 +34,7 @@
 
 .button-header {
   color: #03045e;
-  font-weight: bold;
+  font-weight: 550;
 }
 
 .create-new-button {
@@ -60,6 +59,7 @@
 
 .create-new {
   font-size: 1em;
+  font-weight: 100;
 }
 
 .external-link {
@@ -87,4 +87,7 @@
 .logo {
   margin-right: 2%;
   width: 10%;
+}
+a {
+  text-decoration: none;
 }
