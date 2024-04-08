@@ -23,7 +23,7 @@ body {
 }
 
 .qr-code-form {
-  width: max-content;
+  width: 90%;
   background-color: #e1ebff;
   border-radius: 30px;
   padding: 1% 1%;
@@ -31,7 +31,7 @@ body {
 
 .header {
   text-align: center;
-  font-size: 1.5em;
+  font-size: 2em;
   color: #03045e;
   margin-top: 2%;
 }
@@ -47,13 +47,13 @@ input:focus {
   outline: none;
 }
 .input-section {
-  margin: 15% 10% 15% 15%;
-  font-size: 0.7em;
+  margin: 10% 10% 10% 15%;
+  font-size: 1em;
 }
 
 .submit {
+  margin: 0% 23% 0% 23%;
   padding: 3% 20%;
-  margin: 0% 13% 5% 18%;
   border-radius: 10px;
   background-color: #03045e;
   font-size: 1.5em;
@@ -76,6 +76,10 @@ input:focus {
   color: #03045e;
 }
 
+#event {
+  width: 90%;
+}
+
 #event-name {
   background-color: #d9d9d9;
   color: #9b9b9b;
@@ -89,29 +93,46 @@ input:focus {
 }
 
 #stamp {
-  display: "none";
+  display: none;
 }
 .visible-stamp {
   display: flex;
-  justify-content: right;
+  align-items: center;
   background-color: #d9d9d9;
   border-radius: 12px;
   width: 90%;
   padding: 3% 1% 6% 6%;
 }
-#stamp:hover {
+.visible-stamp:hover {
   cursor: pointer;
 }
 
-::file-selector-button {
-  display: none;
+.stamp-input-image {
+  width: 8%;
+  margin-right: 4%;
 }
 
-.stamp-input-image {
-  width: 10%;
-  margin-right: 5%;
+#upload {
+  margin-left: auto;
 }
 
 .stamp-input-image:hover {
   cursor: pointer;
+}
+
+.stamp-text {
+  color: #9b9b9b;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+input {
+  font-size: 1em;
+  color: #9b9b9b;
+  font-weight: 500;
+}
+
+#file-size {
+  margin-left: auto;
+  margin-right: 2%;
 }
