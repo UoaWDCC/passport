@@ -6,7 +6,7 @@ function QRCodeForm() {
   return (
     <div className="qr-code-form">
         <h1 className="header">QR Code Generator</h1>
-        <form>
+        <form autoComplete="off">
           <EventSection /> 
           <StampSection /> 
           <Submit />

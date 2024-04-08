@@ -15,7 +15,9 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <div>
-      <SignInPage />
+        <p>Hello World!</p>
+        <Link to="passport">Other Page</Link>
+        <Link to="passport">Dashboard</Link>
       </div>
     ),
   },
