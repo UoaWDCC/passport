@@ -1,8 +1,8 @@
 import { useState } from "react";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
-import LeftButton from "../assets/LeftButton.tsx";
-import RightButton from "../assets/RightButton.tsx";
+import LeftButton from "../components/LeftButton.tsx";
+import RightButton from "../components/RightButton.tsx";
 
 import "../styles/Passport.css";
 
