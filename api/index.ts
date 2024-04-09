@@ -9,8 +9,21 @@ import helloRoutes from "./routes/hello"
 const app = express()
 config()
 
-const databaseUrl: string = process.env.DATABASE_URL!
+const databaseUrl: string = process.env.DATABASE_URL!;
+
 connect(databaseUrl)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    // Start the server after successful connection
+    const port = Number.parseInt(process.env.PORT || "3000");
+    app.listen(port, () => {
+      console.log(`Listening on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the process with a non-zero status code to indicate failure
+  });
 
 app.use(json())
 app.use(cors())
