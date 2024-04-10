@@ -24,3 +24,6 @@ dist-ssr
 *.sln
 *.sw?
 *.lock*
+node_modules
+yarn.lock
+package.json
