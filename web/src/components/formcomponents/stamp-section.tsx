@@ -72,9 +72,9 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
     return (
         <div className='input-section'>
             <label className='input-label' htmlFor='stamp'>Custom Stamp Image</label>
-            <br />
             <div className="visible-stamp" onClick={handleUploadClick}>
                 <input
+                    className="event-inputs"
                     id='stamp'
                     type='file'
                     accept='.png'
