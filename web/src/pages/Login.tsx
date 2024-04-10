@@ -16,7 +16,7 @@ interface UserData {
 
 // sending data to mongoDB, need to change url
 const postUserData = async (data: UserData) => {
-  await fetch("http://localhost:3000/api/v1/users", {
+  await fetch("http://localhost:3000/user", {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -36,7 +36,7 @@ const postUserData = async (data: UserData) => {
 }
 
 const updateUserData = async (data: UserData) => {
-  await fetch("http://localhost:3000/api/v1/users", {
+  await fetch("http://localhost:3000/user", {
     method: "PUT",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -117,10 +117,12 @@ function Login() {
               //otherwise, need to update
 
               const getUserData = async () => {
-                await fetch("http://localhost:3000/api/v1/users/" + UserUPI, {
+                //TODO Fix up this method
+                await fetch("http://localhost:3000/user/" + UserUPI, {
                   method: "GET",
                 })
                   .then((response) => {
+                    console.log("Fetch response for user data")
                     console.log(response)
                     // If we get something then, update the user data. Else post.
                     if (response.status == 200) {
