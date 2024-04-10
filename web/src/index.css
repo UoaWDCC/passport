@@ -9,3 +9,136 @@
   box-sizing: border-box;
   min-width: 0;
 }
+
+body {
+  background-color: #e1ebff;
+  
+  /* Set the background color to the desired color */
+
+}
+
+h1 {
+  font-size: 32px;
+  /* Change the font size to 16 pixels */
+  color: #03045E;
+  text-align: center;
+  /* Center-align the text */
+}
+
+p {
+  font-size: 16px;
+  /* Change the font size to 16 pixels */
+  color: #03045E;
+  text-align: center;
+  /* Center-align the text */
+}
+
+.paragraph-type-2{
+  font-size: 23px;
+  color: white;
+}
+
+/* Parent container styles */
+.parent-container {
+  position: relative;
+  /* Ensure the parent container has a non-static position */
+}
+
+/*Hamburger menu */
+.hamburger-icon {
+  width: 30px;
+  height: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  top: 20px;
+  /* Adjust this value to move the menu downwards */
+  left: 20px;
+  /* Adjust this value to move the menu rightwards */
+}
+
+.bar {
+  width: 130%;
+  height: 3px;
+  background-color: #000;
+}
+
+.half-bar {
+  width: 90%;
+  height: 3px;
+  background-color: #000;
+}
+
+/* Open state for hamburger icon */
+.hamburger-icon.open .bar:first-child {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger-icon.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-icon.open .bar:last-child {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Styles for the rectangle container */
+.rectangle-container {
+  display: flex;
+  justify-content: center;
+  /* Horizontally center */
+  align-items: center;
+  /* Vertically center */
+  height: 90vh;
+  /* Full viewport height */
+}
+
+/* Styles for the rectangle */
+.rectangle {
+  align-self: center;
+  width: 350px;
+  height: 550px;
+  background-color: #03045E;
+  border-radius: 0 0 80px 0;
+  /* Top-left, top-right, bottom-right, bottom-left */
+}
+
+.link-container {
+  text-align: center;
+}
+
+.logo {
+  position: relative;
+  left: 40px;
+  top: 140px;
+}
+
+.menu-items {
+  position: absolute;
+  top: calc(100% + 20px);
+  /* Adjust the distance from the button */
+  left: 0;
+  background-color: #fff;
+  /* Background color of the menu */
+  padding: 10px;
+  border: 1px solid #ccc;
+  /* Add a border for clarity */
+  border-radius: 5px;
+  /* Add rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Add a subtle shadow */
+}
+
+/* Additional styles for menu items (optional) */
+.menu-items a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+}
+
+.menu-items a:hover {
+  background-color: #f0f0f0;
+}

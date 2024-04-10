@@ -1,26 +1,33 @@
-// import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+//import React from "react";
 import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
-// import { useState } from 'react';
-// import Home from "@pages/Home";
-// the intersection. 
+import { HamburgerMenu, LeaderboardPlaceholder } from "./pages/Passport_home";
+
+// this page is the intersection. 
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <div>
-        <p>Hello World!</p>
-        <Link to="newpage">Other Page</Link>
+      <div className = "link-container">
+        <h1>WDCC Digital Passport</h1>
+        <Link to="passport">Leaderboard</Link>
       </div>
     ),
   },
+  
   {
-    path: "/newpage",
-    element: <p>Insert element here</p>,
+    path: "/passport",
+    element:  (
+      <div>
+        <HamburgerMenu />, 
+        <LeaderboardPlaceholder />,
+        </div>
+    
+    )
   },
 ]);
 
 export default function App() {
   return <RouterProvider router={router} />;
 }
-
 
