@@ -6,6 +6,7 @@ import { config } from "dotenv"
 // Import Routers
 import helloRoutes from "./routes/hello"
 import userRoutes from "./routes/user"
+import apis from "./routes/Api"
 
 const app = express()
 config()
@@ -31,5 +32,10 @@ app.use(cors())
 app.use(express.static("public"))
 
 // Routes
-app.use("/hello", helloRoutes)
-app.use("/api/user", userRoutes)
+app.use('/hello', helloRoutes);
+app.use('/api', apis)
+
+const port = Number.parseInt(process.env.PORT || '3000');
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
