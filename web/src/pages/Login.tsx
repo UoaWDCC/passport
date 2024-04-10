@@ -28,6 +28,7 @@ const postUserData = async (data: UserData) => {
     }),
   })
     .then((response) => {
+      console.log("New User added!!")
       console.log(response)
     })
     .catch((error) => {
@@ -36,24 +37,32 @@ const postUserData = async (data: UserData) => {
 }
 
 const updateUserData = async (data: UserData) => {
-  await fetch("http://localhost:3000/user", {
-    method: "PUT",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify({
-      firstName: data.userData.given_name,
-      lastName: data.userData.family_name,
-      email: data.userData.email,
-      accessToken: data.userData.jti,
-      upi: data.UserUPI,
-    }),
-  })
-    .then((response) => {
-      console.log(response)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  try {
+    const response = await fetch("http://localhost:3000/user/" + data.UserUPI, {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        firstName: data.userData.given_name,
+        lastName: data.userData.family_name,
+        email: data.userData.email,
+        accessToken: data.userData.jti,
+        upi: data.UserUPI,
+      }),
+    });
+    
+    if (!response.ok) {
+      // console.log(response)
+      throw new Error('Failed to update user data');
+    } else {
+      console.log("User Data Updated")
+    }
+
+    // console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
 }
+
 
 function Login() {
   return (
@@ -71,7 +80,7 @@ function Login() {
               credentialResponse.credential
             )
 
-            console.log(jsondata)
+            // console.log(jsondata)
 
             //extracting user UPI
             const UserUPI = jsondata.email.split("@")[0]
@@ -113,19 +122,18 @@ function Login() {
             ) {
               console.log("YOU'RE IN WDCC!!")
 
-              // Need to create a fork?, if a user is valid and is their first time logging in, then we would need to post
-              //otherwise, need to update
-
               const getUserData = async () => {
-                //TODO Fix up this method
+                //TODO Fix up this method - FIXED
                 await fetch("http://localhost:3000/user/" + UserUPI, {
                   method: "GET",
                 })
                   .then((response) => {
-                    console.log("Fetch response for user data")
-                    console.log(response)
+                    console.log("Fetch response for user data - Checking if user is in DB")
+                    // console.log(response)
                     // If we get something then, update the user data. Else post.
                     if (response.status == 200) {
+                      console.log("Updating User Data");
+                      // console.log(response);
                       updateUserData({
                         userData: jsondata,
                         UserUPI: UserUPI,
@@ -133,6 +141,8 @@ function Login() {
                         localStorage.setItem("accessToken", jsondata!.jti)
                       })
                     } else {
+                      console.log("Posting User Data");
+                      // console.log(response);
                       postUserData({
                         userData: jsondata,
                         UserUPI: UserUPI,

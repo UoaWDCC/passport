@@ -17,20 +17,22 @@ userRoutes.get("/", async (req: Request, res: Response) => {
 })
 
 // GET /api/user/:upi
-userRoutes.get("/:upi", (req: Request, res: Response) => {
-  const userUpi = req.params.upi
-  // Logic to fetch a specific user by ID from the database
+userRoutes.get("/:upi", async (req: Request, res: Response) => {
+  const userUpi = req.params.upi;
   try {
-    const user = User.findOne({ upi: userUpi })
+    const user = await User.findOne({ upi: userUpi }).exec(); // Await the result or use exec()
+    // console.log("Results:");
+    // console.log(user);
     if (user) {
-      res.json(user)
+      res.json(user);
     } else {
-      res.status(404).json({ message: "User not found" })
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
-})
+});
+
 
 // POST /user
 userRoutes.post("/", (req: Request, res: Response) => {
@@ -44,6 +46,7 @@ userRoutes.post("/", (req: Request, res: Response) => {
     accessToken: req.body.accessToken,
     upi: req.body.upi,
   })
+  console.log("New User Added!!")
 
   try {
     const savedUser = newUser.save()
@@ -54,26 +57,29 @@ userRoutes.post("/", (req: Request, res: Response) => {
 })
 
 // PUT /user/:id
-userRoutes.put("/:id", (req: Request, res: Response) => {
-  const userId = req.params.id
-  const updatedUserData = req.body
-
-  // Logic to update a specific user by ID in the database
+userRoutes.put("/:upi", async (req: Request, res: Response) => {
   try {
-    const updatedUser = User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+    // console.log("Request Body:", req.body);
+    const updatedUser = await User.findOneAndUpdate(
+      { upi: req.params.upi }, // Filter criteria
+      req.body, // Updated data
       { new: true } // Return the updated document
-    )
+    ).exec(); // Execute the query
+
+    console.log("Updated user!!")
+    // console.log(updatedUser)
+
     if (updatedUser) {
-      res.json(updatedUser)
+      res.json(updatedUser);
     } else {
-      res.status(404).json({ message: "User not found" })
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error: any) {
-    res.status(400).json({ message: error.message })
+    res.status(400).json({ message: error.message });
   }
-})
+});
+
+
 
 // DELETE /users/:id
 // userRoutes.delete("/:id", (req: Request, res: Response) => {
