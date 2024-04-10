@@ -11,26 +11,12 @@
   background-color: #03045e;
 }
 
-/* .text-black {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-} */
-
 .nav-button {
   background: none;
   border: none;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-
-/* .nav-button-left {
-  float: left;
-}
-
-.nav-button-right {
-  float: right;
-} */
 
 .nav-button:hover {
   transform: scale(1.05);
