@@ -34,7 +34,7 @@ export default function Passport() {
     <div className="background flex flex-col h-screen justify-center items-center ">
       <CurrentView />
 
-      <div className="text-black w-80">
+      <div className="text-black w-88">
         {/* display arrows depending on the current page index */}
         {currentIndex > 0 && (
           <button className="nav-button float-left" onClick={goToPreviousView}>
