@@ -12,7 +12,8 @@ function QRCodeForm() {
 
   const submitForm = async () => {
     const response = await axios.post('http://localhost:3000/api/event',
-      {"eventName": eventName,
+      {
+        "eventName": eventName,
         "stamp64": image64
       },
       {
@@ -40,11 +41,11 @@ function QRCodeForm() {
     <div className="qr-code-form">
       <h1 className="header">QR Code Generator</h1>
 
-      <form autoComplete="off"  method="POST">
+      <form className="form-form" autoComplete="off" method="POST">
         <div className='input-section'>
           <label className='input-label' htmlFor='event-name'>Event Name</label>
-          <br />
           <input
+            className="event-inputs"
             id='event-name'
             type='text'
             placeholder='e.g. The Amazing Race'
@@ -52,13 +53,37 @@ function QRCodeForm() {
             onChange={(e) => setEventName(e.target.value)} />
         </div>
 
+        <div className='input-section'>
+          <label className='input-label' htmlFor='event-name'>Start Date</label>
+          <input
+            className="event-inputs"
+            id='start-date'
+            type='text'
+            placeholder='dd/mm/yy'
+            value={eventName}
+            onChange={(e) => setEventName(e.target.value)} />
+        </div>
+
+        <div className='input-section'>
+          <label className='input-label' htmlFor='event-name'>End Date</label>
+
+          <input
+            className="event-inputs"
+            id='end-date'
+            type='text'
+            placeholder='dd/mm/yy'
+            value={eventName}
+            onChange={(e) => setEventName(e.target.value)} />
+        </div>
+
         <StampSection getImageName={getImageName} getImage64={getImage64} />
 
-        <div>
+        <div className="submit-button-container">
           <Link
+          className="submit-link"
             to='/Dashboard'
           >
-            <button className="submit" type="submit" onClick={submitForm}>
+            <button className="qr-submit-button" type="submit" onClick={submitForm}>
               Finish!
             </button>
           </Link>

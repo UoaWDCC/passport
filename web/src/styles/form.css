@@ -2,6 +2,10 @@
 
 /* Overarching */
 
+/* *{
+  border: 1px solid black;
+} */
+
 .form-outer {
   width: 100%;
   display: flex;
@@ -25,16 +29,26 @@
 }
 
 .form-logo {
-  width: 50%;
+  width: 150px;
 }
 /* QR Code Form */
 
 .qr-code-form {
-  width: 90%;
+  display: flex;
+  flex-direction: column;
+  width: 330px;
   background-color: #e1ebff;
   border-radius: 30px;
-  padding: 1% 0%;
+  padding: 20px;
 }
+
+.form-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 
 .header {
   text-align: center;
@@ -57,8 +71,10 @@ input:focus {
   outline: none;
 }
 .input-section {
-  margin: 10% 10% 15% 15%;
+  display: flex;
+  flex-direction: column;
   font-size: 1em;
+  width: 300px;
 }
 
 .input-label {
@@ -70,15 +86,15 @@ input:focus {
   width: 90%;
 }
 
-#event-name {
+.event-inputs {
   background-color: #d9d9d9;
   color: #9b9b9b;
   border-radius: 12px;
-  width: 90%;
   padding: 5.673% 1% 6% 6%;
+  height: 10px;
 }
 
-#event-name::placeholder {
+.event-inputs::placeholder {
   color: #9b9b9b;
 }
 
@@ -90,8 +106,7 @@ input:focus {
   align-items: center;
   background-color: #d9d9d9;
   border-radius: 12px;
-  width: 90%;
-  padding: 3% 1% 6% 6%;
+  padding: 5% 1% 6% 6%;
 }
 .visible-stamp:hover {
   cursor: pointer;
@@ -125,13 +140,23 @@ input:focus {
 }
 
 /* Submit */
-.submit {
-  margin: 0% 23% 5% 23%;
-  padding: 3% 20%;
+.submit-link{
+  display: flex;
+  justify-content: center;
+}
+
+.qr-submit-button {
+  padding: 8px 20px;
   border-radius: 10px;
   background-color: #03045e;
   font-size: 1.5em;
-  width: max-content;
   border: none;
   cursor: pointer;
+}
+
+
+@media only screen and (max-width: 480px) {
+  .qr-code-form{
+    width: 360px;
+  }
 }
