@@ -27,7 +27,7 @@ const HamburgerMenu = () => {
       {/* Menu items */}
       {isOpen && (
         <div className="menu-items">
-          <a href="/">Home</a>
+          <a href="/passport2">Home</a>
           <a href="/about">About</a>
           <a href="/contact">Contact</a>
         </div>

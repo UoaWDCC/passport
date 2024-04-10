@@ -6,11 +6,11 @@ import { HamburgerMenu, LeaderboardPlaceholder } from "./pages/Passport_home";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/passport2",
     element: (
       <div className = "link-container">
         <h1>WDCC Digital Passport</h1>
-        <Link to="passport">Leaderboard</Link>
+        
         <HamburgerMenu />
         <LeaderboardPlaceholder />
         
@@ -19,11 +19,11 @@ const router = createBrowserRouter([
   },
   
   {
-    path: "/passport",
+    path: "/leaderboard2",
     element:  (
       <div>
         <HamburgerMenu />, 
-        
+        <LeaderboardPlaceholder />
         </div>
     
     )
