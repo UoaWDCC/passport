@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
-import { useEffect, useState } from "react";
 import StampSection from "./stamp-section";
 import axios from "axios"
+import { Link } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function QRCodeForm() {
 
   const [event, setEvent] = useState('');
+  const [event, setEvent] = useState('');
   const [eventName, setEventName] = useState("")
   const [image64, setImage64] = useState("")
+  const [imageName, setImageName] = useState("")
   const [imageName, setImageName] = useState("")
 
   const submitForm = async () => {
     const response = await axios.post('http://localhost:3000/api/event',
       {"eventName": eventName,
-        "stamp64": image64
+        "eventImage": image64
       },
       {
         headers: {
@@ -39,12 +41,15 @@ function QRCodeForm() {
   return (
 
 
+
     <div className="qr-code-form">
       <h1 className="header">QR Code Generator</h1>
 
       <form autoComplete="off"  method="POST">
+      <form autoComplete="off"  method="POST">
         <div className='input-section'>
           <label className='input-label' htmlFor='event-name'>Event Name</label>
+          <br />
           <br />
           <input
             id='event-name'
@@ -59,12 +64,18 @@ function QRCodeForm() {
         <div>
           <Link
             to='/Dashboard'
+        <div>
+          <Link
+            to='/Dashboard'
           >
+            <button className="submit" type="submit" onClick={submitForm}>
             <button className="submit" type="submit" onClick={submitForm}>
               Finish!
             </button>
           </Link>
+          </Link>
         </div>
+      </form>
       </form>
 
     </div>
