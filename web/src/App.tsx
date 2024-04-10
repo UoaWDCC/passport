@@ -9,6 +9,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <div className = "link-container">
+        <HamburgerMenu />,
         <h1>WDCC Digital Passport</h1>
         <Link to="passport">Leaderboard</Link>
       </div>
