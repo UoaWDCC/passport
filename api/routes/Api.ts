@@ -34,10 +34,14 @@ async function run() {
     Api.post('/event', async (req: Request, res: Response) => {
       const eventName = req.body.eventName;
       const stamp64 = req.body.stamp64;
+      const startDate = req.body.startDate;
+      const endDate = req.body.endDate;
 
       const event = {
         "eventName": eventName,
         "stamp64": stamp64,
+        "startDate": startDate,
+        "endDate": endDate
       };
       try {
         const database = client.db("WDCC_Passport");
