@@ -29,6 +29,8 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
                 setFileSize((stampSize / 1000000).toFixed(2) + ' mb');
             }
             let stampName = e.target.value;
+            console.log("skeet")
+            console.log(stampName)
             let stampDisplayName = e.target.files[0].name;
             setStamp(stampName);
             if (stampDisplayName.length < 23) {
