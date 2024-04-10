@@ -45,8 +45,8 @@ const HamburgerMenu = () => {
 const LeaderboardPlaceholder = () => {
   return (
     <div className="leaderboard-placeholder">
-      <h1>Leaderboard Placeholder</h1>
-      <p>Welcome to the Leaderboard page!</p>
+      {/* <h1>Leaderboard Placeholder</h1> */}
+     {/*<p>Welcome to the Leaderboard page!</p> */}
       {/* Rectangle container */}
       <div className="rectangle-container">
         {/* Rectangle */}
