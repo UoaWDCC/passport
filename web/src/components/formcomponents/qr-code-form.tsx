@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 
 function QRCodeForm() {
 
-  const [event, setEvent] = useState('');
   const [eventName, setEventName] = useState("")
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] =useState("")
   const [image64, setImage64] = useState("")
   const [imageName, setImageName] = useState("")
 
@@ -14,7 +15,9 @@ function QRCodeForm() {
     const response = await axios.post('http://localhost:3000/api/event',
       {
         "eventName": eventName,
-        "stamp64": image64
+        "stamp64": image64,
+        "startDate": startDate,
+        "endDate": endDate
       },
       {
         headers: {
@@ -60,8 +63,8 @@ function QRCodeForm() {
             id='start-date'
             type='text'
             placeholder='dd/mm/yy'
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)} />
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)} />
         </div>
 
         <div className='input-section'>
@@ -72,8 +75,8 @@ function QRCodeForm() {
             id='end-date'
             type='text'
             placeholder='dd/mm/yy'
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)} />
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)} />
         </div>
 
         <StampSection getImageName={getImageName} getImage64={getImage64} />
