@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 
 // Import Routers
 import helloRoutes from './routes/hello';
+import apis from "./routes/Api"
 
 const app = express();
 config();
@@ -18,6 +19,7 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/hello', helloRoutes);
+app.use('/api', apis)
 
 const port = Number.parseInt(process.env.PORT || '3000');
 app.listen(port, () => {

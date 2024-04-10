@@ -4,10 +4,12 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
 import { z } from 'zod';
+const multer = require("multer");
+import eventModel from '../MongoSchema/event.model';
 
 const helloRoutes = Router();
 
-helloRoutes.get('/', async (req: Request, res: Response) => {
+helloRoutes.post('/event', async (req: Request, res: Response) => {
   // const Name = z.object({
   //   name: z.string(),
   // });
@@ -16,6 +18,9 @@ helloRoutes.get('/', async (req: Request, res: Response) => {
   // if (!result.success) return res.status(400).send(result.error);
 
   // const { name }: z.infer<typeof Name> = result.data;
+
+
+  console.log(req.body)
 
   return res.status(200).send(`Kia Ora `);
 });
