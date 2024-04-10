@@ -4,8 +4,7 @@ import { connect } from "mongoose"
 import { config } from "dotenv"
 
 // Import Routers
-import helloRoutes from "./routes/hello"
-import userRoutes from "./routes/user"
+import helloRoutes from './routes/hello';
 import apis from "./routes/Api"
 
 const app = express()
@@ -33,9 +32,7 @@ app.use(express.static("public"))
 
 // Routes
 app.use('/hello', helloRoutes);
-apiRoutes.then((apiRouter) => {
-  app.use('/api', apiRouter)
-})
+app.use('/api', apis)
 
 const port = Number.parseInt(process.env.PORT || '3000');
 app.listen(port, () => {
