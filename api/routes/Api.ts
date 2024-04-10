@@ -40,8 +40,8 @@ async function run() {
       const event = {
         "eventName": eventName,
         "stamp64": stamp64,
-        "startDate": startDate,
-        "endDate": endDate
+        "startDate": new Date(startDate),
+        "endDate": new Date(endDate)
       };
       try {
         const database = client.db("WDCC_Passport");
