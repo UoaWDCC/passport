@@ -13,7 +13,7 @@ function QRCodeForm() {
   const submitForm = async () => {
     const response = await axios.post('http://localhost:3000/api/event',
       {"eventName": eventName,
-        "eventImage": image64
+        "stamp64": image64
       },
       {
         headers: {

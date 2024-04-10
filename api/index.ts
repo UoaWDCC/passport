@@ -33,7 +33,9 @@ app.use(express.static("public"))
 
 // Routes
 app.use('/hello', helloRoutes);
-app.use('/api', apis)
+apiRoutes.then((apiRouter) => {
+  app.use('/api', apiRouter)
+})
 
 const port = Number.parseInt(process.env.PORT || '3000');
 app.listen(port, () => {
