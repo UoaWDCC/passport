@@ -3,11 +3,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 // import { useState } from 'react';
 // import Home from "@pages/Home";
-import Passport from "@pages/Passport";
-import Dashboard from './pages/Dashboard.tsx';
-import Form from './pages/Form.tsx';
-import SignInPage from './pages/SignInPage.tsx';
-import SignInErrorPage from "./pages/SignInErrorPage.tsx";
+import Passport from "@pages/Passport"
+import SignInPage from './pages/SignIn-Page/SignInPage';
+import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 const router = createBrowserRouter([
   {
@@ -36,7 +34,7 @@ const router = createBrowserRouter([
   element: <AdminLogin />,
 },
   {
-    path: "/dashboard",
+    path: "/dashboard/events",
     element: <Dashboard />,
   },
   {
