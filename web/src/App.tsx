@@ -4,14 +4,15 @@ import { createBrowserRouter, RouterProvider, Link } from "react-router-dom";
 // import Home from "@pages/Home";
 import Passport from "@pages/Passport";
 import GoogleSigninBtn from './components/GoogleSigninBtn.tsx';
+import SignInPage from './pages/SignIn-Page/SignInPage';
+import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <div>
-        <p>Hello World!</p>
-        <Link to="passport">Other Page</Link>
+      <SignInPage />
       </div>
     ),
   },
@@ -19,17 +20,17 @@ const router = createBrowserRouter([
     path: "/passport",
     element: <Passport />,
   },
+{
+  path: "/sign-in-error",
+  element: <SignInErrorPage />,
+},
 ]);
 
 export default function App() {
-  const handleClick = (): void => {
-    console.log('Custom Button was clicked!');
-  };
-  
   return (
     <div>
-      <GoogleSigninBtn onClick={handleClick} />
-      <RouterProvider router={router} />;
+      
+{/* <RouterProvider router={router} />; */}
     </div>
   );
 }
