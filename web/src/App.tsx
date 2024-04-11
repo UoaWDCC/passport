@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Passport from "@pages/Passport"
 import SignInPage from './pages/SignIn-Page/SignInPage';
 import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
+import AdminLogin from "./pages/Admin-Login";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -25,12 +26,16 @@ const router = createBrowserRouter([
   path: "/sign-in-error",
   element: <SignInErrorPage />,
 },
+{
+  path: "/dashboard",
+  element: <AdminLogin />,
+}
 ]);
 
 export default function App() {
   return (
     <div>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </div>
   )
 }

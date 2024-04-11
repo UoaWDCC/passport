@@ -29,7 +29,7 @@ export default function Passport() {
 
   return (
     <div className="background flex flex-col h-screen justify-center items-center ">
-      <CurrentView />
+      <CurrentView isAdminPage={false}/>
 
       <div className="text-black">
         {/* display arrows depending on the current page index */}
