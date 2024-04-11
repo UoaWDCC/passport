@@ -58,6 +58,13 @@
   margin-top: -19px;
   margin-bottom: 0px;
 }
+
+.error-msg-dates {
+
+  color: red;
+  margin-top: 0px;
+  margin-bottom: -5px;
+}
 /* Inputs */
 input {
   text-align: left;
@@ -80,6 +87,9 @@ input:focus {
 }
 
 .input-label {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   font-style: italic;
   color: #03045e;
 }

@@ -7,6 +7,8 @@ function QRCodeForm() {
 
   const [eventName, setEventName] = useState("")
   const [startDate, setStartDate] = useState("")
+  const [validStartDate, setValidStartDate] = useState("")
+  const [validEndDate, setValidEndDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [image64, setImage64] = useState("")
   const [validSubmit, setValidSubmit] = useState("no")
@@ -47,6 +49,26 @@ function QRCodeForm() {
     setImage64(img)
   }
 
+  const checkValidStartDate = (date: any) => {
+    if (new Date(date).setHours(0, 0, 0, 0) >= new Date().setHours(0, 0, 0, 0) && startDate >= endDate) {
+      setStartDate(date)
+      setValidStartDate("yes")
+    } else {
+      setStartDate("")
+      setValidStartDate("no")
+    }
+  }
+
+  const checkValidEndDate = (date: any) => {
+    if (new Date(date).setHours(0, 0, 0, 0) >= new Date(startDate).setHours(0, 0, 0, 0)) {
+      setEndDate(date)
+      setValidEndDate("yes")
+    } else {
+      setEndDate("")
+      setValidEndDate("no")
+    }
+  }
+
   return (
 
     <div className="qr-code-form">
@@ -70,26 +92,42 @@ function QRCodeForm() {
         </div>
 
         <div className='input-section'>
-          <label className='input-label' htmlFor='event-name'>Start Date</label>
+          <label className='input-label' htmlFor='event-name'>
+            Start Date {validStartDate == "no" ?
+              <p className="error-msg-dates">*invalid start date</p>
+              :
+              null
+            }
+          </label>
+
           <input
             className="event-inputs date-inputs"
             id='start-date'
             type='date'
             placeholder='dd/mm/yy'
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)} />
+            onChange={(e) => checkValidStartDate(e.target.value)} />
         </div>
 
         <div className='input-section'>
-          <label className='input-label' htmlFor='event-name'>End Date</label>
+          <label className='input-label' htmlFor='event-name'>
+            End Date {validEndDate == "no" ?
+              <p className="error-msg-dates">*invalid end date</p>
+              :
+              null
+            }
+            </label>
+
           <input
             className="event-inputs date-inputs"
             id='end-date'
             type='date'
             placeholder='dd/mm/yy'
             value={endDate}
-            onChange={(e) => setEndDate(e.target.value)} />
+            onChange={(e) => checkValidEndDate(e.target.value)} />
         </div>
+
+        <button onClick={() => { console.log(startDate, endDate) }}>testtest</button>
 
 
         <StampSection getImageName={getImageName} getImage64={getImage64} />
@@ -105,7 +143,7 @@ function QRCodeForm() {
         </div>
       </div>
 
-     
+
 
     </div>
   );
