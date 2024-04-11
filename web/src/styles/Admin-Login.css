@@ -8,8 +8,8 @@
 .admin-login-left-items {
   align-self: start;
   display: inline-block;
-  width: 45%;
-  margin-left: 5%;
+  width: 40%;
+  margin-left: 10%;
   margin-right: auto;
   color: #03045e;
 }
@@ -20,7 +20,6 @@
   width: 50%;
   margin-top: 8%;
   margin-left: auto;
-  margin-bottom: 7.2%;
 }
 
 .welcome-title {
@@ -43,4 +42,5 @@
 
 .background-color {
   background-color: #e1ebff;
+  min-height: 100vh;
 }
