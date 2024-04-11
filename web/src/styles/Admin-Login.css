@@ -20,23 +20,27 @@
   width: 50%;
   margin-top: 8%;
   margin-left: auto;
-  margin-bottom: 5%;
+  margin-bottom: 7.2%;
 }
 
 .welcome-title {
   font-style: italic;
-  font-size: 2em;
+  font-size: 3em;
   margin-bottom: 5%;
   font-weight: 100;
 }
 
 .passport-title {
-  font-size: 3em;
+  font-size: 4em;
   font-weight: 700;
 }
 
 .dashboard-title {
-  font-size: 2em;
+  font-size: 3em;
   font-weight: 250;
   margin-bottom: 3%;
+}
+
+.background-color {
+  background-color: #e1ebff;
 }
