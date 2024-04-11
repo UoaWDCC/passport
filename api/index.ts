@@ -32,4 +32,4 @@ app.use(express.static("public"))
 
 // Routes
 app.use("/hello", helloRoutes)
-app.use("/user", userRoutes)
+app.use("/api/user", userRoutes)

@@ -16,7 +16,7 @@ interface UserData {
 
 // sending data to mongoDB, need to change url
 const postUserData = async (data: UserData) => {
-  await fetch("http://localhost:3000/user", {
+  await fetch("http://localhost:3000/api/user", {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -38,38 +38,36 @@ const postUserData = async (data: UserData) => {
 
 const updateUserData = async (data: UserData) => {
   try {
-    const response = await fetch("http://localhost:3000/user/" + data.UserUPI, {
-      method: "PUT",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        firstName: data.userData.given_name,
-        lastName: data.userData.family_name,
-        email: data.userData.email,
-        accessToken: data.userData.jti,
-        upi: data.UserUPI,
-      }),
-    });
-    
+    const response = await fetch(
+      "http://localhost:3000/api/user/" + data.UserUPI,
+      {
+        method: "PUT",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          firstName: data.userData.given_name,
+          lastName: data.userData.family_name,
+          email: data.userData.email,
+          accessToken: data.userData.jti,
+          upi: data.UserUPI,
+        }),
+      }
+    )
+
     if (!response.ok) {
-      // console.log(response)
-      throw new Error('Failed to update user data');
+      throw new Error("Failed to update user data")
     } else {
       console.log("User Data Updated")
     }
-
-    // console.log(response);
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 }
-
 
 function Login() {
   return (
     <div>
       <GoogleLogin
         onSuccess={async (credentialResponse) => {
-          // console.log(credentialResponse.credential);
           if (
             credentialResponse.credential == null ||
             credentialResponse.credential == undefined
@@ -79,8 +77,6 @@ function Login() {
             const jsondata: OathPayload = jwtDecode(
               credentialResponse.credential
             )
-
-            // console.log(jsondata)
 
             //extracting user UPI
             const UserUPI = jsondata.email.split("@")[0]
@@ -124,16 +120,16 @@ function Login() {
 
               const getUserData = async () => {
                 //TODO Fix up this method - FIXED
-                await fetch("http://localhost:3000/user/" + UserUPI, {
+                await fetch("http://localhost:3000/api/user/" + UserUPI, {
                   method: "GET",
                 })
                   .then((response) => {
-                    console.log("Fetch response for user data - Checking if user is in DB")
-                    // console.log(response)
+                    console.log(
+                      "Fetch response for user data - Checking if user is in DB"
+                    )
                     // If we get something then, update the user data. Else post.
                     if (response.status == 200) {
-                      console.log("Updating User Data");
-                      // console.log(response);
+                      console.log("Updating User Data")
                       updateUserData({
                         userData: jsondata,
                         UserUPI: UserUPI,
@@ -141,8 +137,7 @@ function Login() {
                         localStorage.setItem("accessToken", jsondata!.jti)
                       })
                     } else {
-                      console.log("Posting User Data");
-                      // console.log(response);
+                      console.log("Posting User Data")
                       postUserData({
                         userData: jsondata,
                         UserUPI: UserUPI,
