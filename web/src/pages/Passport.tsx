@@ -30,8 +30,7 @@ export default function Passport() {
 
   return (
     <div className="background flex flex-col h-screen justify-center items-center ">
-      <HamburgerMenu />
-      <CurrentView />
+      <CurrentView isAdminPage={false}/>
 
       <div className="text-black w-88">
         {/* display arrows depending on the current page index */}

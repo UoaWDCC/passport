@@ -5,7 +5,7 @@ import "../styles/Admin-Login.css";
 
 function AdminLogin() {
     return (
-        <div className="admin-login-outer background-admin-login">
+        <div className="admin-login-outer">
             <div className="admin-login-left-items">
                 <h2 className="welcome-title">Welcome to the</h2>
                 <h1 className="passport-title">WDCC Passport</h1>
