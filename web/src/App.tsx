@@ -6,27 +6,30 @@ import Passport from "@pages/Passport";
 import SignInPage from './pages/SignIn-Page/SignInPage';
 import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
 
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: (
-//       <div>
-//         <p>Hello World!</p>
-//         <Link to="passport">Other Page</Link>
-//       </div>
-//     ),
-//   },
-//   {
-//     path: "/passport",
-//     element: <Passport />,
-//   },
-// ]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <div>
+      <SignInPage />
+      </div>
+    ),
+  },
+  {
+    path: "/passport",
+    element: <Passport />,
+  },
+{
+  path: "/sign-in-error",
+  element: <SignInErrorPage />,
+},
+]);
 
 export default function App() {
   
   return (
     <div>
-      <SignInPage />
+      
 {/* <RouterProvider router={router} />; */}
     </div>
   );
