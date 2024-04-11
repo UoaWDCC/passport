@@ -1,8 +1,7 @@
 import styles from "./SignInPage.module.css"; // Import the CSS module
 import GoogleSigninBtn from "../../components/GoogleSigninBtn";
 import WDCC_Logo from '../../assets/WDCC_Logo.svg';
-import Login from "@pages/Login";
-import { RouterProvider } from "react-router";
+
 
 const handleSignIn = () => {
   // calls an endpoint to redirect to Google auth (current a place holder)
