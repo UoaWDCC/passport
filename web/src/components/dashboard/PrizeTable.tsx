@@ -1,25 +1,32 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DataTable, { TableColumn } from "react-data-table-component"
 
-const data = [
-  { name: "Prize 1", redeemed: false },
-  { name: "Prize 2", redeemed: false },
-]
+const data = [{ userId: "Placeholder", redeemed: false }]
 
 function PrizeTable() {
   const [prizeData, setPrizeData] = useState(data)
 
+  useEffect(() => {
+    fetch("http://localhost:3000/api/prize/non-redeemed")
+      .then((res) => res.json())
+      .then((datafromdb) => {
+        setPrizeData(datafromdb)
+      })
+  }, [])
+
   // Moved the function definition above its usage
-  const handleRowSelected = (row) => {
+  const handleRowSelected = (row: { userId: string; redeemed?: boolean }) => {
     setPrizeData((prevData) =>
       prevData.map((item) =>
-        item.name === row.name ? { ...item, redeemed: !item.redeemed } : item
+        item.userId === row.userId
+          ? { ...item, redeemed: !item.redeemed }
+          : item
       )
     )
   }
 
-  const columns: TableColumn<{ name: string; redeemed: boolean }>[] = [
-    { name: "Name", selector: (row) => row.name, sortable: true },
+  const columns: TableColumn<{ userId: string; redeemed: boolean }>[] = [
+    { name: "userId", selector: (row) => row.userId, sortable: true },
     {
       name: "Redeemed",
       selector: (row) => row.redeemed,
