@@ -52,7 +52,11 @@
   .text{
     font-size: medium;
     color: #03045e;
-    margin: 0.5%;
+    margin: 1%;
     font-family: "Montserrat";
+    text-align: center;
+  }
 
+  .link {
+    text-decoration: underline;
   }

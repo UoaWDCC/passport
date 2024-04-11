@@ -4,9 +4,9 @@ import { createBrowserRouter, RouterProvider, Link } from "react-router-dom"
 import { useState } from 'react';
 // import Home from "@pages/Home";
 import Passport from "@pages/Passport"
-import GoogleSigninBtn from "./components/GoogleSigninBtn.tsx"
 import SignInPage from './pages/SignIn-Page/SignInPage';
 import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
+import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
   {
@@ -28,15 +28,8 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  const [showLogin, setShowLogin] = useState(false);
-  const handleClick = (): void => {
-    setShowLogin(true);
-  }
-
   return (
     <div>
-      <GoogleSigninBtn onClick={handleClick} />
-      {showLogin && <Login />}
       <RouterProvider router={router} />;
     </div>
   )
