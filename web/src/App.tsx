@@ -5,14 +5,15 @@ import { useState } from 'react';
 // import Home from "@pages/Home";
 import Passport from "@pages/Passport"
 import GoogleSigninBtn from "./components/GoogleSigninBtn.tsx"
+import SignInPage from './pages/SignIn-Page/SignInPage';
+import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <div>
-        <p>Hello World!</p>
-        <Link to="newpage">Other Page</Link>
+      <SignInPage />
       </div>
     ),
   },
@@ -20,13 +21,16 @@ const router = createBrowserRouter([
     path: "/passport",
     element: <Passport />,
   },
-])
+{
+  path: "/sign-in-error",
+  element: <SignInErrorPage />,
+},
+]);
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const handleClick = (): void => {
     setShowLogin(true);
-    console.log("Custom Button was clicked!");
   }
 
   return (
