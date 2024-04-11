@@ -6,6 +6,7 @@ import { config } from "dotenv"
 // Import Routers
 import helloRoutes from "./routes/hello"
 import userRoutes from "./routes/user"
+import prizeRoutes from "./routes/prize"
 
 const app = express()
 config()
@@ -33,3 +34,4 @@ app.use(express.static("public"))
 // Routes
 app.use("/hello", helloRoutes)
 app.use("/api/user", userRoutes)
+app.use("/api/prize", prizeRoutes)
