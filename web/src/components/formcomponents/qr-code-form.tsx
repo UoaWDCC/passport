@@ -127,9 +127,6 @@ function QRCodeForm() {
             onChange={(e) => checkValidEndDate(e.target.value)} />
         </div>
 
-        <button onClick={() => { console.log(startDate, endDate) }}>testtest</button>
-
-
         <StampSection getImageName={getImageName} getImage64={getImage64} />
 
         <div className="submit-button-container">
