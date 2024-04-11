@@ -54,7 +54,7 @@ async function run() {
         //QR code link generated linking to wdccpassport.com with event id as Param
         const qrCode =`https://api.qrserver.com/v1/create-qr-code/?data=www.wdccpassport.com/${result.insertedId}&amp;size=100x100`
         const result2 = await eventCollection.updateOne({_id: new ObjectId(result.insertedId)}, {$set:{"QRcode": qrCode}})
-        console.log(`Event ${result2.upsertedId} updated with QR code link`)
+        console.log(qrCode)
 
       } catch (error) {
         console.log(error);
