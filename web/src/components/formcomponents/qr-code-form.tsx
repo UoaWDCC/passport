@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import StampSection from "./stamp-section";
 import axios from "axios"
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function QRCodeForm() {
 
@@ -12,13 +12,13 @@ function QRCodeForm() {
   const [endDate, setEndDate] = useState("")
   const [image64, setImage64] = useState("")
   const [validSubmit, setValidSubmit] = useState("no")
-  const [imageName, setImageName] = useState("")
+  const [_, setImageName] = useState("")
 
   const navigate = useNavigate()
 
   const submitForm = async () => {
     if (eventName && startDate && endDate) {
-      const response = await axios.post('http://localhost:3000/api/event',
+      await axios.post('http://localhost:3000/api/event',
         {
           "eventName": eventName,
           "stamp64": image64,

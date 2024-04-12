@@ -8,7 +8,6 @@ config();
 
 //setting up Mongo client
 const uri: string = process.env.DATABASE_URL!;
-console.log(uri);
 
 const client = new MongoClient(uri, {
   serverApi: {

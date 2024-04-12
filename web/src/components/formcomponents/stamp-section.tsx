@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Upload from '../../assets/upload.svg';
 import Bin from '../../assets/bin.svg';
 
