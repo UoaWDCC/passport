@@ -20,18 +20,3 @@
   border-width: 1.4vw;
   border-color: #fff;
 }
-
-#adminicon {
-  margin: 2% 10% 0% 10%;
-  height: 1%;
-  border-width: 5px;
-  width: 20%;
-}
-
-#adminbutton {
-  width: 40%;
-  padding: 2% 2% 2% 2%;
-  border-radius: 20px;
-  font-size: 2em;
-  align-items: flex-start;
-}
