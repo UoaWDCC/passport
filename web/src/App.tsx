@@ -3,7 +3,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 // import { useState } from 'react';
 // import Home from "@pages/Home";
-import Passport from "@pages/Passport"
+import Passport from "@pages/Passport";
+import Dashboard from './pages/Dashboard.tsx';
+import Form from './pages/Form.tsx';
 import SignInPage from './pages/SignIn-Page/SignInPage';
 import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
@@ -21,10 +23,18 @@ const router = createBrowserRouter([
     path: "/passport",
     element: <Passport />,
   },
-{
-  path: "/sign-in-error",
-  element: <SignInErrorPage />,
-},
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
+  {
+    path: "/form",
+    element: <Form />,
+  },
+  {
+    path: "/sign-in-error",
+    element: <SignInErrorPage />,
+  },
 ]);
 
 export default function App() {
