@@ -1,6 +1,8 @@
 import { useState } from "react";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
+import LeftButton from "../components/LeftButton.tsx";
+import RightButton from "../components/RightButton.tsx";
 import HamburgerMenu from "@components/HamburgerMenu";
 import "../styles/Passport.css";
 
@@ -33,12 +35,18 @@ export default function Passport() {
       <HamburgerMenu />
       <CurrentView />
 
-      <div className="text-black">
+      <div className="text-black w-88">
         {/* display arrows depending on the current page index */}
-        {currentIndex > 0 && <button onClick={goToPreviousView}> ← </button>}
-        {currentIndex < views.length - 1 && (
-          <button onClick={goToNextView}> → </button>
+        {currentIndex > 0 && (
+          <button className="nav-button float-left" onClick={goToPreviousView}>
+            <LeftButton />
+          </button>
         )}
+        {currentIndex < views.length - 1 && (
+          <button className="nav-button float-right" onClick={goToNextView}>
+            <RightButton />
+          </button>
+        )}  
       </div>
 
       <p>Page {currentIndex + 1}</p>
