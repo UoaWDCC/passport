@@ -1,5 +1,3 @@
-import React from "react";
-
 const LeftButton = () => (
   <svg
     width="61"
