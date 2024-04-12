@@ -1,6 +1,6 @@
-import styles from "./SignInPage.module.css"; // Import the CSS module
-import GoogleSigninBtn from "../../components/GoogleSigninBtn";
-import WDCC_Logo from '../../assets/WDCC_Logo.svg';
+import styles from "../styles/page styles/SignInPage.module.css"; // Import the CSS module
+import GoogleSigninBtn from "../components/GoogleSigninBtn";
+import WDCC_Logo from '../assets/WDCC_Logo.svg';
 
 
 const handleSignIn = () => {

@@ -1,6 +1,6 @@
 import GenerateQRCodeButton from '../components/dashboardcomponents/create-qr-code-button';
 import Header from '../components/dashboardcomponents/dashboard-header';
-import '../styles/dashboard.css';
+import '../styles/page styles/dashboard.css';
 
 function Dashboard() {
     return (

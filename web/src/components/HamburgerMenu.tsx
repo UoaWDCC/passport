@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/HamburgerMenu.css";
+import "../styles/component styles/HamburgerMenu.css";
 
 export default function HamburgerMenu() {
   // open state for the menu
