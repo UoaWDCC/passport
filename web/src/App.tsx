@@ -1,7 +1,6 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // import Login from "@pages/Login"
 import { createBrowserRouter, RouterProvider, Link } from "react-router-dom"
-import { createBrowserRouter, RouterProvider, Link } from "react-router-dom"
 // import { useState } from 'react';
 // import Home from "@pages/Home";
 import Passport from "@pages/Passport"
@@ -44,7 +43,7 @@ const router = createBrowserRouter([
   element: <AdminLogin />,
 },
   {
-    path: "/dashboard",
+    path: "/dashboard/events",
     element: <Dashboard />,
   },
   {
