@@ -4,9 +4,11 @@ import '../styles/page styles/form.css';
 
 function Form() {
     return (
-        <div className='form-container'>
-            <FormLogo />
-            <QRCodeForm />
+        <div className='form-outer background-form'>
+            <div className='form-inner'>
+                <FormLogo />
+                <QRCodeForm />
+            </div>
         </div>
     )
 }

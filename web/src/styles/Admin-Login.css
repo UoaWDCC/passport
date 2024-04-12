@@ -7,11 +7,10 @@
   display: flex;
 }
 
-.background-color {
+.background-admin-login {
   background-color: #e1ebff;
   min-height: 100vh;
 }
-
 
 .admin-login-left-items {
   align-self: start;
@@ -50,3 +49,4 @@
   font-weight: 250;
   margin-bottom: 3%;
 }
+
