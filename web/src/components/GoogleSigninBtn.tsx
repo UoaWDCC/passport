@@ -1,5 +1,5 @@
 import GoogleIcon from "../assets/GoogleIcon.svg"
-import styles from "./GoogleSigninBtn.module.css"
+import styles from "../styles/component styles/GoogleSigninBtn.module.css"
 
 interface GoogleSignin {
   onClick: () => void;

@@ -1,4 +1,4 @@
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/WDCC_Logo.svg";
 
 function FormLogo() {
     return (<img className="form-logo" src={Logo} alt="WDCC logo" />);

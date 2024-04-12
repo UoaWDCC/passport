@@ -1,5 +1,5 @@
-import Logo from "../images/secondary_white_1024.png";
-import "../styles/Passport.css";
+import Logo from "../assets/WDCC_Logo.svg";
+import "../styles/page styles/Passport.css";
 
 export default function PassportMain() {
   return (
