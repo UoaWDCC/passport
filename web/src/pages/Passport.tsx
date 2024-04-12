@@ -1,8 +1,10 @@
 import { useState } from "react";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
+import LeftButton from "../components/LeftButton.tsx";
+import RightButton from "../components/RightButton.tsx";
 import HamburgerMenu from "@components/HamburgerMenu";
-import "../styles/Passport.css";
+import "../styles/page styles/Passport.css";
 
 export default function Passport() {
   // initialise index state

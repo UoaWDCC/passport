@@ -1,7 +1,6 @@
-// app.tsx
-import GenerateQRCodeButton from './components/dashboardcomponents/create-qr-code-button';
-import Header from './components/dashboardcomponents/dashboard-header';
-import '../styles/dashboard.css';
+import GenerateQRCodeButton from '../components/dashboardcomponents/create-qr-code-button';
+import Header from '../components/dashboardcomponents/dashboard-header';
+import '../styles/page styles/dashboard.css';
 
 function Dashboard() {
     return (
