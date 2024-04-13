@@ -13,8 +13,8 @@
 .admin-login-left-items {
   align-self: start;
   display: inline-block;
-  width: 45%;
-  margin-left: 5%;
+  width: 40%;
+  margin-left: 10%;
   margin-right: auto;
   color: #03045e;
 }
@@ -31,7 +31,7 @@
 .welcome-title-admin-login {
   font-style: italic;
   font-size: 3em;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
   font-weight: 100;
 }
 
