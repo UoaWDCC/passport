@@ -4,7 +4,7 @@ import '../styles/page styles/form.css';
 
 function Form() {
     return (
-        <div className='form-outer'>
+        <div className='form-outer background-form'>
             <div className='form-inner'>
                 <FormLogo />
                 <QRCodeForm />

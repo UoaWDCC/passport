@@ -1,0 +1,47 @@
+.background-admin-login {
+  min-height: 100vh;
+  background-color: #e1ebff;
+}
+
+.admin-login-container {
+  width: 100%;
+  justify-content: center;
+  align-content: space-between;
+  display: flex;
+}
+
+.admin-login-left-items {
+  align-self: start;
+  display: inline-block;
+  width: 45%;
+  margin-left: 5%;
+  margin-right: auto;
+  color: #03045e;
+}
+
+.admin-login-right-items {
+  align-self: flex-end;
+  display: inline-block;
+  width: 50%;
+  margin-top: 8%;
+  margin-left: auto;
+  margin-bottom: 5%;
+}
+
+.welcome-title-admin-login {
+  font-style: italic;
+  font-size: 3em;
+  margin-bottom: 5%;
+  font-weight: 100;
+}
+
+.passport-title-admin-login {
+  font-size: 4em;
+  font-weight: 700;
+}
+
+.dashboard-title-admin-login {
+  font-size: 3em;
+  font-weight: 250;
+  margin-bottom: 3%;
+}
