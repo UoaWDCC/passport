@@ -21,6 +21,7 @@ const router = createBrowserRouter([
         <h1>WDCC Digital Passport</h1>
         <Link to="passport">Other Page</Link>
         <GoogleSigninBtn onClick={handleClick} />
+        
       </div>
     ),
   },
@@ -30,7 +31,8 @@ const router = createBrowserRouter([
     element:  (
       <div>
         <HamburgerMenu />, 
-        <Passport />
+        <Passport /> 
+        
       </div>
     
     )
