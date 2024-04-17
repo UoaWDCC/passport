@@ -18,10 +18,12 @@ export default function Events() {
     return (
         <div>
             <h1>Events</h1>
+            <a href="/form">Create new event</a>
+            <h1>Event Name</h1>
             {events ? (
                 <ul>
                     {events.map((event) => (
-                        <li key={event._id}>{event._id}</li>
+                        <li key={event._id}>{event.eventName}</li>
                     ))}
                 </ul>
             ) : (
