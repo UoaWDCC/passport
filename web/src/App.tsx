@@ -16,7 +16,7 @@ const router = createBrowserRouter([
         path: "/",
         element: (
             <div>
-                <SignInPage />
+                <Events />
             </div>
         ),
     },
