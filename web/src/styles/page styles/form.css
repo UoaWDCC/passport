@@ -12,7 +12,6 @@
   font-weight: 400;
   color-scheme: light dark;
   color: #ffffff;
-  background-color: #03045e;
 }
 
 .form-inner {
@@ -21,6 +20,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.background-form {
+  min-height: 100vh;
+  background-color: #03045e;
 }
 
 .form-logo {
@@ -44,7 +48,6 @@
   gap: 20px;
 }
 
-
 .header {
   text-align: center;
   font-size: 2em;
@@ -60,7 +63,6 @@
 }
 
 .error-msg-dates {
-
   color: red;
   margin-top: 0px;
   margin-bottom: -5px;
@@ -152,7 +154,7 @@ input:focus {
 }
 
 /* Submit */
-.submit-link{
+.submit-link {
   display: flex;
   justify-content: center;
 }
@@ -166,9 +168,8 @@ input:focus {
   cursor: pointer;
 }
 
-
 @media only screen and (max-width: 480px) {
-  .qr-code-form{
+  .qr-code-form {
     width: 360px;
   }
 }
