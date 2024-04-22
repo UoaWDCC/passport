@@ -79,6 +79,27 @@ async function run() {
         return res.status(500).send("Issue with database");
       }
     });
+
+    //check event validity 
+    Api.get("/check-event-status/:eventId", async (req: Request, res: Response) => {
+      try {
+        const eventId = req.params.eventId
+        const objectId = new ObjectId(eventId)
+
+        const database = client.db("WDCC_Passport")
+        const eventCollection = database.collection("Events")
+
+        const result = await eventCollection.findOne({ _id: objectId})
+        
+        console.log(result)
+
+        res.status(200).send(result)
+      }catch (error) {
+        console.log(error)
+        return res.status(500).send("Issue with database")
+      }
+    })
+
     return Api
   } finally {
   }

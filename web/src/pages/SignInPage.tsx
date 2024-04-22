@@ -1,6 +1,9 @@
 import styles from "../styles/page styles/SignInPage.module.css"; // Import the CSS module
 import GoogleSigninBtn from "../components/GoogleSigninBtn";
 import WDCC_Logo from '../assets/WDCC_Logo.svg';
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
 
 const handleSignIn = () => {
@@ -9,17 +12,35 @@ const handleSignIn = () => {
 };
 
 const SignInPage: React.FC = () => {
+
+  const [validEvent, setValidEvent] = useState(false)
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const eventId = searchParams.get("data")
+
+  useEffect(() => {
+    if (eventId != undefined) {
+      console.log("skeet")
+      axios.get(`https://localhost:3000/api/check-event-status/${eventId}`)
+        .then(res => {
+          if (res.data == "yes") {
+            setValidEvent(true)
+          }
+        })
+    }
+  }, [])
+
   return (
     <div className={styles.container}>
       <div className={styles.topsection}>
         {/* <h1 className={styles.h1}>WDCC</h1>
         <p className={styles.subtitle}>Web Dev & Consulting Club</p> */}
         <div>
-          <img src={WDCC_Logo} className="h-80"/>
+          <img src={WDCC_Logo} className="h-80" />
         </div>
-      
+
       </div>
-      
+
       <div className={styles.bottomsection}>
         <p className={styles.text}>Welcome to WDCC Passport!</p>
         <p className={styles.text}>Please sign in with your Google account to proceed.</p>
