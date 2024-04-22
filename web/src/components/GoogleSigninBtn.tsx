@@ -3,12 +3,13 @@ import styles from "../styles/component styles/GoogleSigninBtn.module.css"
 
 interface GoogleSignin {
   onClick: () => void;
+  adminLogin?: boolean;
 }
 
-const GoogleSigninBtn = ({ onClick }: GoogleSignin) => {
+const GoogleSigninBtn = ({ onClick, adminLogin }: GoogleSignin) => {
   return(
-  <button className= {styles.button} onClick={onClick}>
-    <img src={GoogleIcon} alt="Google Icon" className={styles.icon} />
+  <button className={styles.button} id={adminLogin ? styles.adminbutton: ""} onClick={onClick}>
+    <img src={GoogleIcon} alt="Google Icon" className={styles.icon} id={adminLogin ? styles.adminicon: ""}  />
     sign in
   </button>
   );
