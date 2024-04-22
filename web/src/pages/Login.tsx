@@ -1,5 +1,6 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 
 interface UserData {
@@ -83,15 +84,17 @@ const checkUser = async (upi: string): Promise<string | undefined> => {
 };
 
 const useGoogleSignIn = () => {
+  const navigate = useNavigate();
+
   const handleSignIn = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log('Token Response:', tokenResponse.access_token); //DELETE
+      // console.log('Token Response:', tokenResponse.access_token); //DELETE
       
       try {
         const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         });
-        console.log('User Info:', userInfo.data); //DELETE
+        // console.log('User Info:', userInfo.data); //DELETE
 
         //extracting user UPI
         const userUPI:string = userInfo.data.email.split("@")[0];
@@ -115,8 +118,7 @@ const useGoogleSignIn = () => {
                   "Fetch response for user data - Checking if user is in DB"
                 )
                 // If we get something then, update the user data. Else post.
-                console.log("Response Satus;", response.status);
-                console.log(response);
+                
                 
                 if (response.status == 200) {
                   console.log("Updating User Data")
@@ -150,10 +152,16 @@ const useGoogleSignIn = () => {
           // Check MongoDB if user is in DB, then updates/posts user data accordingly
           getUserData();
 
-          console.log()
+          // "/passport"
+          navigate('/passport');
+
         } else {
           // Redirect to error page
           console.log("Redirect to error page");
+          
+          // "/sign-in-error"
+          navigate('/sign-in-error');
+
         }
         
       } catch (error) {
