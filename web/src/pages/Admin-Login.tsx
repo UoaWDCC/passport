@@ -1,6 +1,6 @@
 import GoogleSigninBtn from "@components/GoogleSigninBtn";
 import PassportMain from "@components/PassportMain";
-import "../styles/page styles/admin-login.css";
+import "../styles/page styles/Admin-Login.css";
 
 
 function AdminLogin() {
