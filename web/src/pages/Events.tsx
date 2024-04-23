@@ -42,7 +42,6 @@ export default function Events() {
                                 <div className="column">{event.qrCode}</div>
                                 <div className="column">{event.stampImage}</div>
                                 <div className="column">{event.status}</div>
-                                //event attendees should be calculated before being passes through so change this!!
                                 <div className="column">{Array.isArray(event.attendees) ? event.attendees.length : 0}</div> 
                                 <div className="column">
                                     <button>Edit</button>
