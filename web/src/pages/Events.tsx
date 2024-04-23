@@ -21,10 +21,11 @@ export default function Events() {
         <div >
             <img src={logo} alt="Logo" className="logo" />
             <h1 className="title">Event Dashboard</h1>
+
+            <div className="dashboard">
             <a href="/form" className="create-event-button">
                 Create new event
             </a>
-            <div className="dashboard">
                 <div className="dashboard-header">
                     <div className="column">Name</div>
                     <div className="column">QR Code</div>
