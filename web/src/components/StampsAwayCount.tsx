@@ -6,7 +6,7 @@ export default function StampsAwayCount() {
 
     return (
         <div className="text-center text-xl">
-            <p className="font-bold text-2xl">{temp}</p>
+            <p className="font-semibold text-4xl">{temp}</p>
             <div className="flex flex-col text-center">
                 <span>Stamps</span>
                 <span>away from</span>
