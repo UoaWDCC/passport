@@ -5,14 +5,16 @@ export default function PrizesAchieved() {
   // const [prizes, setPrizes] = useState();
   const temp = 2;
 
+
+
   return (
-    <div className="text-center text-xl">
-      <p className="font-bold text-2xl">{temp} x </p>
-      <img src={Present} alt="" />
+    <div className="flex items-center justify-center text-xl">
+      <p className="font-semibold text-4xl mr-4">{temp} x </p>
+      <img src={Present} alt="" className="mr-4" />
       <div className="flex flex-col text-center">
         <span>prizes</span>
         <span>achieved</span>
       </div>
     </div>
-  );
+)
 }
