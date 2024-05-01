@@ -1,0 +1,49 @@
+.hamburger-menu {
+  width: 22em;
+  height: 6em;
+  margin-bottom: 0;
+  transition: background-color 0.2s ease;
+}
+
+.hamburger-menu.open {
+  background-color: #03045e;
+}
+
+/* Hamburger Button */
+.line {
+  width: 25px;
+  height: 3px;
+  margin: 3px 0;
+  background-color: #03045e;
+  transition: all 0.3s ease;
+}
+
+.open .line {
+  background-color: white;
+}
+
+/* Button Animation */
+.open .line:nth-child(1) {
+  transform: rotate(-45deg) translate(-6px, 6px);
+}
+
+.open .line:nth-child(2) {
+  opacity: 0;
+}
+
+.open .line:nth-child(3) {
+  transform: rotate(45deg) translate(-6px, -6px);
+}
+
+/* Menu Items */
+.menu-items.open {
+  display: block;
+  padding-left: 2em;
+}
+
+.menu-items a {
+  display: block;
+  text-decoration: none;
+  padding: 2px 0;
+  color: white;
+}

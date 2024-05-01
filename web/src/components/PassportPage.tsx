@@ -1,4 +1,4 @@
-import "../styles/Passport.css";
+import "../styles/page styles/Passport.css";
 
 export default function PassportPage() {
   return (

@@ -4,9 +4,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 // import { useState } from 'react';
 // import Home from "@pages/Home";
 import Passport from "@pages/Passport"
-import SignInPage from "./pages/SignIn-Page/SignInPage"
-import SignInErrorPage from "./pages/SigninError-Page/SignInErrorPage"
+import SignInPage from "./pages/SignInPage"
+import SignInErrorPage from "./pages/SignInErrorPage"
+import AdminLogin from "./pages/Admin-Login"
+import Dashboard from "@pages/Dashboard"
 import DashboardPrizes from "@pages/DashboardPrizes"
+
+import Form from "@pages/Form"
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -27,15 +31,27 @@ const router = createBrowserRouter([
     element: <SignInErrorPage />,
   },
   {
+    path: "/dashboard",
+    element: <AdminLogin />,
+  },
+  {
     path: "/dashboard/prizes",
     element: <DashboardPrizes />,
+  },
+  {
+    path: "/dashboard/events",
+    element: <Dashboard />,
+  },
+  {
+    path: "/form",
+    element: <Form />,
   },
 ])
 
 export default function App() {
   return (
     <div>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </div>
   )
 }

@@ -1,0 +1,37 @@
+.button {
+  padding: 2% 12%;
+  padding-right: 15%;
+  font-size: 6vw;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 550;
+  background-color: #03045e;
+  color: #fff;
+  border-radius: 8px;
+  align-items: center;
+  position: relative;
+  display: flex;
+}
+
+.icon {
+  margin-right: 6vw;
+  height: 10vw;
+  background-color: #fff;
+  border-radius: 50%;
+  border-width: 1.4vw;
+  border-color: #fff;
+}
+
+#adminicon {
+  margin: 2% 10% 0% 10%;
+  height: 1%;
+  border-width: 5px;
+  width: 20%;
+}
+
+#adminbutton {
+  width: 40%;
+  padding: 2%;
+  border-radius: 20px;
+  font-size: 2em;
+  align-items: flex-start;
+}

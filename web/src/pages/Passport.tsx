@@ -1,7 +1,12 @@
 import { useState } from "react";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
-import "../styles/Passport.css";
+import LeftButton from "../components/LeftButton.tsx";
+import RightButton from "../components/RightButton.tsx";
+import HamburgerMenu from "@components/HamburgerMenu";
+import StampCount from "@components/StampCount.tsx";
+import "../styles/page styles/Passport.css";
+import WelcomeMessage from "@components/WelcomeMessage.tsx";
 
 export default function Passport() {
   // initialise index state
@@ -29,14 +34,26 @@ export default function Passport() {
 
   return (
     <div className="background flex flex-col h-screen justify-center items-center ">
+      <HamburgerMenu />
+      <div className=" flex items-start w-88">
+      <WelcomeMessage />
+      </div>
+      <StampCount />
+      
       <CurrentView />
 
-      <div className="text-black">
+      <div className="text-black w-88">
         {/* display arrows depending on the current page index */}
-        {currentIndex > 0 && <button onClick={goToPreviousView}> ← </button>}
-        {currentIndex < views.length - 1 && (
-          <button onClick={goToNextView}> → </button>
+        {currentIndex > 0 && (
+          <button className="nav-button float-left" onClick={goToPreviousView}>
+            <LeftButton />
+          </button>
         )}
+        {currentIndex < views.length - 1 && (
+          <button className="nav-button float-right" onClick={goToNextView}>
+            <RightButton />
+          </button>
+        )}  
       </div>
 
       <p>Page {currentIndex + 1}</p>

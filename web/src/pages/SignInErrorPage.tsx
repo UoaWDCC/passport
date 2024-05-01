@@ -1,6 +1,6 @@
-import styles from "./SignInError.module.css"; // Import the CSS module
-import styles2 from '../SignIn-Page/SignInPage.module.css';
-import WDCC_Login from '../../assets/WDCC_Logo.svg';
+import styles from "../styles/page styles/SignInError.module.css"; // Import the CSS module
+import styles2 from '../styles/page styles/SignInPage.module.css';
+import WDCC_Login from '../assets/WDCC_Logo.svg';
 
 const SignInErrorPage: React.FC = () => {
     return (

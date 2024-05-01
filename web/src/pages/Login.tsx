@@ -1,29 +1,26 @@
-import { GoogleLogin } from "@react-oauth/google"
-import { JwtPayload, jwtDecode } from "jwt-decode"
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
-//getting rid of  error :D
-interface OathPayload extends JwtPayload {
+
+interface UserData {
   family_name: string
   given_name: string
   email: string
-  jti: string
-}
-
-interface UserData {
-  userData: OathPayload
+  accessToken: string
   UserUPI: string
 }
 
-// sending data to mongoDB, need to change url
+// New user to MongoDB
 const postUserData = async (data: UserData) => {
   await fetch("http://localhost:3000/api/user", {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
-      firstName: data.userData.given_name,
-      lastName: data.userData.family_name,
-      email: data.userData.email,
-      accessToken: data.userData.jti,
+      firstName: data.given_name,
+      lastName: data.family_name,
+      email: data.email,
+      accessToken: data.accessToken,
       upi: data.UserUPI,
     }),
   })
@@ -36,6 +33,7 @@ const postUserData = async (data: UserData) => {
     })
 }
 
+//updating User in MongoDB
 const updateUserData = async (data: UserData) => {
   try {
     const response = await fetch(
@@ -44,10 +42,10 @@ const updateUserData = async (data: UserData) => {
         method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({
-          firstName: data.userData.given_name,
-          lastName: data.userData.family_name,
-          email: data.userData.email,
-          accessToken: data.userData.jti,
+          firstName: data.given_name,
+          lastName: data.family_name,
+          email: data.email,
+          accessToken: data.accessToken,
           upi: data.UserUPI,
         }),
       }
@@ -63,106 +61,120 @@ const updateUserData = async (data: UserData) => {
   }
 }
 
-function Login() {
-  return (
-    <div>
-      <GoogleLogin
-        onSuccess={async (credentialResponse) => {
-          if (
-            credentialResponse.credential == null ||
-            credentialResponse.credential == undefined
-          ) {
-            throw new Error("Credential is null or undefined")
-          } else {
-            const jsondata: OathPayload = jwtDecode(
-              credentialResponse.credential
-            )
+// Passes UPI to WDCC member checker API
+const checkUser = async (upi: string): Promise<string | undefined> => {
+  try {
+    const response = await fetch(
+      `https://membership.wdcc.co.nz/api/verify/${import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS}/UPI/${upi}`,
+      {
+        method: "GET",
+      }
+    );
 
-            //extracting user UPI
-            const UserUPI = jsondata.email.split("@")[0]
+    if (!response.ok) {
+      throw new Error("Failed to connect to verification API");
+    }
 
-            //passes UPI to WDCC member checker API
-            const checkUser = async (
-              upi: string
-            ): Promise<string | undefined> => {
-              try {
-                const response = await fetch(
-                  "https://membership.wdcc.co.nz/api/verify/" +
-                    import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS +
-                    "/UPI/" +
-                    upi,
-                  {
-                    method: "GET",
-                  }
+    const text = await response.text();
+    return text;
+
+  } catch (error) {
+    console.error("Error verifying user:", error);
+  }
+};
+
+const useGoogleSignIn = () => {
+  const navigate = useNavigate();
+
+  const handleSignIn = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      // console.log('Token Response:', tokenResponse.access_token); //DELETE
+      
+      try {
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        // console.log('User Info:', userInfo.data); //DELETE
+
+        //extracting user UPI
+        const userUPI:string = userInfo.data.email.split("@")[0];
+        //passing userUPI to member checker
+        const text = await checkUser(userUPI);
+
+        //checking if email is in domain and user is in WDCC
+        if (
+          userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
+          text === "value found in column"
+        ) {
+          console.log("YOU'RE IN WDCC!!");
+
+          const getUserData = async () => {
+            //TODO Fix up this method - FIXED
+            await fetch("http://localhost:3000/api/user/" + userUPI, {
+              method: "GET",
+            })
+              .then((response) => {
+                console.log(
+                  "Fetch response for user data - Checking if user is in DB"
                 )
-
-                if (!response.ok) {
-                  throw new Error("Failed to connect to verification API")
+                // If we get something then, update the user data. Else post.
+                
+                
+                if (response.status == 200) {
+                  console.log("Updating User Data")
+                  updateUserData({
+                    family_name: userInfo.data.family_name,
+                    given_name: userInfo.data.given_name,
+                    email: userInfo.data.email,
+                    accessToken: tokenResponse.access_token,
+                    UserUPI: userUPI,
+                  }).then(() => {
+                    localStorage.setItem("accessToken", tokenResponse.access_token)
+                  })
+                } else {
+                  console.log("Posting User Data")
+                  postUserData({
+                    family_name: userInfo.data.family_name,
+                    given_name: userInfo.data.given_name,
+                    email: userInfo.data.email,
+                    accessToken: tokenResponse.access_token,
+                    UserUPI: userUPI,
+                  }).then(() => {
+                    localStorage.setItem("accessToken", tokenResponse.access_token)
+                  })
                 }
-
-                const text = await response.text()
-                //console.log(text);
-                return text
-              } catch (error) {
-                console.error("Error verifying user:", error)
-              }
-            }
-
-            //passing userUPI to member checker
-            const text = await checkUser(UserUPI)
-
-            //checking is user email is in domain & if user is in WDCC
-            if (
-              jsondata.email.endsWith("aucklanduni.ac.nz") &&
-              text == "value found in column"
-            ) {
-              console.log("YOU'RE IN WDCC!!")
-
-              const getUserData = async () => {
-                //TODO Fix up this method - FIXED
-                await fetch("http://localhost:3000/api/user/" + UserUPI, {
-                  method: "GET",
-                })
-                  .then((response) => {
-                    console.log(
-                      "Fetch response for user data - Checking if user is in DB"
-                    )
-                    // If we get something then, update the user data. Else post.
-                    if (response.status == 200) {
-                      console.log("Updating User Data")
-                      updateUserData({
-                        userData: jsondata,
-                        UserUPI: UserUPI,
-                      }).then(() => {
-                        localStorage.setItem("accessToken", jsondata!.jti)
-                      })
-                    } else {
-                      console.log("Posting User Data")
-                      postUserData({
-                        userData: jsondata,
-                        UserUPI: UserUPI,
-                      }).then(() => {
-                        localStorage.setItem("accessToken", jsondata!.jti)
-                      })
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error)
-                  })
-              }
-              getUserData()
-            } else {
-              //redirect user to Error Page
-              console.log("Send user to Error Page")
-            }
+              })
+              .catch((error) => {
+                console.log(error)
+              })
           }
-        }}
-        onError={() => {
-          console.log("Login Failed")
-        }}
-      />
-    </div>
-  )
-}
+        
+          // Check MongoDB if user is in DB, then updates/posts user data accordingly
+          getUserData();
 
-export default Login
+          // "/passport"
+          navigate('/passport');
+
+        } else {
+          // Redirect to error page
+          console.log("Redirect to error page");
+          
+          // "/sign-in-error"
+          navigate('/sign-in-error');
+
+        }
+        
+      } catch (error) {
+        console.error('Failed to fetch user info:', error); 
+      }
+    },
+    onError: (error) => {
+      console.log('Login failed:', error);
+    }
+    // Assuming implicit flow as default; no need to specify unless changing
+  });
+
+  return handleSignIn;
+};
+
+export default useGoogleSignIn;

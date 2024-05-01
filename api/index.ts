@@ -4,13 +4,28 @@ import { connect } from "mongoose"
 import { config } from "dotenv"
 
 // Import Routers
-import helloRoutes from "./routes/hello"
+import helloRoutes from './routes/hello';
+import apiRoutes from "./routes/Api"
 import userRoutes from "./routes/user"
 import prizeRoutes from "./routes/prize"
 
 const app = express()
 config()
 
+app.use(json());
+app.use(cors());
+app.use(express.static('public'));
+
+// Routes
+app.use('/hello', helloRoutes);
+apiRoutes.then((apiRouter) => {
+  app.use('/api', apiRouter)
+})
+
+// const port = Number.parseInt(process.env.PORT || '3000');
+// app.listen(port, () => {
+//   console.log(`Listening on port ${port}`);
+// });
 const databaseUrl: string = process.env.DATABASE_URL!
 
 connect(databaseUrl)
