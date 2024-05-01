@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { Router } from "express"
 import Prize from "../db/Prize"
+import User from "../db/User"
 
 const prizeRoutes = Router()
 
@@ -79,5 +80,26 @@ prizeRoutes.delete("/:id", async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to delete prize" })
   }
 })
+
+// Update the redeemed status and time of a prize by ID
+prizeRoutes.post(
+  "/update-redeemed/:id",
+  async (req: Request, res: Response) => {
+    try {
+      const { redeemed, redeemedTime } = req.body
+      const updatedPrize = await Prize.findByIdAndUpdate(
+        req.params.id,
+        { redeemed, redeemedTime },
+        { new: true }
+      )
+      if (!updatedPrize) {
+        return res.status(404).json({ error: "Prize not found" })
+      }
+      res.json(updatedPrize)
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update prize" })
+    }
+  }
+)
 
 export default prizeRoutes
