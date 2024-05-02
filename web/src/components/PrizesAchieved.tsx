@@ -2,7 +2,7 @@ import Present from "../assets/present.svg";
 import "../styles/page styles/Leaderboard.css";
 
 export default function PrizesAchieved({ className }) {
-  // const [prizes, setPrizes] = useState();
+  //  anconst [prizes, setPrizes] = useState();
   const temp = 2;
 
   return (
