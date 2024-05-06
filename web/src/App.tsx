@@ -9,6 +9,7 @@ import SignInErrorPage from "./pages/SignInErrorPage";
 import AdminLogin from "./pages/Admin-Login";
 import Dashboard from "@pages/Dashboard";
 import Form from "@pages/Form";
+import PrivacyPolicy from "@pages/privacy-policy";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
 {
   path: "/form",
   element: <Form />,
+},
+{
+  path: "/privacy-policy",
+  element: <PrivacyPolicy />,
 }
 ]);
 
