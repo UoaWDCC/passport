@@ -9,8 +9,8 @@ import SignInErrorPage from "./pages/SignInErrorPage"
 import AdminLogin from "./pages/Admin-Login"
 import Dashboard from "@pages/Dashboard"
 import DashboardPrizes from "@pages/DashboardPrizes"
-
 import Form from "@pages/Form"
+import PrivacyPolicy from "@pages/privacy-policy";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -46,7 +46,11 @@ const router = createBrowserRouter([
     path: "/form",
     element: <Form />,
   },
-])
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
+  }
+]);
 
 export default function App() {
   return (
