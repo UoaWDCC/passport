@@ -9,6 +9,8 @@ import useGoogleSignIn from "./Login";// Import the custom hook
 
 
 const SignInPage: React.FC = () => {
+  
+  const url = window.location.pathname;
 
   //Validating QR code 
   const [validEvent, setValidEvent] = useState(false) 
