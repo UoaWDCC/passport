@@ -4,7 +4,8 @@ import "../styles/page styles/Admin-Login.css";
 import useGoogleSignIn from "./Login";// Import the custom hook
 
 function AdminLogin() {
-    const handleSignIn = useGoogleSignIn();
+    const url = window.location.pathname;
+    const handleSignIn = useGoogleSignIn(url);
     return (
         <div className="admin-login-outer background-admin-login">
             <div className="admin-login-left-items">
