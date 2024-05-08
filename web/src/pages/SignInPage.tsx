@@ -6,8 +6,10 @@ import useGoogleSignIn from "./Login";// Import the custom hook
 
 
 const SignInPage: React.FC = () => {
+  
+  const url = window.location.pathname;
 
-  const handleSignIn = useGoogleSignIn();
+  const handleSignIn = useGoogleSignIn(url);
 
   return (
     <div className={styles.container}>
