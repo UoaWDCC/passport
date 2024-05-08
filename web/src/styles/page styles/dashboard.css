@@ -1,9 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
 /* Overarching */
-body {
+.background-dashboard {
+  min-height: 100vh;
   background-color: #03045e;
 }
+
 
 .dashboard-container {
   font-family: "Montserrat", sans-serif;

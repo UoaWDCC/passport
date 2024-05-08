@@ -4,7 +4,9 @@ import PassportPage from "@components/PassportPage";
 import LeftButton from "../components/LeftButton.tsx";
 import RightButton from "../components/RightButton.tsx";
 import HamburgerMenu from "@components/HamburgerMenu";
+import StampCount from "@components/StampCount.tsx";
 import "../styles/page styles/Passport.css";
+import WelcomeMessage from "@components/WelcomeMessage.tsx";
 
 export default function Passport() {
   // initialise index state
@@ -33,6 +35,10 @@ export default function Passport() {
   return (
     <div className="background flex flex-col h-screen justify-center items-center ">
       <HamburgerMenu />
+      <div className=" flex items-start w-88">
+      <WelcomeMessage />
+      </div>
+      <StampCount />
       <CurrentView />
 
       <div className="text-black w-88">

@@ -40,7 +40,8 @@ async function run() {
         "eventName": eventName,
         "stamp64": stamp64,
         "startDate": new Date(startDate),
-        "endDate": new Date(endDate)
+        "endDate": new Date(endDate),
+        "totalAttended": 1000
       };
       try {
         const database = client.db("WDCC_Passport");
@@ -71,8 +72,15 @@ async function run() {
 
         const cursor = await eventCollection.find({})
         const result = await cursor.toArray()
-        console.log(result)
-        
+        for(let i=0; i<result.length; i++){
+          if (new Date() >= result[i].startDate && new Date() <= result[i].endDate ){
+            result[i]["status"] = true
+          }else{
+            result[i]["status"] = false
+          }
+        }
+    
+                
         res.status(200).send(result)
       } catch (error) {
         console.log(error);

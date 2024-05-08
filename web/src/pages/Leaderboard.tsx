@@ -7,7 +7,7 @@ import "../styles/page styles/Leaderboard.css";
 import PrizesAchieved from "@components/PrizesAchieved";
 
 export default function Leaderboard() {
-  const [height] = useState(3);
+  const [height] = useState(5);
 
   return (
     <div className="passport-main h-screen flex flex-col items-center justify-center">
