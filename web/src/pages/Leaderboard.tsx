@@ -1,17 +1,29 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import StampsAwayCount from "@components/StampsAwayCount";
 import ProgressBar from "@components/ProgressBar";
+import RedeemPrizeButton from "@components/RedeemPrizeButton";
 import "../styles/page styles/Leaderboard.css";
 import PrizesAchieved from "@components/PrizesAchieved";
 
 export default function Leaderboard() {
+  const [height, setHeight] = useState(5);
+
   return (
     <div className="passport-main h-screen flex flex-col items-center justify-center">
       <div className="flex items-center space-x-4">
-        <ProgressBar />
-
-        <StampsAwayCount />
+        <ProgressBar height={height} setHeight={setHeight} />
+        <StampsAwayCount height={height} />
       </div>
+      {height >= 5 ? (
+      <Link to="/leaderboard-prize">
+        <button className="mt-6">
+            <RedeemPrizeButton />
+          </button>
+      </Link>
+    ) : (
       <PrizesAchieved className="mt-6" />
-    </div>
+    )}
+  </div>
   );
 }
