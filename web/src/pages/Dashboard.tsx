@@ -4,7 +4,7 @@ import '../styles/page styles/dashboard.css';
 
 function Dashboard() {
     return (
-        <div className='dashboard-container'>
+        <div className='dashboard-container background-dashboard'>
             <Header />
             <GenerateQRCodeButton />
         </div>

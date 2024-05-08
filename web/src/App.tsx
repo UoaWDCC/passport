@@ -3,49 +3,60 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import { useState } from 'react';
 // import Home from "@pages/Home";
-import Passport from "@pages/Passport";
-import Dashboard from "./pages/Dashboard.tsx";
+import Passport from "@pages/Passport"
+import SignInPage from "./pages/SignInPage"
+import SignInErrorPage from "./pages/SignInErrorPage"
+import AdminLogin from "./pages/Admin-Login"
+import Dashboard from "@pages/Dashboard"
+import DashboardPrizes from "@pages/DashboardPrizes"
 import Events from "@pages/Events.tsx";
-import Form from "./pages/Form.tsx";
-import SignInPage from "./pages/SignInPage.tsx";
-import SignInErrorPage from "./pages/SignInErrorPage.tsx";
+import Form from "@pages/Form"
+import PrivacyPolicy from "@pages/privacy-policy";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: (
-            <div>
-                <Events />
-            </div>
-        ),
-    },
-    {
-        path: "/passport",
-        element: <Passport />,
-    },
-    {
-        path: "/dashboard",
-        element: <Dashboard />,
-    },
-    {
-        path: "/dashboard/events",
-        element: <Events />,
-    },
-    {
-        path: "/form",
-        element: <Form />,
-    },
-    {
-        path: "/sign-in-error",
-        element: <SignInErrorPage />,
-    },
+  {
+    path: "/",
+    element: (
+      <div>
+        <SignInPage />
+      </div>
+    ),
+  },
+  {
+    path: "/passport",
+    element: <Passport />,
+  },
+  {
+    path: "/sign-in-error",
+    element: <SignInErrorPage />,
+  },
+  {
+    path: "/dashboard",
+    element: <AdminLogin />,
+  },
+  {
+    path: "/dashboard/prizes",
+    element: <DashboardPrizes />,
+  },
+  {
+    path: "/dashboard/events",
+    element: <Events />,
+  },
+  {
+    path: "/form",
+    element: <Form />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
+  }
 ]);
 
 export default function App() {
-    return (
-        <div>
-            <RouterProvider router={router} />;
-        </div>
-    );
+  return (
+    <div>
+      <RouterProvider router={router} />
+    </div>
+  )
 }
