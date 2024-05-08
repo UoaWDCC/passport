@@ -22,7 +22,9 @@ export default function Leaderboard() {
           </button>
       </Link>
     ) : (
-      <PrizesAchieved className="mt-6" />
+      <div className="mt-6">
+      <PrizesAchieved/>
+      </div>
     )}
   </div>
   );
