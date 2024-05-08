@@ -7,6 +7,7 @@ const userSchema = new Schema({
   accessToken: { type: String, required: true },
   upi: { type: String, required: true, unique: true },
   eventList: { type: Array, required: true },
+  totalStamps: { type: Number, required: false}
 })
 
 const User = model("User", userSchema, "Users")
