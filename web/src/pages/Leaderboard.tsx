@@ -7,12 +7,12 @@ import "../styles/page styles/Leaderboard.css";
 import PrizesAchieved from "@components/PrizesAchieved";
 
 export default function Leaderboard() {
-  const [height, setHeight] = useState(5);
+  const [height] = useState(3);
 
   return (
     <div className="passport-main h-screen flex flex-col items-center justify-center">
       <div className="flex items-center space-x-4">
-        <ProgressBar height={height} setHeight={setHeight} />
+        <ProgressBar height={height} />
         <StampsAwayCount height={height} />
       </div>
       {height >= 5 ? (

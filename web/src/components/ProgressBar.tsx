@@ -2,7 +2,7 @@ import manAndBar from "../assets/presentManAndBar.svg";
 import barLines from "../assets/barLines.svg";
 import airplane from "../assets/airplane.svg";
 
-export default function ProgressBar({ height, setHeight }) {
+export default function ProgressBar({ height}: { height: number }) {
     return (
       <div className="relative">
         <img src={manAndBar} alt="" />
