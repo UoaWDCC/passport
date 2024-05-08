@@ -9,6 +9,7 @@ import SignInErrorPage from "./pages/SignInErrorPage";
 import AdminLogin from "./pages/Admin-Login";
 import Dashboard from "@pages/Dashboard";
 import Form from "@pages/Form";
+import CongratsPage from "./pages/LeaderboardCongratsPage.tsx";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
 {
   path: "/form",
   element: <Form />,
+},
+{
+  path: "/leaderboard-prize",
+  element: <CongratsPage />,
 }
 ]);
 

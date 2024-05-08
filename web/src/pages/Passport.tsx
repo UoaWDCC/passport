@@ -39,7 +39,6 @@ export default function Passport() {
       <WelcomeMessage />
       </div>
       <StampCount />
-      
       <CurrentView />
 
       <div className="text-black w-88">
