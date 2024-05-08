@@ -12,6 +12,7 @@ import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
 import { HomePage } from "@pages/Landing-Page"
+import CongratsPage from "./pages/LeaderboardCongratsPage.tsx";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
   path: "/qr-error",
   element: <QRErrorPage />,
 },
+{
+  path: "/leaderboard-prize",
+  element: <CongratsPage />,
+}
 ]);
 
 export default function App() {
