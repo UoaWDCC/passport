@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-export default function StampsAwayCount({ height}) {
-  const [stampsAway, setStampsAway] = useState(5 - height);
+export default function StampsAwayCount({ height }: { height: number }) {
+  const [stampsAway] = useState(5 - height);
 
   return (
     <div className="text-center text-xl">
