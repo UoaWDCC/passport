@@ -18,7 +18,7 @@ export default function Events() {
     };
 
     return (
-        <div>
+        <div className="text-gray-800">
             <img src={logo} alt="Logo" className="logo" />
             <h1 className="title">Event Dashboard</h1>
 
@@ -43,7 +43,7 @@ export default function Events() {
                                     <img
                                         src={event.QRcode}
                                         alt=""
-                                        className="w-20"
+                                        className="w-20 mx-auto"
                                     />
                                 </div>
 
@@ -51,7 +51,7 @@ export default function Events() {
                                     <img
                                         src={event.stamp64}
                                         alt=""
-                                        className="w-20"
+                                        className="w-20 mx-auto"
                                     />
                                 </div>
 
