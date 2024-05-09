@@ -55,12 +55,14 @@ export default function Events() {
                                     />
                                 </div>
 
-                                <div className="column">{event.status}</div>
                                 <div className="column">
-                                    {Array.isArray(event.attendees)
-                                        ? event.attendees.length
-                                        : 0}
+                                    {String(event.status)}
                                 </div>
+
+                                <div className="column">
+                                    {event.totalAttended}
+                                </div>
+
                                 <div className="column">
                                     <button>Edit</button>
                                     <button>Delete</button>
