@@ -56,7 +56,11 @@ export default function Events() {
                                 </div>
 
                                 <div className="column">
-                                    {String(event.status)}
+                                    {event.status ? (
+                                        <p>Active</p>
+                                    ) : (
+                                        <p>Inactive</p>
+                                    )}
                                 </div>
 
                                 <div className="column">
