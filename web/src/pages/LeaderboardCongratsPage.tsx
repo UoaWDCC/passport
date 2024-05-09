@@ -22,11 +22,11 @@ function CongratsPage() {
         <div className="pt-3 text-center">
           <h4 className="text-sm text-blue-950">
             {" "}
-            <span className="italic">Collect your prize at the next</span>
+            <span className="italic font-semibold">Collect your prize at the next</span>
           </h4>
           <h4 className="text-sm text-blue-950">
             {" "}
-            <span className="italic">WDCC event</span>
+            <span className="italic font-semibold">WDCC event</span>
           </h4>
         </div>
         <img
