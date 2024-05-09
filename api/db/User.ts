@@ -6,7 +6,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   accessToken: { type: String, required: true },
   upi: { type: String, required: true, unique: true },
-  eventList: { type: Array, required: true },
+  eventList: { type: Array, required: true, default : [] },
   totalStamps: { type: Number, required: false}
 })
 

@@ -43,6 +43,7 @@ userRoutes.post("/", (req: Request, res: Response) => {
     email: req.body.email,
     accessToken: req.body.accessToken,
     upi: req.body.upi,
+    eventList: [],
   })
 
   try {
