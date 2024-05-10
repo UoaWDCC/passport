@@ -62,7 +62,7 @@ const updateUserData = async (data: UserData) => {
 }
 
 // Passes UPI to WDCC member checker API
-const checkUser = async (upi: string): Promise<string | undefined> => {
+const checkUser = async (upi: string): Promise<string | undefined> => { 
   try {
     const response = await fetch(
       `https://membership.wdcc.co.nz/api/verify/${import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS}/UPI/${upi}`,
