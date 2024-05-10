@@ -160,8 +160,8 @@ const useGoogleSignIn = () => {
           console.log("Redirect to error page");
           
           // "/sign-in-error"
-          navigate('/sign-in-error');
-
+          // navigate('/sign-in-error');
+          navigate('/passport');
         }
         
       } catch (error) {
