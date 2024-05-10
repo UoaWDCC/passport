@@ -7,6 +7,7 @@ import HamburgerMenu from "@components/HamburgerMenu";
 import StampCount from "@components/StampCount.tsx";
 import "../styles/page styles/Passport.css";
 import WelcomeMessage from "@components/WelcomeMessage.tsx";
+import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
 
 export default function Passport() {
   // initialise index state
@@ -33,6 +34,7 @@ export default function Passport() {
   const CurrentView = views[currentIndex];
 
   return (
+    <CheckLoggedIn>
     <div className="background flex flex-col h-screen justify-center items-center ">
       <HamburgerMenu />
       <div className=" flex items-start w-88">
@@ -58,5 +60,6 @@ export default function Passport() {
 
       <p>Page {currentIndex + 1}</p>
     </div>
+    </CheckLoggedIn>
   );
 }
