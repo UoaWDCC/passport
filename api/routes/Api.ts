@@ -52,7 +52,8 @@ async function run() {
         console.log(`A document was inserted with id ${result.insertedId}`);
 
         //QR code link generated linking to wdccpassport.com with event id as Param
-        const qrCode =`https://api.qrserver.com/v1/create-qr-code/?data=www.wdccpassport.com/${result.insertedId}&amp;size=100x100`
+        // const qrCode =`https://api.qrserver.com/v1/create-qr-code/?data=www.wdccpassport.com/${result.insertedId}&amp;size=100x100`
+        const qrCode =`https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173/${result.insertedId}&amp;size=100x100`
         const result2 = await eventCollection.updateOne({_id: new ObjectId(result.insertedId)}, {$set:{"QRcode": qrCode}})
         console.log(qrCode)
 

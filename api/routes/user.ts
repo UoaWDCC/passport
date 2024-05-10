@@ -16,6 +16,26 @@ userRoutes.get("/", async (req: Request, res: Response) => {
   }
 })
 
+
+userRoutes.post("/check-user", async (req: Request, res: Response) => {
+  const accessToken = req.body.accessToken;
+
+  try {
+    const response = await User.find({ accessToken: accessToken }).exec()
+    if (response != undefined) {
+      res.status(200).json({ user: response, success: true })
+    } else {
+      res.status(400).json({
+        success: false
+      })
+    }
+  } catch (error) {
+    res.status(400).json({ success: false, errorMessage: error })
+  }
+
+
+})
+
 // GET /api/user/:upi
 userRoutes.get("/:upi", async (req: Request, res: Response) => {
   const userUpi = req.params.upi

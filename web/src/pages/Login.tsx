@@ -94,8 +94,8 @@ const useGoogleSignIn = () => {
         const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         });
-        // console.log('User Info:', userInfo.data); //DELETE
-
+        console.log('User Info:', userInfo.data); //DELETE
+        
         //extracting user UPI
         const userUPI:string = userInfo.data.email.split("@")[0];
         //passing userUPI to member checker
@@ -122,6 +122,7 @@ const useGoogleSignIn = () => {
                 
                 if (response.status == 200) {
                   console.log("Updating User Data")
+                  
                   updateUserData({
                     family_name: userInfo.data.family_name,
                     given_name: userInfo.data.given_name,
@@ -129,6 +130,7 @@ const useGoogleSignIn = () => {
                     accessToken: tokenResponse.access_token,
                     UserUPI: userUPI,
                   }).then(() => {
+                    console.log("successs")
                     localStorage.setItem("accessToken", tokenResponse.access_token)
                   })
                 } else {
@@ -140,6 +142,7 @@ const useGoogleSignIn = () => {
                     accessToken: tokenResponse.access_token,
                     UserUPI: userUPI,
                   }).then(() => {
+                    console.log("failzure")
                     localStorage.setItem("accessToken", tokenResponse.access_token)
                   })
                 }
@@ -153,7 +156,7 @@ const useGoogleSignIn = () => {
           getUserData();
 
           // "/passport"
-          navigate('/passport');
+          // navigate('/passport');
 
         } else {
           // Redirect to error page
