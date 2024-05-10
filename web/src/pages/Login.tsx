@@ -83,7 +83,7 @@ const checkUser = async (upi: string): Promise<string | undefined> => {
   }
 };
 
-const useGoogleSignIn = () => {
+const useGoogleSignIn = (currentPage: string) => {
   const navigate = useNavigate();
 
   const handleSignIn = useGoogleLogin({
@@ -153,7 +153,12 @@ const useGoogleSignIn = () => {
           getUserData();
 
           // "/passport"
-          navigate('/passport');
+          if (currentPage === "/") {
+            navigate('/passport');
+          }
+          else {
+            navigate('/dashboard/events');
+          }
 
         } else {
           // Redirect to error page
