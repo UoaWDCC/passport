@@ -42,6 +42,7 @@ userRoutes.get("/:upi", async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ upi: userUpi }).exec() // Await the result or use exec()
     if (user) {
+      user["totalStamps"] = user?.eventList.length
       res.json(user)
     } else {
       res.status(404).json({ message: "User not found" })
@@ -62,6 +63,7 @@ userRoutes.post("/", (req: Request, res: Response) => {
     email: req.body.email,
     accessToken: req.body.accessToken,
     upi: req.body.upi,
+    eventList: [],
   })
 
   try {
