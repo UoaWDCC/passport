@@ -9,6 +9,7 @@ import SignInErrorPage from "./pages/SignInErrorPage"
 import AdminLogin from "./pages/Admin-Login"
 import Dashboard from "@pages/Dashboard"
 import DashboardPrizes from "@pages/DashboardPrizes"
+import Events from "@pages/Events.tsx";
 import Form from "@pages/Form"
 import PrivacyPolicy from "@pages/privacy-policy";
 import Leaderboard from "@pages/Leaderboard.tsx";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard/events",
         element: <Dashboard />,
+    },
+  {
+    path: "/dashboard/events",
+        element: <Events />,
     },
     {
         path: "/form",
