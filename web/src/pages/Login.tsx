@@ -142,7 +142,7 @@ const useGoogleSignIn = () => {
                     accessToken: tokenResponse.access_token,
                     UserUPI: userUPI,
                   }).then(() => {
-                    console.log("failzure")
+                    // console.log("failzure")
                     localStorage.setItem("accessToken", tokenResponse.access_token)
                   })
                 }
@@ -156,7 +156,17 @@ const useGoogleSignIn = () => {
           getUserData();
 
           // "/passport"
-          // navigate('/passport');
+
+          //needa change it later
+          const eventId = location.pathname.split('/')[2];
+          console.log(eventId)
+
+          if (eventId !== ""){
+            //navigate back to anding page
+            navigate("/sign-in/" + eventId)
+          } else {
+            navigate('/passport');
+          }
 
         } else {
           // Redirect to error page

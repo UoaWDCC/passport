@@ -15,7 +15,17 @@ import QRErrorPage from "@pages/QrErrorPage";
 
 const router = createBrowserRouter([
   {
+    //landing page
     path: "/",
+    element: (
+      <div>
+      {/* change to landing */}
+      <SignInPage />
+      </div>
+    ),
+  },
+  {
+    path: "/sign-in",
     element: (
       <div>
       <SignInPage />
@@ -23,7 +33,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/:id", //using this to testing qr code functionality
+    path: "/sign-in/:id", //using this to testing qr code functionality
     element: (
       <div>
       <SignInPage />
