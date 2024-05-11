@@ -11,6 +11,7 @@ import Dashboard from "@pages/Dashboard";
 import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
+import { HomePage } from "@pages/Landing-Page"
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -39,6 +40,11 @@ const router = createBrowserRouter([
       <SignInPage />
       </div>
     ),
+    element: <HomePage />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignInPage />,
   },
   {
     path: "/passport",
