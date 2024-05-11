@@ -13,6 +13,9 @@ import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
 import { HomePage } from "@pages/Landing-Page"
 import CongratsPage from "./pages/LeaderboardCongratsPage.tsx";
+import Leaderboard from "@pages/Leaderboard"
+import LeaderboardPrize from "@pages/LeaderboardCongratsPage"
+import QRErrorPage from "@pages/QrErrorPage";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -58,26 +61,38 @@ const router = createBrowserRouter([
     path: "/passport",
     element: <Passport />,
   },
-{
-  path: "/sign-in-error",
-  element: <SignInErrorPage />,
-},
-{
-  path: "/dashboard",
-  element: <AdminLogin />,
-},
-{
-  path: "/dashboard/events",
-  element: <Dashboard />,
-},
-{
-  path: "/form",
-  element: <Form />,
-},
-{
-  path: "/privacy-policy",
-  element: <PrivacyPolicy />,
-},
+  {
+    path: "/sign-in-error",
+    element: <SignInErrorPage />,
+  },
+  {
+    path: "/leaderboard",
+    element: <Leaderboard />,
+  },
+  {
+    path: "/leaderboard-prize",
+    element: <LeaderboardPrize />,
+  },
+  {
+    path: "/dashboard",
+    element: <AdminLogin />,
+  },
+  {
+    path: "/dashboard/prizes",
+    element: <DashboardPrizes />,
+  },
+  {
+    path: "/dashboard/events",
+    element: <Events />,
+  },
+  {
+    path: "/form",
+    element: <Form />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
+  },
 {
   path: "/qr-error",
   element: <QRErrorPage />,
