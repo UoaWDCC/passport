@@ -10,6 +10,7 @@ import AdminLogin from "./pages/Admin-Login";
 import Dashboard from "@pages/Dashboard";
 import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
+import QRErrorPage from "@pages/QrErrorPage";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -52,7 +53,11 @@ const router = createBrowserRouter([
 {
   path: "/privacy-policy",
   element: <PrivacyPolicy />,
-}
+},
+{
+  path: "/qr-error",
+  element: <QRErrorPage />,
+},
 ]);
 
 export default function App() {
