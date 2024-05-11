@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-const CheckLoggedIn = ({ children }) => {
+const CheckLoggedIn: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navigate = useNavigate();
     useEffect(() => {
         const fetchUserData = async () => {
           try {
@@ -12,7 +13,6 @@ const CheckLoggedIn = ({ children }) => {
             if (response.data.success) {
               console.log("User is logged in");
             } else {
-                const navigate = useNavigate();
                 navigate("/");
               // Make this so it returns to this page after logging in
             }
