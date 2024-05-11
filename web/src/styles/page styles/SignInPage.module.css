@@ -60,3 +60,16 @@
   .link {
     text-decoration: underline;
   }
+
+  .privacyPolicy {
+    text-decoration: underline;
+    font-size: 80%;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e1ebff;
+    margin-top: -15%;
+  }

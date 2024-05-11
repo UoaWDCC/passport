@@ -3,59 +3,65 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import { useState } from 'react';
 // import Home from "@pages/Home";
+import Passport from "@pages/Passport"
+import SignInPage from "./pages/SignInPage"
+import SignInErrorPage from "./pages/SignInErrorPage"
+import AdminLogin from "./pages/Admin-Login"
+import Dashboard from "@pages/Dashboard"
+import DashboardPrizes from "@pages/DashboardPrizes"
+import Form from "@pages/Form"
+import PrivacyPolicy from "@pages/privacy-policy";
+import Leaderboard from "@pages/Leaderboard.tsx";
 
-import Passport from "@pages/Passport";
-import Dashboard from './pages/Dashboard.tsx';
-import Form from './pages/Form.tsx';
-import SignInPage from './pages/SignInPage.tsx';
-import SignInErrorPage from "./pages/SignInErrorPage.tsx";
-import AdminLogin from "./pages/Admin-Login";
-import CongratsPage from "./pages/LeaderboardCongratsPage.tsx";
-import Leaderboard from "./pages/Leaderboard.tsx";
+// import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <div>
-        <SignInPage />
-      </div>
-    ),
-  },
-  {
-    path: "/passport",
-    element: <Passport />,
-  },
-  {
-    path: "/leaderboard",
-    element: <Leaderboard />,
-  },
+    {
+        path: "/",
+        element: (
+            <div>
+                  <SignInPage />
+            </div>
+        ),
+    },
+    {
+        path: "/passport",
+        element: <Passport />,
+    },
   {
     path: "/sign-in-error",
     element: <SignInErrorPage />,
   },
-  {
-    path: "/dashboard",
+    {
+        path: "/leaderboard",
+        element: <Leaderboard />,
+    },
+    {
+        path: "/dashboard",
     element: <AdminLogin />,
   },
   {
+    path: "/dashboard/prizes",
+    element: <DashboardPrizes />,
+  },
+  {
     path: "/dashboard/events",
-    element: <Dashboard />,
-  },
-  {
-    path: "/leaderboard-prize",
-    element: <CongratsPage />,
-  },
-  {
-    path: "/form",
-    element: <Form />,
-  }
+        element: <Dashboard />,
+    },
+    {
+        path: "/form",
+        element: <Form />,
+    },
+    {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
+    }
 ]);
 
 export default function App() {
-  return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
-  )
+    return (
+        <div>
+            <RouterProvider router={router} />;
+        </div>
+    );
 }
