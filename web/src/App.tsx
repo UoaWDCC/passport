@@ -11,16 +11,17 @@ import Dashboard from "@pages/Dashboard"
 import DashboardPrizes from "@pages/DashboardPrizes"
 import Form from "@pages/Form"
 import PrivacyPolicy from "@pages/privacy-policy";
+import { HomePage } from "@pages/Landing-Page"
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <div>
-        <SignInPage />
-      </div>
-    ),
+    element: <HomePage />,
+  },
+  {
+    path: "/sign-in",
+    element: <SignInPage />,
   },
   {
     path: "/passport",
