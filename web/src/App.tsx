@@ -47,10 +47,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/sign-in",
-    element: <SignInPage />,
+    element: (
+      <div>
+      <SignInPage />
+      </div>
+    ),
   },
   {
-    path: "/:id", //using this to testing qr code functionality
+    path: "/sign-in/:id", //using this to testing qr code functionality
     element: (
       <div>
       <SignInPage />
