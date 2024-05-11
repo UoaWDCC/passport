@@ -62,7 +62,7 @@ const updateUserData = async (data: UserData) => {
 }
 
 // Passes UPI to WDCC member checker API
-const checkUser = async (upi: string): Promise<string | undefined> => {
+const checkUser = async (upi: string): Promise<string | undefined> => { 
   try {
     const response = await fetch(
       `https://membership.wdcc.co.nz/api/verify/${import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS}/UPI/${upi}`,
@@ -153,7 +153,7 @@ const useGoogleSignIn = (currentPage: string) => {
           getUserData();
 
           // "/passport"
-          if (currentPage === "/") {
+          if (currentPage === "/sign-in") {
             navigate('/passport');
           }
           else {
@@ -165,8 +165,8 @@ const useGoogleSignIn = (currentPage: string) => {
           console.log("Redirect to error page");
           
           // "/sign-in-error"
-          navigate('/sign-in-error');
-
+          // navigate('/sign-in-error');
+          navigate('/passport');
         }
         
       } catch (error) {
