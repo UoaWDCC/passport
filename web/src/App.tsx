@@ -12,27 +12,33 @@ import DashboardPrizes from "@pages/DashboardPrizes"
 import Events from "@pages/Events.tsx";
 import Form from "@pages/Form"
 import PrivacyPolicy from "@pages/privacy-policy";
+import Leaderboard from "@pages/Leaderboard.tsx";
+
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <div>
-        <SignInPage />
-      </div>
-    ),
-  },
-  {
-    path: "/passport",
-    element: <Passport />,
-  },
+    {
+        path: "/",
+        element: (
+            <div>
+                  <SignInPage />
+            </div>
+        ),
+    },
+    {
+        path: "/passport",
+        element: <Passport />,
+    },
   {
     path: "/sign-in-error",
     element: <SignInErrorPage />,
   },
-  {
-    path: "/dashboard",
+    {
+        path: "/leaderboard",
+        element: <Leaderboard />,
+    },
+    {
+        path: "/dashboard",
     element: <AdminLogin />,
   },
   {
@@ -41,22 +47,26 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard/events",
-    element: <Events />,
-  },
+        element: <Dashboard />,
+    },
   {
-    path: "/form",
-    element: <Form />,
-  },
-  {
-    path: "/privacy-policy",
-    element: <PrivacyPolicy />,
-  }
+    path: "/dashboard/events",
+        element: <Events />,
+    },
+    {
+        path: "/form",
+        element: <Form />,
+    },
+    {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
+    }
 ]);
 
 export default function App() {
-  return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
-  )
+    return (
+        <div>
+            <RouterProvider router={router} />;
+        </div>
+    );
 }
