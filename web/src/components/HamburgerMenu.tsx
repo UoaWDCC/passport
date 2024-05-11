@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/component styles/HamburgerMenu.css";
 
-export default function HamburgerMenu({ pages, links }) {
+export default function HamburgerMenu({ pages, links }: { pages: string[], links: string[] }) {
     // open state for the menu
     const [isOpen, setIsOpen] = useState(false);
 

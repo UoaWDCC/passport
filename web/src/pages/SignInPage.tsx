@@ -26,9 +26,6 @@ const SignInPage: React.FC = () => {
         <p className={styles.text}>Or</p>
         <a className={styles.link} href="https://forms.gle/YX8RAdXGF4rTN3e27">Register Here</a>
       </div>
-      <div className={styles.footer}>
-        <a className={styles.privacyPolicy} href="/privacy-policy">View our Privacy Policy here</a>
-      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ export default function Leaderboard() {
   const [height] = useState(5);
 
   return (
-    <div className="passport-main h-screen flex flex-col items-center justify-center">
+    <div className="leaderboard-main h-screen flex flex-col items-center justify-center">
       <div className="flex items-center space-x-4">
         <ProgressBar height={height} />
         <StampsAwayCount height={height} />

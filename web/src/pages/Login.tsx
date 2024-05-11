@@ -153,7 +153,7 @@ const useGoogleSignIn = (currentPage: string) => {
           getUserData();
 
           // "/passport"
-          if (currentPage === "/") {
+          if (currentPage === "/sign-in") {
             navigate('/passport');
           }
           else {
