@@ -1,12 +1,27 @@
 import WDCCLogo from "../assets/WDCC_Logo.svg";
 import { useNavigate } from "react-router";
 import styles from "../styles/page styles/Landing-Page.module.css";
+import axios from "axios";
 
 export const HomePage = () => {
   const navigate = useNavigate();
-  const handleButtonClick = () => {
-    navigate("/sign-in");
+  const handleButtonClick = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+
+      const response = await axios.post("http://localhost:3000/api/user/check-user", { accessToken });
+      if (response.data.success && accessToken) {
+        console.log("User is logged in");
+        navigate("/passport");
+      } else {
+        console.log("User is not logged in");
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      console.error("Error fetching logged-in data:", error);
+      navigate("/sign-in");
   };
+};
   return (
     <div className={styles.background}>
       <title>WDCC Passport</title>
