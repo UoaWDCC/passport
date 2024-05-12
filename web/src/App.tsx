@@ -11,6 +11,7 @@ import Dashboard from "@pages/Dashboard";
 import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
+import EventAttended from "@pages/EventAttended";
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
   path: "/qr-error",
   element: <QRErrorPage />,
 },
+{
+  path: "/qr-success",
+  element: <EventAttended />
+}
 ]);
 
 export default function App() {

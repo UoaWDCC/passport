@@ -50,3 +50,4 @@ app.use(express.static("public"))
 // Routes
 app.use("/hello", helloRoutes)
 app.use("/api/user", userRoutes)
+// app.use("/api/events")
