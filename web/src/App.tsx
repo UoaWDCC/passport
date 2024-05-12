@@ -1,8 +1,5 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// import Login from "@pages/Login"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import { useState } from 'react';
-// import Home from "@pages/Home";
 import Passport from "@pages/Passport"
 import SignInPage from './pages/SignInPage';
 import SignInErrorPage from "./pages/SignInErrorPage";
@@ -11,12 +8,10 @@ import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
 import { HomePage } from "@pages/Landing-Page"
-import CongratsPage from "./pages/LeaderboardCongratsPage.tsx";
 import Leaderboard from "@pages/Leaderboard"
 import LeaderboardPrize from "@pages/LeaderboardCongratsPage"
 import DashboardPrizes from "@pages/DashboardPrizes"
 import Events from "@pages/Events"
-// import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
   {
@@ -24,8 +19,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <div>
-      {/* change to landing */}
-      <SignInPage />
+      <HomePage />
       </div>
     ),
   },
