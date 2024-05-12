@@ -163,7 +163,13 @@ const useGoogleSignIn = (currentPage: string) => {
           } else {
             navigate('/passport');
           }
-          if (currentPage === "/") {
+
+          const prevLocation = localStorage.getItem('prevLocation'); 
+          if (prevLocation) {
+            localStorage.removeItem('prevLocation');
+            navigate(prevLocation); // Takes them back to previous location if theyve been logged out
+          }
+          else if (currentPage === "/") {
             navigate('/passport');
           }
           else {
@@ -176,7 +182,7 @@ const useGoogleSignIn = (currentPage: string) => {
           
           // "/sign-in-error"
           // navigate('/sign-in-error');
-          navigate('/passport');
+          navigate('/sign-in-error');
         }
         
       } catch (error) {

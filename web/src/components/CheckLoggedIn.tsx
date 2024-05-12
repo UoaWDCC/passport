@@ -14,8 +14,10 @@ const CheckLoggedIn: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               console.log("User is logged in");
 
             } else {
+                if (location.pathname!== "/") {
+                  localStorage.setItem('prevLocation', location.pathname);
+                }
                 navigate("/");
-              // Make this so it returns to this page after logging in
             }
           } catch (error) {
             console.error("Error fetching logged in data:", error);
@@ -23,7 +25,7 @@ const CheckLoggedIn: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           }
         };
         fetchUserData();
-    });
+    }, []);;
     return <>{children}</>
 }
 
