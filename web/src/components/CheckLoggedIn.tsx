@@ -1,31 +1,41 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 
 const CheckLoggedIn: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
-    useEffect(() => {
-        const fetchUserData = async () => {
-          try {
-            
-            const accessToken = localStorage.getItem('accessToken');
-            const response = await axios.post("http://localhost:3000/api/user/check-user", { accessToken });
+  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-            if (response.data.success) {
-              console.log("User is logged in");
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
 
-            } else {
-                navigate("/");
-              // Make this so it returns to this page after logging in
+        const response = await axios.post("http://localhost:3000/api/user/check-user", { accessToken });
+        if (response.data.success && accessToken) {
+          console.log("User is logged in");
+          setIsLoggedIn(true);
+        } else {
+           if (location.pathname!== "/sign-in") {
+                  localStorage.setItem('prevLocation', location.pathname);
             }
-          } catch (error) {
-            console.error("Error fetching logged in data:", error);
-          }
-        };
-        fetchUserData();
-    });
-    return <>{children}</>
-}
+          console.log("User is not logged in");
+          navigate("/sign-in");
+        }
+      } catch (error) {
+        console.error("Error fetching logged-in data:", error);
+        navigate("/sign-in");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
+    fetchUserData();
+  }, [navigate]);
+
+  return isLoading ? null : isLoggedIn ? <>{children}</> : null;
+}
 
 export default CheckLoggedIn;

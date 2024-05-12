@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "../styles/page styles/SignInPage.module.css"; // Import the CSS module
 import GoogleSigninBtn from "../components/GoogleSigninBtn";
+import useGoogleSignIn from "./Login";
 import WDCC_Logo from '../assets/WDCC_Logo.svg';
 import { useEffect, useState } from "react";
 import { useSearchParams, useLocation, Await, useNavigate } from "react-router-dom";
 import axios from "axios";
-import useGoogleSignIn from "./Login";// Import the custom hook
 
 
 const SignInPage: React.FC = () => {
@@ -47,14 +47,15 @@ const SignInPage: React.FC = () => {
   }, []); // Empty dependency array means this effect will only run once after the initial render
 
 
-  const handleSignIn = useGoogleSignIn();
+  const handleSignIn = useGoogleSignIn("/");
 
   return (
     <div className={styles.container}>
       <div className={styles.topsection}>
         <div>
-          <img src={WDCC_Logo} className="h-80" alt="WDCC Logo" />
+          <img src={WDCC_Logo} className="h-80" />
         </div>
+
       </div>
 
       <div className={styles.bottomsection}>

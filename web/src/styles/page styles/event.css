@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+body {
+    background-color: #e1ebff;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.logo {
+    position: absolute;
+    top: 10px; 
+    right: 40px; 
+    height: 150px;
+    width: auto;
+}
+
+.dashboard-container {
+    position: relative;
+}
+
+.dashboard {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    margin: auto;
+    position: relative;
+}
+
+.create-event-button {
+    position: absolute; 
+    top: -50px; 
+    right: 10px; 
+    background-color: #03045e;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.create-event-button:hover {
+    background-color: #087df1;
+}
+
+.title {
+    color: #03045e;
+    font-weight: 700;
+    font-size: 4.5em;
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 35px;
+}
+
+.dashboard-header {
+    display: flex;
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-weight: 650;
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.event-item {
+    border-top: 1px solid #03045e;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.column {
+    flex: 1;
+    text-align: center;
+}
+
+.event-item:nth-child(2n) {
+    background-color: #f2f2f2;
+}
