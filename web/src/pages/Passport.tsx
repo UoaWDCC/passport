@@ -33,14 +33,8 @@ export default function Passport() {
         }
     };
 
-  return (
-    <div className="background flex flex-col h-screen justify-center items-center ">
-      <HamburgerMenu />
-      <div className=" flex items-start w-88">
-      <WelcomeMessage />
-      </div>
-      <StampCount />
-      <CurrentView />
+    // retrieves the page component from the array
+    const CurrentView = views[currentIndex];
 
     return (
         <CheckLoggedIn>

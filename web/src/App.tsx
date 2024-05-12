@@ -7,7 +7,6 @@ import Passport from "@pages/Passport"
 import SignInPage from './pages/SignInPage';
 import SignInErrorPage from "./pages/SignInErrorPage";
 import AdminLogin from "./pages/Admin-Login";
-import Dashboard from "@pages/Dashboard";
 import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
@@ -15,7 +14,8 @@ import { HomePage } from "@pages/Landing-Page"
 import CongratsPage from "./pages/LeaderboardCongratsPage.tsx";
 import Leaderboard from "@pages/Leaderboard"
 import LeaderboardPrize from "@pages/LeaderboardCongratsPage"
-import QRErrorPage from "@pages/QrErrorPage";
+import DashboardPrizes from "@pages/DashboardPrizes"
+import Events from "@pages/Events"
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([

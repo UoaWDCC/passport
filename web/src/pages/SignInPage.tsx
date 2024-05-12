@@ -6,7 +6,6 @@ import WDCC_Logo from '../assets/WDCC_Logo.svg';
 import { useEffect, useState } from "react";
 import { useSearchParams, useLocation, Await, useNavigate } from "react-router-dom";
 import axios from "axios";
-import useGoogleSignIn from "./Login";// Import the custom hook
 
 
 const SignInPage: React.FC = () => {
@@ -45,7 +44,7 @@ const SignInPage: React.FC = () => {
   }, []); // Empty dependency array means this effect will only run once after the initial render
   
 
-  const handleSignIn = useGoogleSignIn();
+  const handleSignIn = useGoogleSignIn("/");
 
   return (
     <div className={styles.container}>
