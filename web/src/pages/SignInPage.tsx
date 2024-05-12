@@ -18,14 +18,11 @@ const SignInPage: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    
     axios.post('http://localhost:3000/api/user/check-user', {
       accessToken: localStorage.getItem("accessToken")
     })
     .then((response) => {
-      
       const eventId = location.pathname.split('/')[2];
-
       
       // Handle the response data here
       // console.log(response.data.success);
@@ -39,7 +36,7 @@ const SignInPage: React.FC = () => {
     })
     .catch((error) => {
       // Handle errors
-      console.error('vjhsjdsbcError:', error);
+      console.error('Error:', error);
     });
   }, []); // Empty dependency array means this effect will only run once after the initial render
   

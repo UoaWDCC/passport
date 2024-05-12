@@ -46,22 +46,6 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/sign-in",
-    element: (
-      <div>
-      <SignInPage />
-      </div>
-    ),
-  },
-  {
-    path: "/sign-in/:id", //using this to testing qr code functionality
-    element: (
-      <div>
-      <SignInPage />
-      </div>
-    ),
-  },
-  {
     path: "/passport",
     element: <Passport />,
   },
@@ -101,10 +85,6 @@ const router = createBrowserRouter([
   path: "/qr-error",
   element: <QRErrorPage />,
 },
-{
-  path: "/leaderboard-prize",
-  element: <CongratsPage />,
-}
 ]);
 
 export default function App() {

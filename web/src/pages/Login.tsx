@@ -89,7 +89,7 @@ const useGoogleSignIn = (currentPage: string) => {
   const handleSignIn = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       // console.log('Token Response:', tokenResponse.access_token); //DELETE
-      
+
       try {
         const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
@@ -100,16 +100,13 @@ const useGoogleSignIn = (currentPage: string) => {
         const userUPI:string = userInfo.data.email.split("@")[0];
         //passing userUPI to member checker
         const text = await checkUser(userUPI);
-
         //checking if email is in domain and user is in WDCC
         if (
           userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
           text === "value found in column"
         ) {
           console.log("YOU'RE IN WDCC!!");
-
           const getUserData = async () => {
-            //TODO Fix up this method - FIXED
             await fetch("http://localhost:3000/api/user/" + userUPI, {
               method: "GET",
             })
@@ -142,7 +139,6 @@ const useGoogleSignIn = (currentPage: string) => {
                     accessToken: tokenResponse.access_token,
                     UserUPI: userUPI,
                   }).then(() => {
-                    // console.log("failzure")
                     localStorage.setItem("accessToken", tokenResponse.access_token)
                   })
                 }

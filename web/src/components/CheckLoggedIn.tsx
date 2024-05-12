@@ -9,9 +9,8 @@ const CheckLoggedIn: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           try {
             
             const accessToken = localStorage.getItem('accessToken');
-            console.log("TOken: " + accessToken)
             const response = await axios.post("http://localhost:3000/api/user/check-user", { accessToken });
-            if (response.data.success) {
+            if (response.data.success && accessToken !== null) {
               console.log("User is logged in");
 
             } else {
@@ -20,6 +19,7 @@ const CheckLoggedIn: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             }
           } catch (error) {
             console.error("Error fetching logged in data:", error);
+            navigate("/");
           }
         };
         fetchUserData();
