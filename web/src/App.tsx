@@ -11,6 +11,7 @@ import Dashboard from "@pages/Dashboard"
 import DashboardPrizes from "@pages/DashboardPrizes"
 import Form from "@pages/Form"
 import PrivacyPolicy from "@pages/privacy-policy";
+import MeetTheTeam from "@pages/MeetTheTeam"
 // import GoogleSigninBtn from "@components/GoogleSigninBtn";
 
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "/privacy-policy",
     element: <PrivacyPolicy />,
+  },
+  {
+    path: "/team",
+    element: <MeetTheTeam />,
   }
 ]);
 
