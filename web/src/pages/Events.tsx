@@ -2,9 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
-import { config } from 'dotenv';
 
-config();
+interface Event {
+    _id: string;
+    eventName: string;
+    QRcode: string;
+    stamp64: string;
+    status: boolean;
+    totalAttended: number;
+}
 
 export default function Events() {
     const [events, setEvents] = useState<Event[]>([]);
@@ -16,22 +22,13 @@ export default function Events() {
     const getEvents = async () => {
         try {
             const eventsResponse = await axios.get(
-                `${process.env.SERVER_URL}/api/get-all-events`
+                `${import.meta.env.VITE_SERVER_URL}/api/get-all-events`
             );
             setEvents(eventsResponse.data);
         } catch (error) {
             console.error("Error fetching events:", error);
         }
     };
-
-    interface Event {
-        _id: string;
-        eventName: string;
-        QRcode: string;
-        stamp64: string;
-        status: boolean;
-        totalAttended: number;
-    }
 
     return (
         <div className="text-gray-800">

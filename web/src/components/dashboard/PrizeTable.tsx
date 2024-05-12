@@ -11,7 +11,7 @@ function PrizeTable() {
   }, [])
 
   const fetchPrizeData = useCallback(() => {
-    fetch(`${import.meta.env.SERVER_URL}/api/prize/non-redeemed`)
+    fetch(`${import.meta.env.VITE_SERVER_URL}/api/prize/non-redeemed`)
       .then((res) => res.json())
       .then((datafromdb) => {
         console.log(datafromdb)
@@ -30,7 +30,7 @@ function PrizeTable() {
       setPrizeData(updatedPrizeData)
 
       // Make HTTP request to update the redeemed status and time
-      fetch(`${import.meta.env.SERVER_URL}/api/prize/update-redeemed/${row._id}`, {
+      fetch(`${import.meta.env.VITE_SERVER_URL}/api/prize/update-redeemed/${row._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

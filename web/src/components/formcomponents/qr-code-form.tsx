@@ -18,7 +18,7 @@ function QRCodeForm() {
     const submitForm = async () => {
         if (eventName && startDate && endDate) {
             await axios.post(
-                `${import.meta.env.SERVER_URL}/api/event`,
+                `${import.meta.env.VITE_SERVER_URL}/api/event`,
                 {
                     eventName: eventName,
                     stamp64: image64,
