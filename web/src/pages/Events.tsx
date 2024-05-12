@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
+import { config } from 'dotenv';
+
+config();
 
 export default function Events() {
     const [events, setEvents] = useState<Event[]>([]);
@@ -13,7 +16,7 @@ export default function Events() {
     const getEvents = async () => {
         try {
             const eventsResponse = await axios.get(
-                "http://localhost:3000/api/get-all-events"
+                `${process.env.SERVER_URL}/api/get-all-events`
             );
             setEvents(eventsResponse.data);
         } catch (error) {
