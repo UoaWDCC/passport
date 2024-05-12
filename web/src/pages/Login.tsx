@@ -101,6 +101,7 @@ const useGoogleSignIn = (currentPage: string) => {
         //passing userUPI to member checker
         const text = await checkUser(userUPI);
         //checking if email is in domain and user is in WDCC
+
         if (
           userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
           text === "value found in column"
@@ -129,6 +130,17 @@ const useGoogleSignIn = (currentPage: string) => {
                   }).then(() => {
                     console.log("successs")
                     localStorage.setItem("accessToken", tokenResponse.access_token)
+                    const prevLocation = localStorage.getItem('prevLocation'); 
+                    if (prevLocation) {
+                      localStorage.removeItem('prevLocation');
+                      navigate(prevLocation); // Takes them back to previous location if theyve been logged out
+                    }
+                    else if (currentPage === "/") {
+                      navigate('/passport');
+                    }
+                    else {
+                      navigate('/dashboard/events');
+                    }
                   })
                 } else {
                   console.log("Posting User Data")
@@ -140,6 +152,17 @@ const useGoogleSignIn = (currentPage: string) => {
                     UserUPI: userUPI,
                   }).then(() => {
                     localStorage.setItem("accessToken", tokenResponse.access_token)
+                    const prevLocation = localStorage.getItem('prevLocation'); 
+                    if (prevLocation) {
+                      localStorage.removeItem('prevLocation');
+                      navigate(prevLocation); // Takes them back to previous location if theyve been logged out
+                    }
+                    else if (currentPage === "/") {
+                      navigate('/passport');
+                    }
+                    else {
+                      navigate('/dashboard/events');
+                    }
                   })
                 }
               })
@@ -164,24 +187,8 @@ const useGoogleSignIn = (currentPage: string) => {
             navigate('/passport');
           }
 
-          const prevLocation = localStorage.getItem('prevLocation'); 
-          if (prevLocation) {
-            localStorage.removeItem('prevLocation');
-            navigate(prevLocation); // Takes them back to previous location if theyve been logged out
-          }
-          else if (currentPage === "/") {
-            navigate('/passport');
-          }
-          else {
-            navigate('/dashboard/events');
-          }
-
         } else {
-          // Redirect to error page
-          console.log("Redirect to error page");
-          
-          // "/sign-in-error"
-          // navigate('/sign-in-error');
+          // Redirect to error page if user is not in WDCC
           navigate('/sign-in-error');
         }
         
