@@ -12,7 +12,7 @@ interface UserData {
 }
 
 // Navigate user to correct page
-const NavigateUser = (currentPage: string, navigate ) => {
+const NavigateUser = (currentPage: string, navigate: Function ) => {
   const prevLocation = localStorage.getItem('prevLocation'); 
   if (prevLocation) {
     localStorage.removeItem('prevLocation');
