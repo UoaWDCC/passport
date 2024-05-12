@@ -174,19 +174,6 @@ const useGoogleSignIn = (currentPage: string) => {
           // Check MongoDB if user is in DB, then updates/posts user data accordingly
           getUserData();
 
-          // "/passport"
-
-          //needa change it later
-          const eventId = location.pathname.split('/')[2];
-          console.log(eventId)
-
-          if (eventId !== ""){
-            //navigate back to anding page
-            navigate("/sign-in/" + eventId)
-          } else {
-            navigate('/passport');
-          }
-
         } else {
           // Redirect to error page if user is not in WDCC
           navigate('/sign-in-error');

@@ -23,6 +23,16 @@ const router = createBrowserRouter([
       </div>
     ),
   },
+
+  {
+    //landing page with qr code
+    path: "/:id",
+    element: (
+      <div>
+      <HomePage />
+      </div>
+    ),
+  },
   {
     path: "/sign-in",
     element: (

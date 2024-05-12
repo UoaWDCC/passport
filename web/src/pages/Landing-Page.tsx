@@ -7,15 +7,28 @@ export const HomePage = () => {
   const navigate = useNavigate();
   const handleButtonClick = async () => {
     try {
+      const eventId = location.pathname.split('/')[1];
       const accessToken = localStorage.getItem('accessToken');
 
       const response = await axios.post("http://localhost:3000/api/user/check-user", { accessToken });
-      if (response.data.success && accessToken) {
-        console.log("User is logged in");
-        navigate("/passport");
+      if (eventId) {
+        if (response.data.success && accessToken) {
+          console.log("User is logged in");
+          // check QR Code Validity here 
+          navigate("/passport");
+        } else {
+          console.log("User is not logged in");
+          navigate("/sign-in/" + eventId); // if not signed in, check after sign in
+        }
+
       } else {
-        console.log("User is not logged in");
-        navigate("/sign-in");
+        if (response.data.success && accessToken) {
+          console.log("User is logged in");
+          navigate("/passport");
+        } else {
+          console.log("User is not logged in");
+          navigate("/sign-in");
+        }
       }
     } catch (error) {
       console.error("Error fetching logged-in data:", error);
