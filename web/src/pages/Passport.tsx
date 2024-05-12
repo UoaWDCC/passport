@@ -15,9 +15,6 @@ export default function Passport() {
     // initialise temporary page array
     const views = [PassportMain, PassportPage, PassportPage];
 
-    const pageArray = ["Passport Page", "Leaderbord Page"];
-    const linkArray = ["/passport", "/leaderboard"];
-
     // function to switch to next page
     const goToNextView = () => {
         if (currentIndex < views.length - 1) {
@@ -37,8 +34,8 @@ export default function Passport() {
 
     return (
         <div className="background flex flex-col h-screen justify-center items-center ">
-            <HamburgerMenu pages={pageArray} links={linkArray} />
-            <div className=" flex items-start w-88">
+            <HamburgerMenu />
+            <div className=" flex items-start w-88 mt-16">
                 <WelcomeMessage />
             </div>
             <StampCount />

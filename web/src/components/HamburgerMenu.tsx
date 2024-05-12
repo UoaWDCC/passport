@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/component styles/HamburgerMenu.css";
 
-export default function HamburgerMenu({ pages, links }: { pages: string[], links: string[] }) {
+export default function HamburgerMenu() {
     // open state for the menu
     const [isOpen, setIsOpen] = useState(false);
 
@@ -12,7 +12,7 @@ export default function HamburgerMenu({ pages, links }: { pages: string[], links
 
     return (
         <div
-            className={`hamburger-menu relative flex mt-6 p-3 ${
+            className={`hamburger-menu absolute top-0 z-50 flex mt-4 p-3 ${
                 isOpen ? "open" : ""
             }`}
         >
@@ -28,9 +28,8 @@ export default function HamburgerMenu({ pages, links }: { pages: string[], links
             </div>
 
             <div className={`menu-items hidden ${isOpen ? "open" : ""}`}>
-                {pages.map((page, index) => (
-                    <a href={links[index] || "#"}>{page}</a>
-                ))}
+                <a href="/passport">Passport Page</a>
+                <a href="/leaderboard">Leaderboard Page</a>
             </div>
         </div>
     );
