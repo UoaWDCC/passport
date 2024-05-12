@@ -6,8 +6,8 @@ import Inez from '../assets/TeamPhotos/Inez_WDCC.jpg';
 import Nancy from '../assets/TeamPhotos/Nancy_WDCC.jpg';
 import Sebastian from '../assets/TeamPhotos/Sebastian_WDCC.jpg';
 import Rithvik from '../assets/TeamPhotos/Rithvik_WDCC.jpg';
+import Justin from '../assets/TeamPhotos/Justin_WDCC.jpg';
 import WDCC from '../assets/WDCCDarkLogo.svg';
-
 
 const MeetTheTeam = () => {
     const teamMembers = [
@@ -30,10 +30,10 @@ const MeetTheTeam = () => {
         {
             id: 1,
             role: 'Developer',
-            name: 'Josh',
-            funFact: 'I have a youtube channel ▶️',
-            image: JoshLi_WDCC,
-            profileLink: 'https://www.linkedin.com/in/joshua-li-92b87926a/'
+            name: 'Rithvik',
+            funFact: "i cannot see I'm legally blind (I'm not actually blind)",
+            image: Rithvik,
+            profileLink: 'https://www.linkedin.com/in/rithvik-sharma-008246227/'
         },
         {
             id: 1,
@@ -43,7 +43,14 @@ const MeetTheTeam = () => {
             image: Bill,
             profileLink: 'https://www.linkedin.com/in/bwon02/'
         },
-
+        {
+            id: 1,
+            role: 'Developer',
+            name: 'Josh',
+            funFact: 'im a lebron fan',
+            image: JoshLi_WDCC,
+            profileLink: 'https://www.linkedin.com/in/joshua-li-92b87926a/'
+        },
         {
             id: 1,
             role: 'Developer',
@@ -72,14 +79,6 @@ const MeetTheTeam = () => {
         {
             id: 1,
             role: 'Developer',
-            name: 'Rithvik',
-            funFact: "i cannot see I'm legally blind (I'm not actually blind)",
-            image: Rithvik,
-            profileLink: 'https://www.linkedin.com/in/rithvik-sharma-008246227/'
-        },
-        {
-            id: 1,
-            role: 'Developer',
             name: 'Alden',
             funFact: '',
             image: Bill,
@@ -89,8 +88,8 @@ const MeetTheTeam = () => {
             id: 1,
             role: 'Developer',
             name: 'Justin',
-            funFact: '',
-            image: Bill,
+            funFact: 'kate edgar is my home',
+            image: Justin,
             profileLink: 'https://www.linkedin.com/in/justinfyh/'
         },
     ];
