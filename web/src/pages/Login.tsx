@@ -11,6 +11,21 @@ interface UserData {
   UserUPI: string
 }
 
+// Navigate user to correct page
+const NavigateUser = (currentPage: string, navigate ) => {
+  const prevLocation = localStorage.getItem('prevLocation'); 
+  if (prevLocation) {
+    localStorage.removeItem('prevLocation');
+    navigate(prevLocation); // Takes them back to previous location if theyve been logged out
+  }
+  else if (currentPage === "/") {
+    navigate('/passport');
+  }
+  else {
+    navigate('/dashboard/events');
+  }
+}
+
 // New user to MongoDB
 const postUserData = async (data: UserData) => {
   await fetch("http://localhost:3000/api/user", {
@@ -130,17 +145,7 @@ const useGoogleSignIn = (currentPage: string) => {
                   }).then(() => {
                     console.log("successs")
                     localStorage.setItem("accessToken", tokenResponse.access_token)
-                    const prevLocation = localStorage.getItem('prevLocation'); 
-                    if (prevLocation) {
-                      localStorage.removeItem('prevLocation');
-                      navigate(prevLocation); // Takes them back to previous location if theyve been logged out
-                    }
-                    else if (currentPage === "/") {
-                      navigate('/passport');
-                    }
-                    else {
-                      navigate('/dashboard/events');
-                    }
+                    NavigateUser(currentPage, navigate);
                   })
                 } else {
                   console.log("Posting User Data")
@@ -152,17 +157,7 @@ const useGoogleSignIn = (currentPage: string) => {
                     UserUPI: userUPI,
                   }).then(() => {
                     localStorage.setItem("accessToken", tokenResponse.access_token)
-                    const prevLocation = localStorage.getItem('prevLocation'); 
-                    if (prevLocation) {
-                      localStorage.removeItem('prevLocation');
-                      navigate(prevLocation); // Takes them back to previous location if theyve been logged out
-                    }
-                    else if (currentPage === "/") {
-                      navigate('/passport');
-                    }
-                    else {
-                      navigate('/dashboard/events');
-                    }
+                    NavigateUser(currentPage, navigate);
                   })
                 }
               })
