@@ -4,18 +4,31 @@ import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
 
 export default function Events() {
-    const [events, setEvents] = useState();
+    const [events, setEvents] = useState<Event[]>([]);
 
     useEffect(() => {
         getEvents();
     }, []);
 
     const getEvents = async () => {
-        const eventsResponse = await axios.get(
-            "http://localhost:3000/api/get-all-events"
-        );
-        setEvents(eventsResponse.data);
+        try {
+            const eventsResponse = await axios.get(
+                "http://localhost:3000/api/get-all-events"
+            );
+            setEvents(eventsResponse.data);
+        } catch (error) {
+            console.error("Error fetching events:", error);
+        }
     };
+
+    interface Event {
+        _id: string;
+        eventName: string;
+        QRcode: string;
+        stamp64: string;
+        status: boolean;
+        totalAttended: number;
+    }
 
     return (
         <div className="text-gray-800">
@@ -36,7 +49,7 @@ export default function Events() {
                 </div>
                 {events ? (
                     <ul className="event-list">
-                        {events.map((event) => (
+                        {events.map((event: Event) => (
                             <li key={event._id} className="event-item">
                                 <div className="column">{event.eventName}</div>
                                 <div className="column">

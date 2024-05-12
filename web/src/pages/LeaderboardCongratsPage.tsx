@@ -1,6 +1,7 @@
 import congrats_present from "../assets/congrats_present.svg";
 import cheering_boy from "../assets/cheering_boy.svg";
-import '../styles/page styles/dashboard.css';
+import "../styles/page styles/dashboard.css";
+import PrizesAchieved from "@components/PrizesAchieved";
 
 function CongratsPage() {
   return (
@@ -36,9 +37,12 @@ function CongratsPage() {
           alt="Cheering Boy SVG"
         />
 
+        <div className="mt-6">
+          <PrizesAchieved />
         </div>
       </div>
-    );
+    </div>
+  );
 }
 
 export default CongratsPage;

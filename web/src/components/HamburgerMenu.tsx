@@ -29,7 +29,9 @@ export default function HamburgerMenu({ pages, links }) {
 
             <div className={`menu-items hidden ${isOpen ? "open" : ""}`}>
                 {pages.map((page, index) => (
-                    <a href={links[index] || "#"}>{page}</a>
+                    <a key={index} href={links[index] || "#"}>
+                        {page}
+                    </a>
                 ))}
             </div>
         </div>
