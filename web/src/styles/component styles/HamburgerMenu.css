@@ -1,6 +1,6 @@
 .hamburger-menu {
     width: 22em;
-    height: 6em;
+    /* height: 6em; */
     margin-bottom: 0;
     transition: background-color 0.2s ease;
     border-radius: 10px;
