@@ -4,48 +4,11 @@ import GoogleSigninBtn from "../components/GoogleSigninBtn";
 import useGoogleSignIn from "./Login";
 import WDCC_Logo from '../assets/WDCC_Logo.svg';
 import { useEffect, useState } from "react";
-import { useSearchParams, useLocation, Await, useNavigate } from "react-router-dom";
+import { useSearchParams, useLocation, Await, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 
 const SignInPage: React.FC = () => {
-
-  // //Validating QR code 
-  // const [validEvent, setValidEvent] = useState(false)
-  // const [searchParams, setSearchParams] = useSearchParams()
-  // // console.log(localStorage.getItem("accessToken"))
-
-  // const navigate = useNavigate();
-  // // const location = useLocation();
-  // const eventId = searchParams.get("id")
-
-  // useEffect(() => {
-  //   if (localStorage.getItem("accessToken") != null) {
-  //     axios.post('http://localhost:3000/api/user/check-user', {
-  //       accessToken: localStorage.getItem("accessToken")
-  //     })
-  //       .then((response) => {
-  //         // const eventId = location.pathname.split('/')[2];
-  //         if (response.data.success) {
-  //           axios.get(`http://localhost:3000/api/check-event-status/${eventId}`)
-  //             .then((res) => {
-  //               if (res.status == 401 || res.data.status == false) {
-  //                 navigate("/qr-error")
-  //               }
-  //             })
-  //           console.log("Verify QrCode")
-  //         } else {
-  //           navigate("/sign-in/" + eventId)
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error('error:', error);
-  //       });
-  //   } else{
-  //     navigate("/sign-in")
-  //   }
-  // }, []); // Empty dependency array means this effect will only run once after the initial render
-
 
   const handleSignIn = useGoogleSignIn("/");
 

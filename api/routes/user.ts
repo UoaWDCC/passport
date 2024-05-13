@@ -21,12 +21,15 @@ userRoutes.post("/check-user", async (req: Request, res: Response) => {
   const accessToken = req.body.accessToken;
 
   try {
-    const response = await User.find({ accessToken: accessToken }).exec()
-    if (response != undefined) {
+    const response = await User.findOne({ accessToken: accessToken }).exec()
+    console.log(response)
+    if (response != undefined && response !== null) {
+      
       res.status(200).json({ user: response, success: true })
     } else {
-      res.status(400).json({
-        success: false
+      res.status(200).json({
+        success: false,
+        error: "User not found"
       })
     }
   } catch (error) {
