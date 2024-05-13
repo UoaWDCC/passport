@@ -165,7 +165,7 @@ const useGoogleSignIn = (currentPage: string) => {
           
           // "/sign-in-error"
           // navigate('/sign-in-error');
-          navigate('/passport');
+          navigate('/sign-in-error');
         }
         
       } catch (error) {
