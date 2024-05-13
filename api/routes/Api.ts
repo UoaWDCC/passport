@@ -42,7 +42,7 @@ async function run() {
         "stamp64": stamp64,
         "startDate": new Date(startDate),
         "endDate": new Date(endDate),
-        "totalAttended": 1000
+        "totalAttended": 0
       };
       try {
         const database = client.db("WDCC_Passport");
