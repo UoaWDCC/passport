@@ -56,10 +56,10 @@ const QRErrorPage: React.FC = () => {
               setUser(response.data.user)
               axios.get(`http://localhost:3000/api/check-event-status/${eventId}`)
                 .then((res) => {
-                  console.log(res)
+                  console.log(res.status)
                   if (res.status == 401 || res.data.status == false) {
                     setSuccess(false)
-                    setErrorMessage("QR not valid")
+                    setErrorMessage(res.data.error)
                     setIsLoading(false)
                   } else {
                     console.log(response.data.user[0].upi)

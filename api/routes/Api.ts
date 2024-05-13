@@ -4,6 +4,7 @@ import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import { config } from 'dotenv';
 import { object } from 'zod';
 import User from '../db/User';
+import mongoose from 'mongoose';
 
 config();
 
@@ -92,21 +93,23 @@ async function run() {
     Api.get("/check-event-status/:eventId", async (req: Request, res: Response) => {
       try {
         const eventId = req.params.eventId
-        const objectId = new ObjectId(eventId)
+        if (mongoose.Types.ObjectId.isValid(eventId)) {
+          const objectId = new ObjectId(eventId)
+          const database = client.db("WDCC_Passport")
+          const eventCollection = database.collection("Events")
 
-        const database = client.db("WDCC_Passport")
-        const eventCollection = database.collection("Events")
-
-        const result = await eventCollection.findOne({ _id: objectId })
-        if (result?.startDate && result?.endDate && new Date() >= result.startDate && new Date() <= result.endDate) {
-          result["status"] = true;
-        } else if (result?.startDate && result?.endDate) {
-          result["status"] = false
+          const result = await eventCollection.findOne({ _id: objectId })
+          if (result?.startDate && result?.endDate && new Date() >= result.startDate && new Date() <= result.endDate) {
+            result["status"] = true;
+          } else if (result?.startDate && result?.endDate) {
+            result["status"] = false
+          } else {
+            return res.status(200).json({ error: "event not found" })
+          }
+          res.status(200).json(result)
         } else {
-          return res.status(401).json({ error: "event not found" })
+          return res.status(200).json({ error: "event not found" })
         }
-
-        res.status(200).json(result)
       } catch (error) {
         console.log(error)
         return res.status(500).send("Issue with database")
@@ -118,45 +121,50 @@ async function run() {
       const user = req.body.upi;
       console.log(eventId)
 
-      const database = client.db("WDCC_Passport")
-      const eventCollection = database.collection("Events")
-      const objectId = new ObjectId(eventId)
+      if (mongoose.Types.ObjectId.isValid(eventId)) {
+        const database = client.db("WDCC_Passport")
+        const eventCollection = database.collection("Events")
+        const objectId = new ObjectId(eventId)
 
-      console.log(user)
+        console.log(user)
 
-      const resUser = await User.updateOne({"upi": user},
-        {
-          $addToSet: {eventList: eventId}
-        }
-      ).exec()
-
-      if(resUser.modifiedCount == 1){
-        const eventAddRes = await eventCollection.updateOne({_id: objectId},
+        const resUser = await User.updateOne({ "upi": user },
           {
-            $inc: {totalAttended: 1}
+            $addToSet: { eventList: eventId }
           }
-        )
-        return res.status(200).json({
-          user: user,
-          eventId: eventId,
-          added: true,
-          message: "successfully attended event"
-        })
-      }else if(resUser.modifiedCount == 0){
-        return res.status(200).json({
-          user: user,
-          eventId: eventId,
-          added: false,
-          message: "Already attended event"
-        })
+        ).exec()
+
+        if (resUser.modifiedCount == 1) {
+          const eventAddRes = await eventCollection.updateOne({ _id: objectId },
+            {
+              $inc: { totalAttended: 1 }
+            }
+          )
+          return res.status(200).json({
+            user: user,
+            eventId: eventId,
+            added: true,
+            message: "successfully attended event"
+          })
+        } else if (resUser.modifiedCount == 0) {
+          return res.status(200).json({
+            user: user,
+            eventId: eventId,
+            added: false,
+            message: "Already attended event"
+          })
+        } else {
+          return res.status(200).json({
+            user: user,
+            eventId: eventId,
+            added: false,
+            message: "QR code error"
+          })
+        }
       }else{
-        return res.status(200).json({
-          user: user,
-          eventId: eventId,
-          added: false,
-          message: "QR code error"
-        })
+        return res.json({added: false, message: "Invalid event Id"})
       }
+
     })
 
     return Api
