@@ -7,6 +7,7 @@ import Nancy from '../assets/TeamPhotos/Nancy_WDCC.jpg';
 import Sebastian from '../assets/TeamPhotos/Sebastian_WDCC.jpg';
 import Rithvik from '../assets/TeamPhotos/Rithvik_WDCC.jpg';
 import Justin from '../assets/TeamPhotos/Justin_WDCC.jpg';
+import Alden from '../assets/TeamPhotos/Alden_WDCC.png';
 import WDCC from '../assets/WDCCDarkLogo.svg';
 
 const MeetTheTeam = () => {
@@ -80,9 +81,9 @@ const MeetTheTeam = () => {
             id: 1,
             role: 'Developer',
             name: 'Alden',
-            funFact: '',
-            image: Bill,
-            profileLink: ''
+            funFact: 'i dreamt about coding the other day, send help please',
+            image: Alden,
+            profileLink: 'https://www.linkedin.com/in/alden-maiyor-284712257/ '
         },
         {
             id: 1,
