@@ -101,6 +101,7 @@ async function run() {
           const result = await eventCollection.findOne({ _id: objectId })
           if (result?.startDate && result?.endDate && new Date() >= result.startDate && new Date() <= result.endDate) {
             result["status"] = true;
+            console.log("sdfsdfsdfsdfsdf",result)
             res.status(200).json({
               result:result,
               error: "none"

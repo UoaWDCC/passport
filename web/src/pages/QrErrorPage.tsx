@@ -56,8 +56,8 @@ const QRErrorPage: React.FC = () => {
               setUser(response.data.user)
               axios.get(`http://localhost:3000/api/check-event-status/${eventId}`)
                 .then((res) => {
-                  console.log(res.status)
-                  if (res.status == 401 || res.data.status == false) {
+                  console.log(res)
+                  if (res.status == 401 || res.data.result.status == false) {
                     console.log("here",res)
                     setSuccess(false)
                     setErrorMessage(res.data.error)
