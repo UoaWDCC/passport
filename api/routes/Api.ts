@@ -101,18 +101,26 @@ async function run() {
           const result = await eventCollection.findOne({ _id: objectId })
           if (result?.startDate && result?.endDate && new Date() >= result.startDate && new Date() <= result.endDate) {
             result["status"] = true;
+            res.status(200).json({
+              result:result,
+              error: "none"
+            })
           } else if (result?.startDate && result?.endDate) {
-            result["status"] = false
+            result["status"] = false;
+            res.status(200).json({
+              result:result,
+              error: "event not active"
+            })
           } else {
             return res.status(200).json({ error: "event not found" })
           }
-          res.status(200).json(result)
+          
         } else {
           return res.status(200).json({ error: "event not found" })
         }
       } catch (error) {
         console.log(error)
-        return res.status(500).send("Issue with database")
+        return res.status(500).json("Issue with database")
       }
     })
 

@@ -58,12 +58,13 @@ const QRErrorPage: React.FC = () => {
                 .then((res) => {
                   console.log(res.status)
                   if (res.status == 401 || res.data.status == false) {
+                    console.log("here",res)
                     setSuccess(false)
                     setErrorMessage(res.data.error)
                     setIsLoading(false)
                   } else {
-                    console.log(response.data.user[0].upi)
-                    attendEvent(eventId, response.data.user[0].upi)
+                    console.log(response.data.user.upi)
+                    attendEvent(eventId, response.data.user.upi)
                   }
                 })
               console.log("Verify QrCode")
