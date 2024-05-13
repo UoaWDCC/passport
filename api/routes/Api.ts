@@ -52,7 +52,7 @@ async function run() {
         const result = await eventCollection.insertOne(event);
         console.log(`A document was inserted with id ${result.insertedId}`);
 
-        const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173/${result.insertedId}&amp;size=100x100`
+        const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173//${result.insertedId}&amp;size=100x100`
         const result2 = await eventCollection.updateOne({ _id: new ObjectId(result.insertedId) }, { $set: { "QRcode": qrCode } })
         console.log(qrCode)
 
@@ -91,8 +91,7 @@ async function run() {
     //check event validity 
     Api.get("/check-event-status/:eventId", async (req: Request, res: Response) => {
       try {
-        // const eventId = req.params.eventId
-        const eventId = "663c59fe7493ceabaae7b781"
+        const eventId = req.params.eventId
         const objectId = new ObjectId(eventId)
 
         const database = client.db("WDCC_Passport")
@@ -117,8 +116,7 @@ async function run() {
     Api.post("/attend-event", async (req: Request, res: Response) => {
       const eventId = req.body.eventId;
       const user = req.body.upi;
-      // const eventId = "663a031cecff7c5e2189eaaa"
-      // const user = "jdoe123"
+      console.log(eventId)
 
       const database = client.db("WDCC_Passport")
       const eventCollection = database.collection("Events")
@@ -149,7 +147,7 @@ async function run() {
           user: user,
           eventId: eventId,
           added: false,
-          message: "already attended event"
+          message: "Already attended event"
         })
       }else{
         return res.status(200).json({

@@ -87,13 +87,9 @@ const router = createBrowserRouter([
     element: <PrivacyPolicy />,
   },
 {
-  path: "/qr-error",
+  path: "/qr-error/:eventId?",
   element: <QRErrorPage />,
 },
-{
-  path: "/qr-success",
-  element: <EventAttended />
-}
 ]);
 
 export default function App() {
