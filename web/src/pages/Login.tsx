@@ -2,7 +2,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
-
 interface UserData {
   family_name: string
   given_name: string
@@ -13,7 +12,7 @@ interface UserData {
 
 // New user to MongoDB
 const postUserData = async (data: UserData) => {
-  await fetch("http://localhost:3000/api/user", {
+  await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user`, {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -37,7 +36,7 @@ const postUserData = async (data: UserData) => {
 const updateUserData = async (data: UserData) => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/user/" + data.UserUPI,
+      `${import.meta.env.VITE_SERVER_URL}/api/user/` + data.UserUPI,
       {
         method: "PUT",
         headers: { "Content-type": "application/json" },
@@ -62,7 +61,7 @@ const updateUserData = async (data: UserData) => {
 }
 
 // Passes UPI to WDCC member checker API
-const checkUser = async (upi: string): Promise<string | undefined> => {
+const checkUser = async (upi: string): Promise<string | undefined> => { 
   try {
     const response = await fetch(
       `https://membership.wdcc.co.nz/api/verify/${import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS}/UPI/${upi}`,
@@ -110,7 +109,7 @@ const useGoogleSignIn = (currentPage: string) => {
 
           const getUserData = async () => {
             //TODO Fix up this method - FIXED
-            await fetch("http://localhost:3000/api/user/" + userUPI, {
+            await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/` + userUPI, {
               method: "GET",
             })
               .then((response) => {
@@ -153,7 +152,7 @@ const useGoogleSignIn = (currentPage: string) => {
           getUserData();
 
           // "/passport"
-          if (currentPage === "/") {
+          if (currentPage === "/sign-in") {
             navigate('/passport');
           }
           else {
@@ -165,8 +164,8 @@ const useGoogleSignIn = (currentPage: string) => {
           console.log("Redirect to error page");
           
           // "/sign-in-error"
+          // navigate('/sign-in-error');
           navigate('/sign-in-error');
-
         }
         
       } catch (error) {
