@@ -12,7 +12,7 @@ export default function HamburgerMenu() {
 
     return (
         <div
-            className={`hamburger-menu absolute top-0 z-50 flex mt-4 p-3 pb-4 ${
+            className={`hamburger-menu relative flex mt-6 p-3 ${
                 isOpen ? "open" : ""
             }`}
         >

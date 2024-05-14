@@ -1,12 +1,40 @@
 import WDCCLogo from "../assets/WDCC_Logo.svg";
 import { useNavigate } from "react-router";
 import styles from "../styles/page styles/Landing-Page.module.css";
+import axios from "axios";
 
 export const HomePage = () => {
   const navigate = useNavigate();
-  const handleButtonClick = () => {
-    navigate("/sign-in");
+  const handleButtonClick = async () => {
+    try {
+      const eventId = location.pathname.split('/')[1];
+      const accessToken = localStorage.getItem('accessToken');
+
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, { accessToken });
+      if (eventId) {
+        if (response.data.success && accessToken) {
+          console.log("User is logged in");
+          // check QR Code Validity here 
+          navigate("/passport");
+        } else {
+          console.log("User is not logged in");
+          navigate("/sign-in/" + eventId); // if not signed in, check after sign in
+        }
+
+      } else {
+        if (response.data.success && accessToken) {
+          console.log("User is logged in");
+          navigate("/passport");
+        } else {
+          console.log("User is not logged in");
+          navigate("/sign-in");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching logged-in data:", error);
+      navigate("/sign-in");
   };
+};
   return (
     <div className={styles.background}>
       <title>WDCC Passport</title>

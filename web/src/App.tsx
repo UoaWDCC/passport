@@ -1,31 +1,39 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// import Login from "@pages/Login"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// import { useState } from 'react';
-// import Home from "@pages/Home";
 import Passport from "@pages/Passport"
-import SignInPage from "./pages/SignInPage"
-import SignInErrorPage from "./pages/SignInErrorPage"
-import AdminLogin from "./pages/Admin-Login"
-//import Dashboard from "@pages/Dashboard"
-import DashboardPrizes from "@pages/DashboardPrizes"
-import Events from "@pages/Events.tsx";
-import Form from "@pages/Form"
+import SignInPage from './pages/SignInPage';
+import SignInErrorPage from "./pages/SignInErrorPage";
+import AdminLogin from "./pages/Admin-Login";
+import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
+import QRErrorPage from "@pages/QrErrorPage";
+//import EventAttended from "@pages/EventAttended";
 import MeetTheTeam from "@pages/MeetTheTeam"
 import { HomePage } from "@pages/Landing-Page"
 import Leaderboard from "@pages/Leaderboard"
 import LeaderboardPrize from "@pages/LeaderboardCongratsPage"
-// import GoogleSigninBtn from "@components/GoogleSigninBtn";
+import DashboardPrizes from "@pages/DashboardPrizes"
+import Events from "@pages/Events"
 
 const router = createBrowserRouter([
   {
+    //landing page
     path: "/",
-    element: <HomePage />,
+    element: <HomePage />
+  },
+
+  {
+    //landing page with qr code
+    path: "/:id",
+    element: <HomePage />
   },
   {
     path: "/sign-in",
-    element: <SignInPage />,
+    element: <SignInPage />
+  },
+  {
+    path: "/sign-in/:id", //using this to testing qr code functionality
+    element: <SignInPage />
   },
   {
     path: "/passport",
@@ -63,10 +71,14 @@ const router = createBrowserRouter([
     path: "/privacy-policy",
     element: <PrivacyPolicy />,
   },
-  {
-    path: "/team",
-    element: <MeetTheTeam />,
-  }
+{
+  path: "/qr-error/:eventId?",
+  element: <QRErrorPage />,
+},
+{
+  path: "/team",
+  element: <MeetTheTeam />,
+}
 ]);
 
 export default function App() {

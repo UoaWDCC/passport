@@ -7,6 +7,7 @@ import HamburgerMenu from "@components/HamburgerMenu";
 import StampCount from "@components/StampCount.tsx";
 import "../styles/page styles/Passport.css";
 import WelcomeMessage from "@components/WelcomeMessage.tsx";
+import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
 
 export default function Passport() {
     // initialise index state
@@ -14,6 +15,9 @@ export default function Passport() {
 
     // initialise temporary page array
     const views = [PassportMain, PassportPage, PassportPage];
+
+    // const pageArray = ["Passport Page", "Leaderbord Page"];
+    // const linkArray = ["/passport", "/leaderboard"];
 
     // function to switch to next page
     const goToNextView = () => {
@@ -33,36 +37,40 @@ export default function Passport() {
     const CurrentView = views[currentIndex];
 
     return (
-        <div className="background flex flex-col h-screen justify-center items-center ">
-            <HamburgerMenu />
-            <div className=" flex items-start w-88 mt-16">
-                <WelcomeMessage />
+        <CheckLoggedIn>
+            <div className="background flex flex-col h-screen justify-center items-center ">
+
+                {/* <HamburgerMenu pages={pageArray} links={linkArray} /> */}
+                <HamburgerMenu />
+                <div className=" flex items-start w-88">
+                    <WelcomeMessage />
+                </div>
+                <StampCount />
+
+                <CurrentView />
+
+                <div className="text-black w-88">
+                    {/* display arrows depending on the current page index */}
+                    {currentIndex > 0 && (
+                        <button
+                            className="nav-button float-left"
+                            onClick={goToPreviousView}
+                        >
+                            <LeftButton />
+                        </button>
+                    )}
+                    {currentIndex < views.length - 1 && (
+                        <button
+                            className="nav-button float-right"
+                            onClick={goToNextView}
+                        >
+                            <RightButton />
+                        </button>
+                    )}
+                </div>
+
+                <p>Page {currentIndex + 1}</p>
             </div>
-            <StampCount />
-
-            <CurrentView />
-
-            <div className="text-black w-88">
-                {/* display arrows depending on the current page index */}
-                {currentIndex > 0 && (
-                    <button
-                        className="nav-button float-left"
-                        onClick={goToPreviousView}
-                    >
-                        <LeftButton />
-                    </button>
-                )}
-                {currentIndex < views.length - 1 && (
-                    <button
-                        className="nav-button float-right"
-                        onClick={goToNextView}
-                    >
-                        <RightButton />
-                    </button>
-                )}
-            </div>
-
-            <p>Page {currentIndex + 1}</p>
-        </div>
+        </CheckLoggedIn>
     );
 }

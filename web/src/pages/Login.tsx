@@ -10,6 +10,21 @@ interface UserData {
   UserUPI: string
 }
 
+// Navigate user to correct page
+const NavigateUser = (currentPage: string, navigate: Function ) => {
+  const prevLocation = localStorage.getItem('prevLocation'); 
+  if (prevLocation) {
+    localStorage.removeItem('prevLocation');
+    navigate(prevLocation); // Takes them back to previous location if theyve been logged out
+  }
+  else if (currentPage === "/sign-in") {
+    navigate('/passport');
+  }
+  else {
+    navigate('/dashboard/events');
+  }
+}
+
 // New user to MongoDB
 const postUserData = async (data: UserData) => {
   await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user`, {
@@ -87,26 +102,23 @@ const useGoogleSignIn = (currentPage: string) => {
 
   const handleSignIn = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      // console.log('Token Response:', tokenResponse.access_token); //DELETE
-      
+
       try {
         const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         });
-        // console.log('User Info:', userInfo.data); //DELETE
-
+        
         //extracting user UPI
         const userUPI:string = userInfo.data.email.split("@")[0];
         //passing userUPI to member checker
         const text = await checkUser(userUPI);
-
         //checking if email is in domain and user is in WDCC
+
         if (
           userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
           text === "value found in column"
         ) {
           console.log("YOU'RE IN WDCC!!");
-
           const getUserData = async () => {
             //TODO Fix up this method - FIXED
             await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/` + userUPI, {
@@ -121,6 +133,7 @@ const useGoogleSignIn = (currentPage: string) => {
                 
                 if (response.status == 200) {
                   console.log("Updating User Data")
+                  
                   updateUserData({
                     family_name: userInfo.data.family_name,
                     given_name: userInfo.data.given_name,
@@ -128,7 +141,9 @@ const useGoogleSignIn = (currentPage: string) => {
                     accessToken: tokenResponse.access_token,
                     UserUPI: userUPI,
                   }).then(() => {
+                    console.log("successs")
                     localStorage.setItem("accessToken", tokenResponse.access_token)
+                    NavigateUser(currentPage, navigate);
                   })
                 } else {
                   console.log("Posting User Data")
@@ -140,6 +155,7 @@ const useGoogleSignIn = (currentPage: string) => {
                     UserUPI: userUPI,
                   }).then(() => {
                     localStorage.setItem("accessToken", tokenResponse.access_token)
+                    NavigateUser(currentPage, navigate);
                   })
                 }
               })
@@ -151,20 +167,8 @@ const useGoogleSignIn = (currentPage: string) => {
           // Check MongoDB if user is in DB, then updates/posts user data accordingly
           getUserData();
 
-          // "/passport"
-          if (currentPage === "/sign-in") {
-            navigate('/passport');
-          }
-          else {
-            navigate('/dashboard/events');
-          }
-
         } else {
-          // Redirect to error page
-          console.log("Redirect to error page");
-          
-          // "/sign-in-error"
-          // navigate('/sign-in-error');
+          // Redirect to error page if user is not in WDCC
           navigate('/sign-in-error');
         }
         

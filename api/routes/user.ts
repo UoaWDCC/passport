@@ -16,12 +16,36 @@ userRoutes.get("/", async (req: Request, res: Response) => {
   }
 })
 
+
+userRoutes.post("/check-user", async (req: Request, res: Response) => {
+  const accessToken = req.body.accessToken;
+
+  try {
+    const response = await User.findOne({ accessToken: accessToken }).exec()
+    console.log(response)
+    if (response != undefined && response !== null) {
+      
+      res.status(200).json({ user: response, success: true })
+    } else {
+      res.status(200).json({
+        success: false,
+        error: "User not found"
+      })
+    }
+  } catch (error) {
+    res.status(400).json({ success: false, errorMessage: error })
+  }
+
+
+})
+
 // GET /api/user/:upi
 userRoutes.get("/:upi", async (req: Request, res: Response) => {
   const userUpi = req.params.upi
   try {
     const user = await User.findOne({ upi: userUpi }).exec() // Await the result or use exec()
     if (user) {
+      user["totalStamps"] = user?.eventList.length
       res.json(user)
     } else {
       res.status(404).json({ message: "User not found" })
@@ -42,6 +66,7 @@ userRoutes.post("/", (req: Request, res: Response) => {
     email: req.body.email,
     accessToken: req.body.accessToken,
     upi: req.body.upi,
+    eventList: [],
   })
 
   try {
