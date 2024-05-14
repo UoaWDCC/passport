@@ -7,7 +7,6 @@ import AdminLogin from "./pages/Admin-Login";
 import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
-//import EventAttended from "@pages/EventAttended";
 import MeetTheTeam from "@pages/MeetTheTeam"
 import { HomePage } from "@pages/Landing-Page"
 import Leaderboard from "@pages/Leaderboard"
