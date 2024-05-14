@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 
 const EventAttended = () => {
 
@@ -8,12 +8,12 @@ const EventAttended = () => {
   const [success, setSuccess] = useState(false)
   const [resMessage, setResMessage] = useState("")
 
-  const location = useLocation()
+  //const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
     // if(location.state.event && location.state.upi){
-    axios.post("http://localhost:3000/api/attend-event", {
+    axios.post(`${import.meta.env.VITE_SERVER_URL}/api/attend-event`, {
       // eventId: location.state.event,
       // upi: location.state.upi
       eventId: "663c59fe7493ceabaae7b781",

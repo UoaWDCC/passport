@@ -7,7 +7,8 @@ import AdminLogin from "./pages/Admin-Login";
 import Form from "@pages/Form";
 import PrivacyPolicy from "@pages/privacy-policy";
 import QRErrorPage from "@pages/QrErrorPage";
-import EventAttended from "@pages/EventAttended";
+//import EventAttended from "@pages/EventAttended";
+import MeetTheTeam from "@pages/MeetTheTeam"
 import { HomePage } from "@pages/Landing-Page"
 import Leaderboard from "@pages/Leaderboard"
 import LeaderboardPrize from "@pages/LeaderboardCongratsPage"
@@ -18,37 +19,21 @@ const router = createBrowserRouter([
   {
     //landing page
     path: "/",
-    element: (
-      <div>
-      <HomePage />
-      </div>
-    ),
+    element: <HomePage />
   },
 
   {
     //landing page with qr code
     path: "/:id",
-    element: (
-      <div>
-      <HomePage />
-      </div>
-    ),
+    element: <HomePage />
   },
   {
     path: "/sign-in",
-    element: (
-      <div>
-      <SignInPage />
-      </div>
-    ),
+    element: <SignInPage />
   },
   {
     path: "/sign-in/:id", //using this to testing qr code functionality
-    element: (
-      <div>
-      <SignInPage />
-      </div>
-    ),
+    element: <SignInPage />
   },
   {
     path: "/passport",
@@ -90,6 +75,10 @@ const router = createBrowserRouter([
   path: "/qr-error/:eventId?",
   element: <QRErrorPage />,
 },
+{
+  path: "/team",
+  element: <MeetTheTeam />,
+}
 ]);
 
 export default function App() {

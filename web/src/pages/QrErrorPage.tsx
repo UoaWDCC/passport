@@ -1,19 +1,19 @@
 import styles from "../styles/page styles/SignInError.module.css";
 import WDCC_Login from '../assets/WDCC_Logo.svg';
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
-import { set } from "zod";
+// import { useSearchParams } from "react-router-dom";
+// import { set } from "zod";
 
 const QRErrorPage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(true)
   const [success, setSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const [user, setUser] = useState()
+  const [_, setUser] = useState()
 
-  const location = useLocation()
+  // const location = useLocation()
   const params = useParams()
 
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const QRErrorPage: React.FC = () => {
   console.log(eventId)
 
   const attendEvent = (eventId: string, upi: string) => {
-    axios.post("http://localhost:3000/api/attend-event", {
+    axios.post(`${import.meta.env.VITE_SERVER_URL}/api/attend-event`, {
       // eventId: location.state.event,
       // upi: location.state.upi
       eventId: eventId,
@@ -47,14 +47,14 @@ const QRErrorPage: React.FC = () => {
     if (localStorage.getItem("accessToken") != null) {
       if (eventId) {
         
-        axios.post('http://localhost:3000/api/user/check-user', {
+        axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, {
           accessToken: localStorage.getItem("accessToken")
         })
           .then((response) => {
             if (response.data.success) {
               
               setUser(response.data.user)
-              axios.get(`http://localhost:3000/api/check-event-status/${eventId}`)
+              axios.get(`${import.meta.env.VITE_SERVER_URL}/api/check-event-status/${eventId}`)
                 .then((res) => {
                   console.log(res)
                   if (res.status == 401 || res.data.result.status == false) {

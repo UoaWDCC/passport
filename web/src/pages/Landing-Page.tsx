@@ -10,7 +10,7 @@ export const HomePage = () => {
       const eventId = location.pathname.split('/')[1];
       const accessToken = localStorage.getItem('accessToken');
 
-      const response = await axios.post("http://localhost:3000/api/user/check-user", { accessToken });
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, { accessToken });
       if (eventId) {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
