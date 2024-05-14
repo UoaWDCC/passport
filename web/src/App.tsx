@@ -12,6 +12,7 @@ import DashboardPrizes from "@pages/DashboardPrizes"
 import Events from "@pages/Events.tsx";
 import Form from "@pages/Form"
 import PrivacyPolicy from "@pages/privacy-policy";
+import MeetTheTeam from "@pages/MeetTheTeam"
 import { HomePage } from "@pages/Landing-Page"
 import Leaderboard from "@pages/Leaderboard"
 import LeaderboardPrize from "@pages/LeaderboardCongratsPage"
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: "/privacy-policy",
     element: <PrivacyPolicy />,
+  },
+  {
+    path: "/team",
+    element: <MeetTheTeam />,
   }
 ]);
 
