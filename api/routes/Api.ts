@@ -113,11 +113,11 @@ async function run() {
               error: "event not active"
             })
           } else {
-            return res.status(200).json({ error: "event not found" })
+            return res.status(200).json({ result: {error: "event not found", status: false }})
           }
           
         } else {
-          return res.status(200).json({ error: "event not found" })
+          return res.status(200).json({result: { status: false },error: "event not found"})
         }
       } catch (error) {
         console.log(error)
