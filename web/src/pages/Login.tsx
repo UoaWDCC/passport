@@ -2,7 +2,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
-
 interface UserData {
   family_name: string
   given_name: string
@@ -18,7 +17,7 @@ const NavigateUser = (currentPage: string, navigate: Function ) => {
     localStorage.removeItem('prevLocation');
     navigate(prevLocation); // Takes them back to previous location if theyve been logged out
   }
-  else if (currentPage === "/") {
+  else if (currentPage === "/sign-in") {
     navigate('/passport');
   }
   else {
@@ -28,7 +27,7 @@ const NavigateUser = (currentPage: string, navigate: Function ) => {
 
 // New user to MongoDB
 const postUserData = async (data: UserData) => {
-  await fetch("http://localhost:3000/api/user", {
+  await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user`, {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify({
@@ -52,7 +51,7 @@ const postUserData = async (data: UserData) => {
 const updateUserData = async (data: UserData) => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/user/" + data.UserUPI,
+      `${import.meta.env.VITE_SERVER_URL}/api/user/` + data.UserUPI,
       {
         method: "PUT",
         headers: { "Content-type": "application/json" },
@@ -103,13 +102,11 @@ const useGoogleSignIn = (currentPage: string) => {
 
   const handleSignIn = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      // console.log('Token Response:', tokenResponse.access_token); //DELETE
 
       try {
         const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         });
-        console.log('User Info:', userInfo.data); //DELETE
         
         //extracting user UPI
         const userUPI:string = userInfo.data.email.split("@")[0];
@@ -123,7 +120,8 @@ const useGoogleSignIn = (currentPage: string) => {
         ) {
           console.log("YOU'RE IN WDCC!!");
           const getUserData = async () => {
-            await fetch("http://localhost:3000/api/user/" + userUPI, {
+            //TODO Fix up this method - FIXED
+            await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/` + userUPI, {
               method: "GET",
             })
               .then((response) => {

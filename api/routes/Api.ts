@@ -73,8 +73,9 @@ async function run() {
 
         const cursor = await eventCollection.find({})
         const result = await cursor.toArray()
-        for (let i = 0; i < result.length; i++) {
-          if (new Date() >= result[i].startDate && new Date() <= result[i].endDate) {
+        // console.log(result)
+        for(let i=0; i<result.length; i++){
+          if (new Date() >= result[i].startDate && new Date() <= result[i].endDate ){
             result[i]["status"] = true
           } else {
             result[i]["status"] = false
