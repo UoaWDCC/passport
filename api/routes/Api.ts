@@ -53,7 +53,7 @@ async function run() {
         const result = await eventCollection.insertOne(event);
         console.log(`A document was inserted with id ${result.insertedId}`);
 
-        const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173//${result.insertedId}&amp;size=100x100`
+        const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport.fly.dev/qr-error/${result.insertedId}&amp;size=100x100`
         const result2 = await eventCollection.updateOne({ _id: new ObjectId(result.insertedId) }, { $set: { "QRcode": qrCode } })
         console.log(qrCode)
 
