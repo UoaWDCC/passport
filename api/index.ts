@@ -11,7 +11,7 @@ import userRoutes from "./routes/user"
 const app = express()
 config()
 
-app.use(json());
+app.use(express.json(({ limit: "500mb" })));
 app.use(cors());
 app.use(express.static('public'));
 
