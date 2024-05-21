@@ -5,7 +5,7 @@ import logo from "../assets/primary_logo.svg";
 
 function DashboardPrizes() {
     return (
-        <div>
+        <div className="custom-blue min-h-screen">
             <HamburgerMenu />
             <div>
                 <h1 className="title">Prize Dashboard</h1>

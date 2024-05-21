@@ -92,3 +92,6 @@ body {
 .event-item:nth-child(2n) {
     background-color: #f2f2f2;
 }
+.custom-blue {
+    background-color: #e1ebff; /* Replace with your specific shade of blue */
+}
