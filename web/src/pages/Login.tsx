@@ -188,8 +188,6 @@ const useGoogleSignIn = (
                 }
             } catch (error) {
                 console.error("Failed to fetch user info:", error);
-            } finally {
-                setLoading(false);
             }
         },
         onError: (error) => {
