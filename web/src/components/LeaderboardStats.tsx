@@ -21,12 +21,12 @@ const GetLeaderboardStats = () => {
         try {
         const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/` + upi);
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error('Error fetching data');
         }
         const result = await response.json();
         setData(result);
         } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data');
         }
     };
 

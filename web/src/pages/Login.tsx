@@ -17,11 +17,11 @@ const NavigateUser = (currentPage: string, navigate: Function ) => {
     localStorage.removeItem('prevLocation');
     navigate(prevLocation); // Takes them back to previous location if theyve been logged out
   }
-  else if (currentPage === "/sign-in") {
-    navigate('/passport');
+  else if (currentPage === "/dashboard") {
+    navigate('/dashboard/events');
   }
   else {
-    navigate('/dashboard/events');
+    navigate('/passport');
   }
 }
 
@@ -110,6 +110,7 @@ const useGoogleSignIn = (currentPage: string) => {
         
         //extracting user UPI
         const userUPI:string = userInfo.data.email.split("@")[0];
+        localStorage.setItem("userUPI", userUPI);
         //passing userUPI to member checker
         const text = await checkUser(userUPI);
         //checking if email is in domain and user is in WDCC
