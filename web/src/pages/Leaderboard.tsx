@@ -17,6 +17,7 @@ export default function Leaderboard() {
     } else {
         stampsLeft = height % 5; // To be updated when it gets calced in Mongo
     } 
+    console.log(height, stampsLeft);
     const prizes = Math.floor(height/5); // To be updated when it gets calced in Mongo
 
     return (

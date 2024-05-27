@@ -110,7 +110,7 @@ const useGoogleSignIn = (currentPage: string) => {
         
         //extracting user UPI
         const userUPI:string = userInfo.data.email.split("@")[0];
-        localStorage.setItem("userUPI", userUPI);
+        localStorage.setItem("userUpi", userUPI);
         //passing userUPI to member checker
         const text = await checkUser(userUPI);
         //checking if email is in domain and user is in WDCC

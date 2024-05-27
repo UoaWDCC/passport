@@ -26,6 +26,7 @@ userRoutes.post("/check-user", async (req: Request, res: Response) => {
     if (response != undefined && response !== null) {
       
       res.status(200).json({ user: response, success: true })
+
     } else {
       res.status(200).json({
         success: false,

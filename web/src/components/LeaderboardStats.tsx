@@ -14,7 +14,7 @@ const GetLeaderboardStats = () => {
 
     });
 
-    const upi = "cwha972";
+    const upi = localStorage.getItem('userUpi');
 
     useEffect(() => {
     const fetchData = async () => {
