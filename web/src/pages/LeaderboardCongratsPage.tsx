@@ -3,8 +3,12 @@ import cheering_boy from "../assets/cheering_boy.svg";
 import "../styles/page styles/dashboard.css";
 import PrizesAchieved from "@components/PrizesAchieved";
 import CheckLoggedIn from "@components/CheckLoggedIn";
+import GetLeaderboardStats from "@components/LeaderboardStats";
 
 function CongratsPage() {
+  const userData = GetLeaderboardStats();
+  const height = userData.totalStamps; // To be removed when other vals in Mongo
+  const prizes = Math.floor(height/5); // To be updated when it gets calced in Mongo
   return (
     <CheckLoggedIn>
       <div className="background flex flex-col h-screen justify-center items-center ">
@@ -40,7 +44,7 @@ function CongratsPage() {
           />
 
           <div className="mt-6">
-            <PrizesAchieved />
+            <PrizesAchieved height={prizes} />
           </div>
         </div>
       </div>
