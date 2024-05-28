@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PrizesAchieved from './PrizesAchieved';
 
 const GetLeaderboardStats = () => {
     const [data, setData] = useState({
@@ -8,6 +9,8 @@ const GetLeaderboardStats = () => {
         firstName : "null",
         lastName : "null", 
         totalStamps : 0,
+        stampsLeft : 0,
+        prizesAchieved : 0,
         upi : "null",
         __v : 0,
         _id : "0"

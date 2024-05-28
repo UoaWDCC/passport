@@ -7,8 +7,29 @@ const userSchema = new Schema({
   accessToken: { type: String, required: true },
   upi: { type: String, required: true, unique: true },
   eventList: { type: Array, required: true, default : [] },
-  totalStamps: { type: Number, required: false}
 })
+
+userSchema.virtual('totalStamps')
+  .get(function() {
+  return this.eventList.length; 
+  });
+
+  userSchema.virtual('stampsLeft')
+  .get(function() {
+    if (this.eventList.length % 5 === 0 && this.eventList.length !== 0) {
+      return 0;
+    } else {
+      return 5 - (this.eventList.length % 5);
+    }
+  });
+
+userSchema.virtual('prizesAchieved')
+  .get(function() {
+  return Math.floor(this.eventList.length / 5)
+});
+
+userSchema.set('toJSON', { virtuals: true });
+userSchema.set('toObject', { virtuals: true });
 
 const User = model("User", userSchema, "Users")
 

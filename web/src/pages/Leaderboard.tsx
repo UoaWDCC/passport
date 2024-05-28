@@ -10,25 +10,26 @@ import GetLeaderboardStats from "@components/LeaderboardStats";
 
 export default function Leaderboard() {
     const userData = GetLeaderboardStats();
-    const height = userData.totalStamps; // To be removed when other vals in Mongo
-    let stampsLeft; // To be updated when it gets calced in Mongo
-    if (height % 5 == 0 && height != 0) {
-        stampsLeft = 5;  // To be updated when it gets calced in Mongo
-    } else {
-        stampsLeft = height % 5; // To be updated when it gets calced in Mongo
-    } 
-    console.log(height, stampsLeft);
-    const prizes = Math.floor(height/5); // To be updated when it gets calced in Mongo
+    const stampsLeft = userData.stampsLeft;
+    const prizes = userData.prizesAchieved;
+    const height = 5-stampsLeft;
+    
+
+    console.log('User Data:', userData);
+
+    console.log('height:', height);
+    console.log('stampsLeft:', stampsLeft);
+    console.log('prizes:', prizes);
 
     return (
       <CheckLoggedIn>
         <div className="leaderboard-main h-screen flex flex-col items-center justify-center">
             <HamburgerMenu />
             <div className="flex items-center space-x-4">
-                <ProgressBar height={stampsLeft} />
-                <StampsAwayCount height={5 - stampsLeft} />
+                <ProgressBar height={height} />
+                <StampsAwayCount height={stampsLeft} />
             </div>
-            {(stampsLeft == 5) ? (
+            {(height == 5) ? (
                 <Link to="/leaderboard-prize">
                     <button className="mt-6">
                         <RedeemPrizeButton />
