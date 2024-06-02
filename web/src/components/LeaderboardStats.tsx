@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import PrizesAchieved from './PrizesAchieved';
+//import PrizesAchieved from './PrizesAchieved';
 
 const GetLeaderboardStats = () => {
     const [data, setData] = useState({
