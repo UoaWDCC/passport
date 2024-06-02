@@ -9,11 +9,13 @@ body {
 
 .logo {
     position: absolute;
-    top: 10px; 
+    top: 12px; 
     right: 40px; 
-    height: 150px;
+    height: 180px;
     width: auto;
 }
+
+
 
 .dashboard-container {
     position: relative;
@@ -49,9 +51,18 @@ body {
     color: #03045e;
     font-weight: 700;
     font-size: 4.5em;
-    text-align: center;
+    text-align: left;
+    margin-left: 12%;
     padding-top: 40px;
-    padding-bottom: 35px;
+    padding-bottom: 45px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .title{
+        font-size: 3.5em;
+        text-align: left;
+        padding-bottom: 40px;
+    }
 }
 
 .dashboard-header {

@@ -26,6 +26,7 @@ userRoutes.post("/check-user", async (req: Request, res: Response) => {
     if (response != undefined && response !== null) {
       
       res.status(200).json({ user: response, success: true })
+
     } else {
       res.status(200).json({
         success: false,
@@ -45,7 +46,6 @@ userRoutes.get("/:upi", async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ upi: userUpi }).exec() // Await the result or use exec()
     if (user) {
-      user["totalStamps"] = user?.eventList.length
       res.json(user)
     } else {
       res.status(404).json({ message: "User not found" })

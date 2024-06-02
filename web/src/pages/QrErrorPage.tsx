@@ -102,10 +102,10 @@ const QRErrorPage: React.FC = () => {
           </div>
           : (success
             ? <div className={styles.bottomsection}>
-              <p className={styles.errorbig}>YAY!</p>
-              <p className={styles.errorsmall}>successfully attended event :D </p>
+              <p className={styles.successbig}>YAY!</p>
+              <p className={styles.successsmall}>successfully attended event :D </p>
               <button
-                style={{ backgroundColor: "white" }}
+                className={styles.continue_btn}
                 onClick={() => {
                   navigate("/passport")
                 }}
@@ -115,7 +115,7 @@ const QRErrorPage: React.FC = () => {
               <p className={styles.errorbig}>OOPS!</p>
               <p className={styles.errorsmall}>{errorMessage} </p>
               <button
-                style={{ backgroundColor: "white" }}
+                className={styles.continue_btn}
                 onClick={() => {
                   navigate("/passport")
                 }}
