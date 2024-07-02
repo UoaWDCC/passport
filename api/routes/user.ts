@@ -16,28 +16,23 @@ userRoutes.get("/", async (req: Request, res: Response) => {
   }
 })
 
-
 userRoutes.post("/check-user", async (req: Request, res: Response) => {
-  const accessToken = req.body.accessToken;
+  const accessToken = req.body.accessToken
 
   try {
     const response = await User.findOne({ accessToken: accessToken }).exec()
     console.log(response)
     if (response != undefined && response !== null) {
-      
       res.status(200).json({ user: response, success: true })
-
     } else {
       res.status(200).json({
         success: false,
-        error: "User not found"
+        error: "User not found",
       })
     }
   } catch (error) {
     res.status(400).json({ success: false, errorMessage: error })
   }
-
-
 })
 
 // GET /api/user/:upi
@@ -96,15 +91,19 @@ userRoutes.put("/:upi", async (req: Request, res: Response) => {
   }
 })
 
-// DELETE /api/users/:upi
-// userRoutes.delete("/:id", (req: Request, res: Response) => {
-//   const userId = req.params.id
-
-//   // Logic to delete a specific user by ID from the database
-//   // ...
-
-//   // Send the response with a success message
-//   res.json({ message: "User deleted successfully" })
-// })
+// GET /api/user/token/:accessToken
+userRoutes.get("/token/:accessToken", async (req: Request, res: Response) => {
+  const accessToken = req.params.accessToken
+  try {
+    const user = await User.findOne({ accessToken: accessToken }).exec()
+    if (user) {
+      res.json(user)
+    } else {
+      res.status(404).json({ message: "User not found" })
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+})
 
 export default userRoutes
