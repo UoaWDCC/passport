@@ -31,6 +31,15 @@ async function run() {
     // Define routes after successful connection
     const Api: any = Router();
 
+    //Test route for s3 bucket image upload 
+    Api.post('/imageTest', async (req: Request, res: Response) =>{
+      const image = req.body.image;
+
+      console.log(image)
+
+      return res.status(200).json("hi")
+    })
+
     //Route to add information into mongoDB
     Api.post('/event', async (req: Request, res: Response) => {
       const eventName = req.body.eventName;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Upload from '../../assets/upload.svg';
 import Bin from '../../assets/bin.svg';
+import axios from "axios";
 
 interface StampSectionProps {
     getImageName: (name:string) => void;
@@ -12,6 +13,7 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
     const [fileSize, setFileSize] = useState('');
     const [fileName, setFileName] = useState('');
     const [imageBase64, setBase64String] = useState("")
+    const [actualFile, setActualFile] = useState({})
 
     
     useEffect(()=>{
@@ -19,9 +21,15 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
         getImageName(fileName)
     },[imageBase64, fileName])
 
+    const uploadImageFile = async() =>{
+        axios.get()
+    }
+
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.files)
+        console.log("this is the file", e.target.files)
         if (e.target.files) {
+            setActualFile(e.target.files)
             let stampSize = e.target.files[0].size
             if (stampSize < 1000000) {
                 setFileSize((stampSize / 1000).toFixed(2) + ' kb');
