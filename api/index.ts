@@ -7,6 +7,7 @@ import { config } from "dotenv"
 import helloRoutes from './routes/hello';
 import apiRoutes from "./routes/Api"
 import userRoutes from "./routes/user"
+import imageRoutes from "./routes/images";
 
 const app = express()
 config()
@@ -27,7 +28,7 @@ apiRoutes.then((apiRouter) => {
 // });
 
 const databaseUrl: string = process.env.DATABASE_URL!
-// const databaseUrl: string = "mongodb+srv://inezchong7:WDCCpa55p0rt@cluster0.hviqnfy.mongodb.net/WDCC_Passport?retryWrites=true&w=majority&appName=Cluster0"
+
 
 connect(databaseUrl)
   .then(() => {
@@ -50,4 +51,5 @@ app.use(express.static("public"))
 // Routes
 app.use("/hello", helloRoutes)
 app.use("/api/user", userRoutes)
+app.use("/api", imageRoutes);
 // app.use("/api/events")

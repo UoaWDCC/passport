@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 import { object } from 'zod';
 import User from '../db/User';
 import mongoose from 'mongoose';
+import axios from 'axios';
 
 config();
 
@@ -40,7 +41,7 @@ async function run() {
 
       const event = {
         "eventName": eventName,
-        "stamp64": stamp64,
+        // "stamp64": stamp64,
         "startDate": new Date(startDate),
         "endDate": new Date(endDate),
         "totalAttended": 0
@@ -54,8 +55,20 @@ async function run() {
         console.log(`A document was inserted with id ${result.insertedId}`);
 
         const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173//${result.insertedId}&amp;size=100x100`
-        const result2 = await eventCollection.updateOne({ _id: new ObjectId(result.insertedId) }, { $set: { "QRcode": qrCode } })
-        console.log(qrCode)
+        // const stampBuffer = Buffer.from(stamp64, 'base64');
+
+        // Call the image upload endpoint
+        const uploadResponse = await axios.post(process.env.VITE_SERVER_URL + `/api/upload-images/${result.insertedId}`,{
+          qrcode: qrCode,
+          stamp: stamp64
+        })
+        
+
+        const { stampKey, qrCodeKey } = uploadResponse.data;
+    
+      
+        const result2 = await eventCollection.updateOne({ _id: new ObjectId(result.insertedId) }, { $set: { stamp64:stampKey, "QRcode": qrCodeKey } })
+        console.log(`Event document updated with S3 keys: ${stampKey}, ${qrCodeKey}`);
 
       } catch (error) {
         console.log(error);
