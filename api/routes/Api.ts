@@ -5,6 +5,37 @@ import { config } from 'dotenv';
 import { object } from 'zod';
 import User from '../db/User';
 import mongoose from 'mongoose';
+import { S3Client } from '@aws-sdk/client-s3';
+
+const multer = require('multer')
+const multerS3 = require('multer-s3')
+const AWS = require('aws-sdk')
+
+// AWS.config.update({
+//   accessKeyId: process.env.AWS_ACCESS_KEY,
+//   secretAccessKey: process.env.AWS_SECRET_KEY,
+//   region: process.env.AWS_REGION,
+// });
+
+// const s3 = new AWS.S3()
+
+const s3 = new S3Client({
+  region: "ap-southeast-4",
+  credentials: {
+    accessKeyId: "tid_WiyzIeBaMvMBSoSkpDQK_jYaaobUcnEcjLrHieIsJwljieohhU",
+    secretAccessKey: 'tsec_4JI+2pzFYHcMhHwz-SBZAlOeZZLqXJAKN-x3GpPT6zDPQK8CgnlP_AEiB-Uw7QXTDVmMQk',
+  },
+});
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "passport-storage",
+    acl: 'public-read',
+    key: function (req: Request, file: Express.Multer.File, cb: (error: any, key?: string) => void) {
+      cb(null, file.originalname);
+    }
+  })
+});
 
 config();
 
@@ -32,12 +63,21 @@ async function run() {
     const Api: any = Router();
 
     //Test route for s3 bucket image upload 
-    Api.post('/imageTest', async (req: Request, res: Response) =>{
-      const image = req.body.image;
+    Api.post('/imageTest', upload.single('file'), async (req: Request, res: Response) =>{
+      // const image = req.body.image;
+      console.log("skeet", process.env.AWS_ACCESS_KEY!)
+      if(req.file){
+        const params = {
+          Bucket: 'passport-storage',
+          Key: req.file.originalname,
+          Body: req.file.buffer,
+        };
+      }
+      
 
-      console.log(image)
+      console.log("aldensImage", req.file)
 
-      return res.status(200).json("hi")
+      return res.json(req.file)
     })
 
     //Route to add information into mongoDB

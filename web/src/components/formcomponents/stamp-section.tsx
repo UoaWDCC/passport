@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Upload from '../../assets/upload.svg';
 import Bin from '../../assets/bin.svg';
 import axios from "axios";
+import { act } from "react-dom/test-utils";
 
 interface StampSectionProps {
     getImageName: (name:string) => void;
@@ -13,7 +14,7 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
     const [fileSize, setFileSize] = useState('');
     const [fileName, setFileName] = useState('');
     const [imageBase64, setBase64String] = useState("")
-    const [actualFile, setActualFile] = useState({})
+    const [actualFile, setActualFile] = useState<File | null>(null)
 
     
     useEffect(()=>{
@@ -22,8 +23,26 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
     },[imageBase64, fileName])
 
     const uploadImageFile = async() =>{
-        axios.get()
+        if(actualFile){
+            const formData = new FormData()
+            formData.append('image', actualFile)
+            await axios.post(
+                `${import.meta.env.VITE_SERVER_URL}/api/imageTest`,
+                formData
+            );
+        }
+         
+        
     }
+
+    useEffect(()=>{
+        console.log("insideUE", actualFile)
+        const skeet = async() => {
+            await uploadImageFile()
+        }
+
+        skeet()
+    },[actualFile])
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
