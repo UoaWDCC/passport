@@ -5,7 +5,7 @@ import totalStampsCalc from "../pipelines/totalStamps"
 
 const userRoutes = Router()
 
-userRoutes.get("/totalStamps/:accessToken", async (req: Request, res: Response) => {
+userRoutes.get("/total-stamps/:accessToken", async (req: Request, res: Response) => {
   const accessToken = req.params.accessToken
   try {
     const result = await totalStampsCalc(accessToken)

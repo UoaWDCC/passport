@@ -1,6 +1,7 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import updateStampValues from "@components/GetTotalStamps";
 
 interface UserData {
     family_name: string;
@@ -9,18 +10,6 @@ interface UserData {
     accessToken: string;
     UserUPI: string;
 }
-
-// Update user data in MongoDB
-
-const getTotalStamps = async (accessToken: String) => {
-    try {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/user/totalStamps/${accessToken}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching total stamps:', error);
-        throw error;
-    }
-};
 
 // Navigate user to correct page
 const NavigateUser = (currentPage: string, navigate: Function ) => {
@@ -196,7 +185,7 @@ const useGoogleSignIn = (
                               console.log(error);
                           });
 
-                          await getTotalStamps(tokenResponse.access_token);
+                          await updateStampValues(tokenResponse.access_token);
                   };
 
                   // Check MongoDB if user is in DB, then updates/posts user data accordingly

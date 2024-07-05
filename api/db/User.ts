@@ -9,9 +9,6 @@ const userSchema = new Schema({
   eventList: { type: Array, required: true, default : [] },
 })
 
-userSchema.set('toJSON', { virtuals: true });
-userSchema.set('toObject', { virtuals: true });
-
 const User = model("User", userSchema, "Users")
 
 export default User
