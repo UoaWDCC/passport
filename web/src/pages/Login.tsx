@@ -184,8 +184,10 @@ const useGoogleSignIn = (
                           .catch((error) => {
                               console.log(error);
                           });
-
-                        updateStampValues(tokenResponse.access_token);
+                        const eventId = location.pathname.split('/')[2];
+                        if (eventId) {
+                            updateStampValues(tokenResponse.access_token);
+                        }
                   };
 
                   // Check MongoDB if user is in DB, then updates/posts user data accordingly
