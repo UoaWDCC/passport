@@ -23,7 +23,7 @@ const agg = (accessToken: String) => [
               '$cond': [
                   { '$eq': [{ '$size': '$eventList' }, 0] },
                   5,
-                  { '$mod': [{ '$size': '$eventList' }, 5] }
+                  { '$subtract': [5, { '$mod': [{ '$size': '$eventList' }, 5] }] }
               ]
           },
           'prizesAchieved': {
@@ -41,6 +41,19 @@ const totalStampsCalc = async (accessToken: String) => {
         const coll = client.db('WDCC_Passport').collection('Users');
         const cursor = coll.aggregate(agg(accessToken));
         const result = await cursor.toArray();
+            const user = result[0];
+            const { _id, totalStamps, stampsLeft, prizesAchieved } = user;
+            await coll.updateOne(
+                { _id: user._id },
+                {
+                    $set: {
+                        totalStamps,
+                        stampsLeft,
+                        prizesAchieved
+                    }
+                }
+            );
+
         return result;
     } catch (error) {
         console.error('Error during database operation:', error);

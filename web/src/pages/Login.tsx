@@ -185,7 +185,7 @@ const useGoogleSignIn = (
                               console.log(error);
                           });
 
-                          await updateStampValues(tokenResponse.access_token);
+                        updateStampValues(tokenResponse.access_token);
                   };
 
                   // Check MongoDB if user is in DB, then updates/posts user data accordingly
