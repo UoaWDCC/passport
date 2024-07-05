@@ -36,7 +36,7 @@ const totalStampsCalc = async (accessToken: String) => {
             const user = result[0];
             const { _id, totalStamps, stampsLeft, prizesAchieved } = user;
             await User.updateOne(
-                { _id: user._id },
+                { _id: _id },
                 { $set: { totalStamps, stampsLeft, prizesAchieved } }
             );
         }
