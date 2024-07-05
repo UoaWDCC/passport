@@ -1,8 +1,19 @@
 import { Request, Response } from "express"
 import { Router } from "express"
 import User from "../db/User"
+import totalStampsCalc from "../pipelines/totalStamps"
 
 const userRoutes = Router()
+
+userRoutes.get("/totalStamps/:accessToken", async (req: Request, res: Response) => {
+  const accessToken = req.params.accessToken
+  try {
+    const result = await totalStampsCalc(accessToken)
+    res.json(result)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+})
 
 // GET /api/users
 userRoutes.get("/", async (req: Request, res: Response) => {
@@ -19,12 +30,10 @@ userRoutes.get("/", async (req: Request, res: Response) => {
 
 userRoutes.post("/check-user", async (req: Request, res: Response) => {
   const accessToken = req.body.accessToken;
-
   try {
     const response = await User.findOne({ accessToken: accessToken }).exec()
     console.log(response)
     if (response != undefined && response !== null) {
-      
       res.status(200).json({ user: response, success: true })
 
     } else {

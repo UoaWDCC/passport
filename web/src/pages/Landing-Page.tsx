@@ -14,7 +14,6 @@ export const HomePage = () => {
       if (eventId) {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
-          // check QR Code Validity here 
           navigate("/passport");
         } else {
           console.log("User is not logged in");

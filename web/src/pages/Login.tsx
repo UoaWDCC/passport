@@ -10,6 +10,18 @@ interface UserData {
     UserUPI: string;
 }
 
+// Update user data in MongoDB
+
+const getTotalStamps = async (accessToken: String) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/user/totalStamps/${accessToken}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching total stamps:', error);
+        throw error;
+    }
+};
+
 // Navigate user to correct page
 const NavigateUser = (currentPage: string, navigate: Function ) => {
   const prevLocation = localStorage.getItem('prevLocation'); 
@@ -183,6 +195,8 @@ const useGoogleSignIn = (
                           .catch((error) => {
                               console.log(error);
                           });
+
+                          await getTotalStamps(tokenResponse.access_token);
                   };
 
                   // Check MongoDB if user is in DB, then updates/posts user data accordingly
