@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import User from '../db/User';
 
-// Connect to MongoDB using Mongoose
-mongoose.connect("mongodb+srv://inezchong7:WDCCpa55p0rt@cluster0.hviqnfy.mongodb.net/WDCC_Passport?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(process.env.DATABASE_URL!)
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
