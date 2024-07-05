@@ -15,7 +15,7 @@ export const HomePage = () => {
       if (eventId) {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
-          updateStampValues(accessToken);
+          await updateStampValues(accessToken);
           navigate("/passport");
         } else {
           console.log("User is not logged in");
@@ -25,7 +25,7 @@ export const HomePage = () => {
       } else {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
-          updateStampValues(accessToken);
+          await updateStampValues(accessToken);
           navigate("/passport");
         } else {
           console.log("User is not logged in");
