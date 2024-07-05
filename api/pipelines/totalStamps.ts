@@ -1,66 +1,59 @@
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
+import User from '../db/User';
 
-// Aggregation pipeline
-const agg = (accessToken: String) => [
-  {
-      '$match': {
-          'accessToken': accessToken
-      }
-  },
-  {
-      '$project': {
-          '_id': 1,
-          'firstName': 1,
-          'lastName': 1,
-          'email': 1,
-          'accessToken': 1,
-          'upi': 1,
-          'eventList': 1,
-          'totalStamps': {
-              '$size': '$eventList'
-          },
-          'stampsLeft': {
-              '$cond': [
-                  { '$eq': [{ '$size': '$eventList' }, 0] },
-                  5,
-                  { '$subtract': [5, { '$mod': [{ '$size': '$eventList' }, 5] }] }
-              ]
-          },
-          'prizesAchieved': {
-              '$floor': { '$divide': [{ '$size': '$eventList' }, 5] }
-          }
-      }
-  }
-];
+// Connect to MongoDB using Mongoose
+mongoose.connect("mongodb+srv://inezchong7:WDCCpa55p0rt@cluster0.hviqnfy.mongodb.net/WDCC_Passport?retryWrites=true&w=majority&appName=Cluster0")
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const totalStampsCalc = async (accessToken: String) => {
-    const client = new MongoClient("mongodb+srv://inezchong7:WDCCpa55p0rt@cluster0.hviqnfy.mongodb.net/WDCC_Passport?retryWrites=true&w=majority&appName=Cluster0");
-
     try {
-        await client.connect();
-        const coll = client.db('WDCC_Passport').collection('Users');
-        const cursor = coll.aggregate(agg(accessToken));
-        const result = await cursor.toArray();
+        const result = await User.aggregate([
+            { '$match': { 'accessToken': accessToken } },
+            {
+                '$project': {
+                    '_id': 1,
+                    'firstName': 1,
+                    'lastName': 1,
+                    'email': 1,
+                    'accessToken': 1,
+                    'upi': 1,
+                    'eventList': 1,
+                    'totalStamps': { '$size': '$eventList' },
+                    'stampsLeft': {
+                        '$cond': [
+                            { '$eq': [{ '$size': '$eventList' }, 0] },
+                            5,
+                            { '$subtract': [5, { '$mod': [{ '$size': '$eventList' }, 5] }] }
+                        ]
+                    },
+                    'prizesAchieved': { '$floor': { '$divide': [{ '$size': '$eventList' }, 5] } }
+                }
+            }
+        ]);
+
+        if (result.length > 0) {
             const user = result[0];
             const { _id, totalStamps, stampsLeft, prizesAchieved } = user;
-            await coll.updateOne(
+            await User.updateOne(
                 { _id: user._id },
-                {
-                    $set: {
-                        totalStamps,
-                        stampsLeft,
-                        prizesAchieved
-                    }
-                }
+                { $set: { totalStamps, stampsLeft, prizesAchieved } }
             );
+        }
 
         return result;
     } catch (error) {
         console.error('Error during database operation:', error);
         throw error;
-    } finally {
-        await client.close();
     }
-}
+};
+
+const closeDatabaseConnection = async () => {
+    await mongoose.disconnect();
+};
+
+process.on('SIGINT', closeDatabaseConnection);
+process.on('SIGTERM', closeDatabaseConnection);
 
 export default totalStampsCalc;
