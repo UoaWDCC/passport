@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import { Router } from "express"
 import User from "../db/User"
+import Prize from "../db/Prize"
 
 const userRoutes = Router()
 
@@ -91,19 +92,38 @@ userRoutes.put("/:upi", async (req: Request, res: Response) => {
   }
 })
 
-// GET /api/user/token/:accessToken
-userRoutes.get("/token/:accessToken", async (req: Request, res: Response) => {
-  const accessToken = req.params.accessToken
-  try {
-    const user = await User.findOne({ accessToken: accessToken }).exec()
-    if (user) {
-      res.json(user)
-    } else {
-      res.status(404).json({ message: "User not found" })
+//Redeem Prize Endpoint
+// POST /api/user/redeem-prize/:accessToken
+userRoutes.post(
+  "/redeem-prize/:accessToken",
+  async (req: Request, res: Response) => {
+    const accessToken = req.params.accessToken
+    try {
+      const user = await User.findOne({ accessToken: accessToken }).exec()
+      if (user) {
+        //Logic check if user has enough stamps
+        const userStamps = user.eventList.length
+        const userPrizes = await Prize.find({ userId: user._id }).exec()
+
+        if (userStamps / 5 <= userPrizes.length) {
+          res.status(400).json({ message: "User has already redeemed prize" })
+          return
+        }
+
+        const prize = new Prize({
+          userId: user._id,
+          redeemed: false,
+          redeemedTime: Date.now(),
+        })
+        const savedPrize = await prize.save()
+        res.status(201).json(savedPrize)
+      } else {
+        res.status(404).json({ message: "User not found" })
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
     }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
   }
-})
+)
 
 export default userRoutes

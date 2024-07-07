@@ -13,12 +13,6 @@ export default function Leaderboard() {
   const prizes = userData.prizesAchieved
   const height = 5 - stampsLeft
 
-  console.log("User Data:", userData)
-
-  console.log("height:", height)
-  console.log("stampsLeft:", stampsLeft)
-  console.log("prizes:", prizes)
-
   return (
     <CheckLoggedIn>
       <div className="leaderboard-main h-screen flex flex-col items-center justify-center">
