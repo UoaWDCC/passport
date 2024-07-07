@@ -1,6 +1,7 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import updateStampValues from "@components/GetTotalStamps";
 
 interface UserData {
     family_name: string;
@@ -183,6 +184,10 @@ const useGoogleSignIn = (
                           .catch((error) => {
                               console.log(error);
                           });
+                        const eventId = location.pathname.split('/')[2];
+                        if (eventId) {
+                            updateStampValues(tokenResponse.access_token);
+                        }
                   };
 
                   // Check MongoDB if user is in DB, then updates/posts user data accordingly

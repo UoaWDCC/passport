@@ -2,6 +2,7 @@ import WDCCLogo from "../assets/WDCC_Logo.svg";
 import { useNavigate } from "react-router";
 import styles from "../styles/page styles/Landing-Page.module.css";
 import axios from "axios";
+import updateStampValues from "@components/GetTotalStamps";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export const HomePage = () => {
       if (eventId) {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
-          // check QR Code Validity here 
+          await updateStampValues(accessToken);
           navigate("/passport");
         } else {
           console.log("User is not logged in");

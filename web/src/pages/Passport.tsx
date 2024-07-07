@@ -4,12 +4,12 @@ import PassportPage from "@components/PassportPage";
 import LeftButton from "../components/LeftButton.tsx";
 import RightButton from "../components/RightButton.tsx";
 import HamburgerMenu from "@components/HamburgerMenu";
-import StampCount from "@components/StampCount.tsx";
 import "../styles/page styles/Passport.css";
-import WelcomeMessage from "@components/WelcomeMessage.tsx";
 import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
+import GetLeaderboardStats from "@components/LeaderboardStats.tsx";
 
 export default function Passport() {
+    const userData = GetLeaderboardStats();
     // initialise index state
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -43,10 +43,15 @@ export default function Passport() {
                 {/* <HamburgerMenu pages={pageArray} links={linkArray} /> */}
                 <HamburgerMenu />
                 <div className=" flex items-start w-88">
-                    <WelcomeMessage />
+                    <div className="pt-3 text-left flex item-start">
+                        <h1 className="text-2xl text-blue-950"><span className="italic">Welcome</span> <span className="font-semibold">{userData.firstName}</span></h1>
+                    </div>
                 </div>
-                <StampCount />
-
+                <div>
+                    <div className="border-b-4 welcome-line w-88 mb-1 mt-3"></div>
+                        <div className=" text-center text-blue-950 ">  <span className="text-4xl font-semibold">{userData.totalStamps} </span> <span className="text-xl">Stamps Collected</span></div>
+                        <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
+                    </div>
                 <CurrentView />
 
                 <div className="text-black w-88">
