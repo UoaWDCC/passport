@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
 import LeftButton from "../components/LeftButton.tsx";
@@ -36,9 +37,15 @@ export default function Passport() {
     // retrieves the page component from the array
     const CurrentView = views[currentIndex];
 
+    // handlers for swiping
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: goToNextView,
+        onSwipedRight: goToPreviousView,
+    })
+
     return (
         <CheckLoggedIn>
-            <div className="background flex flex-col h-screen justify-center items-center ">
+            <div {...swipeHandlers} className="background flex flex-col h-screen justify-center items-center ">
 
                 {/* <HamburgerMenu pages={pageArray} links={linkArray} /> */}
                 <HamburgerMenu />
@@ -47,28 +54,12 @@ export default function Passport() {
                 </div>
                 <StampCount />
 
-                <CurrentView />
-
-                <div className="text-black w-88">
-                    {/* display arrows depending on the current page index */}
-                    {currentIndex > 0 && (
-                        <button
-                            className="nav-button float-left"
-                            onClick={goToPreviousView}
-                        >
-                            <LeftButton />
-                        </button>
-                    )}
-                    {currentIndex < views.length - 1 && (
-                        <button
-                            className="nav-button float-right"
-                            onClick={goToNextView}
-                        >
-                            <RightButton />
-                        </button>
-                    )}
+        	    <div className = "text-center">
+                    <p>Swipe left or right to navigate through pages.</p>
                 </div>
 
+                <CurrentView />
+                
                 <p>Page {currentIndex + 1}</p>
             </div>
         </CheckLoggedIn>

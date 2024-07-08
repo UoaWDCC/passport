@@ -23,6 +23,7 @@
     "react-dom": "^18.2.0",
     "react-router": "^6.22.0",
     "react-router-dom": "^6.22.0",
+    "react-swipeable": "^7.0.1",
     "styled-components": "^6.1.11",
     "tailwind-merge": "^2.2.1",
     "ts-node": "^10.9.2",
