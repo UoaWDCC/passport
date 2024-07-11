@@ -27,7 +27,6 @@ apiRoutes.then((apiRouter) => {
 // });
 
 const databaseUrl: string = process.env.DATABASE_URL!
-// const databaseUrl: string = "mongodb+srv://inezchong7:WDCCpa55p0rt@cluster0.hviqnfy.mongodb.net/WDCC_Passport?retryWrites=true&w=majority&appName=Cluster0"
 
 connect(databaseUrl)
   .then(() => {

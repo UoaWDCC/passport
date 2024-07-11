@@ -14,6 +14,7 @@ import multerS3 from 'multer-s3';
 // const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 
+
 // AWS.config.update({
 //   accessKeyId: process.env.AWS_ACCESS_KEY,
 //   secretAccessKey: process.env.AWS_SECRET_KEY,
@@ -27,6 +28,7 @@ const awsAccessKeyId: string = process.env.AWS_ACCESS_KEY_ID!;
 const awsRegion: string = process.env.AWS_REGION!;
 const awsSecretAccessKey: string = process.env.AWS_SECRET_ACCESS_KEY!;
 const bucketName: string = process.env.BUCKET_NAME!;
+
 
 
 const s3 = new S3Client({
