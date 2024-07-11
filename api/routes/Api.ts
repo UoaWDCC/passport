@@ -7,9 +7,12 @@ import User from '../db/User';
 import mongoose from 'mongoose';
 import { S3Client } from '@aws-sdk/client-s3';
 
+config();
+
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
+
 
 // AWS.config.update({
 //   accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -19,17 +22,19 @@ const AWS = require('aws-sdk')
 
 // const s3 = new AWS.S3()
 
+
 const s3 = new S3Client({
-  region: "ap-southeast-4",
+  region: "auto", // Set your region here
   credentials: {
-    accessKeyId: "tid_WiyzIeBaMvMBSoSkpDQK_jYaaobUcnEcjLrHieIsJwljieohhU",
-    secretAccessKey: 'tsec_4JI+2pzFYHcMhHwz-SBZAlOeZZLqXJAKN-x3GpPT6zDPQK8CgnlP_AEiB-Uw7QXTDVmMQk',
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
   },
 });
+
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "passport-storage",
+    bucket: "wdcc-passport-storage",
     acl: 'public-read',
     key: function (req: Request, file: Express.Multer.File, cb: (error: any, key?: string) => void) {
       cb(null, file.originalname);
@@ -37,7 +42,6 @@ const upload = multer({
   })
 });
 
-config();
 
 //setting up Mongo client
 const uri: string = process.env.DATABASE_URL!;
@@ -69,12 +73,11 @@ async function run() {
       if(req.file){
         const params = {
           Bucket: 'passport-storage',
+          ContentType: 'image/png',
           Key: req.file.originalname,
           Body: req.file.buffer,
         };
       }
-      
-
       console.log("aldensImage", req.file)
 
       return res.json(req.file)
