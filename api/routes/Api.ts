@@ -5,10 +5,13 @@ import { config } from 'dotenv';
 import { object } from 'zod';
 import User from '../db/User';
 import mongoose from 'mongoose';
-import { S3Client } from '@aws-sdk/client-s3';
 
-const multer = require('multer')
-const multerS3 = require('multer-s3')
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import multer from 'multer';
+import multerS3 from 'multer-s3';
+
+// const multer = require('multer')
+// const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 
 // AWS.config.update({
@@ -18,18 +21,26 @@ const AWS = require('aws-sdk')
 // });
 
 // const s3 = new AWS.S3()
+config();
+
+const awsAccessKeyId: string = process.env.AWS_ACCESS_KEY_ID!;
+const awsRegion: string = process.env.AWS_REGION!;
+const awsSecretAccessKey: string = process.env.AWS_SECRET_ACCESS_KEY!;
+const bucketName: string = process.env.BUCKET_NAME!;
+
 
 const s3 = new S3Client({
-  region: "ap-southeast-4",
   credentials: {
-    accessKeyId: "tid_WiyzIeBaMvMBSoSkpDQK_jYaaobUcnEcjLrHieIsJwljieohhU",
-    secretAccessKey: 'tsec_4JI+2pzFYHcMhHwz-SBZAlOeZZLqXJAKN-x3GpPT6zDPQK8CgnlP_AEiB-Uw7QXTDVmMQk',
+    accessKeyId: awsAccessKeyId,
+    secretAccessKey: awsSecretAccessKey,
   },
+  region: awsRegion 
 });
+
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "passport-storage",
+    bucket: bucketName,
     acl: 'public-read',
     key: function (req: Request, file: Express.Multer.File, cb: (error: any, key?: string) => void) {
       cb(null, file.originalname);
@@ -37,10 +48,11 @@ const upload = multer({
   })
 });
 
-config();
+// config();
 
 //setting up Mongo client
 const uri: string = process.env.DATABASE_URL!;
+
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -63,37 +75,40 @@ async function run() {
     const Api: any = Router();
 
     //Test route for s3 bucket image upload 
-    Api.post('/imageTest', upload.single('file'), async (req: Request, res: Response) =>{
-      // const image = req.body.image;
-      console.log("skeet", process.env.AWS_ACCESS_KEY!)
-      if(req.file){
-        const params = {
-          Bucket: 'passport-storage',
-          Key: req.file.originalname,
-          Body: req.file.buffer,
-        };
-      }
+    // Api.post('/imageTest', upload.single('file'), async (req: Request, res: Response) =>{
+    //   // const image = req.body.image;
+    //   console.log("skeet", process.env.AWS_ACCESS_KEY!)
+    //   if(req.file){
+    //     const params = {
+    //       Bucket: bucketName,
+    //       Key: req.file.originalname,
+    //       Body: req.file.buffer,
+    //     };
+    //   }
       
 
-      console.log("aldensImage", req.file)
+    //   console.log("aldensImage", req.file)
 
-      return res.json(req.file)
-    })
+    //   return res.json(req.file)
+    // })
 
     //Route to add information into mongoDB
-    Api.post('/event', async (req: Request, res: Response) => {
+    Api.post('/event', upload.single('file'), async (req: Request, res: Response) => {
+      console.log("Entering /event route!")
       const eventName = req.body.eventName;
-      const stamp64 = req.body.stamp64;
+      // const stamp64 = req.body.stamp64;
       const startDate = req.body.startDate;
       const endDate = req.body.endDate;
+      const key = req.body.imgName;
 
       const event = {
         "eventName": eventName,
-        "stamp64": stamp64,
+        "stamp64": key,
         "startDate": new Date(startDate),
         "endDate": new Date(endDate),
         "totalAttended": 0
       };
+      
       try {
         const database = client.db("WDCC_Passport");
         const eventCollection = database.collection("Events");
@@ -101,10 +116,13 @@ async function run() {
         //inserting event into DB
         const result = await eventCollection.insertOne(event);
         console.log(`A document was inserted with id ${result.insertedId}`);
-
         const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173//${result.insertedId}&amp;size=100x100`
-        const result2 = await eventCollection.updateOne({ _id: new ObjectId(result.insertedId) }, { $set: { "QRcode": qrCode } })
-        console.log(qrCode)
+        const result2 = await eventCollection.updateOne(
+          { _id: new ObjectId(result.insertedId) },
+          { $set: { QRcode: qrCode} }
+        );
+        // console.log("updated event to hold correct key")
+        // console.log(qrCode)
 
       } catch (error) {
         console.log(error);
@@ -128,6 +146,21 @@ async function run() {
             result[i]["status"] = true
           } else {
             result[i]["status"] = false
+          }
+          try {
+            const key = result[i].stamp64;
+            const command = new GetObjectCommand({
+              Bucket: bucketName,
+              Key: key
+            });
+
+            
+            const response = await s3.send(command)
+            console.log(i, response)
+            result[i].stamp64 = `https://wdcc-passport-storage.fly.storage.tigris.dev/${key}`
+
+          } catch (err) {
+            continue; 
           }
         }
 

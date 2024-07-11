@@ -11,7 +11,7 @@ function QRCodeForm() {
     const [endDate, setEndDate] = useState("");
     const [image64, setImage64] = useState("");
     const [validSubmit, setValidSubmit] = useState("no");
-    const [_, setImageName] = useState("");
+    const [imageName, setImageName] = useState("");
 
     const navigate = useNavigate();
 
@@ -24,6 +24,7 @@ function QRCodeForm() {
                     stamp64: image64,
                     startDate: startDate,
                     endDate: endDate,
+                    imgName: imageName
                 },
                 {
                     headers: {
