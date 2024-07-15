@@ -7,7 +7,9 @@ const userSchema = new Schema({
   accessToken: { type: String, required: true },
   upi: { type: String, required: true, unique: true },
   eventList: { type: Array, required: true, default : [] },
-  totalStamps: { type: Number, required: false}
+  totalStamps: { type: Number, required: true, default: 0 },
+  stampsLeft: { type: Number, required: true, default: 5 },
+  prizesAchieved: { type: Number, required: true, default: 0 }
 })
 
 const User = model("User", userSchema, "Users")

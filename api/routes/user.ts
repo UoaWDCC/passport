@@ -1,8 +1,19 @@
 import { Request, Response } from "express"
 import { Router } from "express"
 import User from "../db/User"
+import totalStampsCalc from "../pipelines/totalStamps"
 
 const userRoutes = Router()
+
+userRoutes.get("/total-stamps/:accessToken", async (req: Request, res: Response) => {
+  const accessToken = req.params.accessToken
+  try {
+    const result = await totalStampsCalc(accessToken)
+    res.json(result)
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+})
 
 // GET /api/users
 userRoutes.get("/", async (req: Request, res: Response) => {
@@ -19,13 +30,12 @@ userRoutes.get("/", async (req: Request, res: Response) => {
 
 userRoutes.post("/check-user", async (req: Request, res: Response) => {
   const accessToken = req.body.accessToken;
-
   try {
     const response = await User.findOne({ accessToken: accessToken }).exec()
     console.log(response)
     if (response != undefined && response !== null) {
-      
       res.status(200).json({ user: response, success: true })
+
     } else {
       res.status(200).json({
         success: false,
@@ -45,7 +55,6 @@ userRoutes.get("/:upi", async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ upi: userUpi }).exec() // Await the result or use exec()
     if (user) {
-      user["totalStamps"] = user?.eventList.length
       res.json(user)
     } else {
       res.status(404).json({ message: "User not found" })

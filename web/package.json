@@ -17,6 +17,7 @@
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
     "jwt-decode": "^4.0.0",
+    "ldrs": "^1.0.1",
     "react": "^18.2.0",
     "react-cookies": "^0.1.1",
     "react-data-table-component": "^7.6.2",

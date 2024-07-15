@@ -17,6 +17,7 @@ const CheckLoggedIn: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         if (response.data.success && accessToken) {
           console.log("User is logged in");
           setIsLoggedIn(true);
+          
         } else {
            if (location.pathname!== "/sign-in") {
                   localStorage.setItem('prevLocation', location.pathname);

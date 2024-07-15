@@ -494,9 +494,9 @@
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
 
 "@types/node@^20.12.11":
-  version "20.14.10"
-  resolved "https://registry.npmjs.org/@types/node/-/node-20.14.10.tgz"
-  integrity sha512-MdiXf+nDuMvY0gJKxyfZ7/6UFsETO7mGKF54MVD/ekJS6HdFtpZFBgrh6Pseu64XTb2MLyFPlbW6hj8HYRQNOQ==
+  version "20.12.12"
+  resolved "https://registry.npmjs.org/@types/node/-/node-20.12.12.tgz"
+  integrity sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==
   dependencies:
     undici-types "~5.26.4"
 
@@ -657,13 +657,11 @@ acorn-jsx@^5.3.2:
   integrity sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==
 
 acorn-walk@^8.1.1:
-  version "8.3.3"
-  resolved "https://registry.npmjs.org/acorn-walk/-/acorn-walk-8.3.3.tgz"
-  integrity sha512-MxXdReSRhGO7VlFe1bRG/oI7/mdLV9B9JJT0N8vZOhF7gFRR5l3M8W9G8JxmKV+JC5mGqJ0QvqfSOLsCPa4nUw==
-  dependencies:
-    acorn "^8.11.0"
+  version "8.3.2"
+  resolved "https://registry.npmjs.org/acorn-walk/-/acorn-walk-8.3.2.tgz"
+  integrity sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==
 
-acorn@^8.11.0, acorn@^8.4.1, acorn@^8.9.0:
+acorn@^8.4.1, acorn@^8.9.0:
   version "8.11.3"
   resolved "https://registry.npmjs.org/acorn/-/acorn-8.11.3.tgz"
   integrity sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==
@@ -1477,6 +1475,11 @@ keyv@^4.5.3:
   integrity sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==
   dependencies:
     json-buffer "3.0.1"
+
+ldrs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/ldrs/-/ldrs-1.0.1.tgz"
+  integrity sha512-eeCP1XEG72Yz6JX50zlYWRJcEfNBrpp8QSzyjD3HHhxrnt4steLX4iDHF3Dezjbnnj5qtuJn7lr1nln+/kpUIQ==
 
 levn@^0.4.1:
   version "0.4.1"

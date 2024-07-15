@@ -1,19 +1,15 @@
 import PrizeTable from "@components/dashboard/PrizeTable";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
+import "../styles/page styles/event.css"
+import logo from "../assets/primary_logo.svg";
 
 function DashboardPrizes() {
     return (
         <div>
             <HamburgerMenu />
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "16px 32px 0 32px",
-                }}
-            >
-                <h1 style={{ fontSize: "48px" }}>Prize Dashboard</h1>
-                <>Logo Placeholder</>
+            <div>
+                <h1 className="title">Prize Dashboard</h1>
+                <img src={logo} alt="Logo" className="logo" />
             </div>
             <div
                 id="prize-table-div"
