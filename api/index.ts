@@ -1,53 +1,94 @@
-import express, { json } from "express"
-import cors from "cors"
-import { connect } from "mongoose"
-import { config } from "dotenv"
+import express from "express";
+import cors from "cors";
+import { connect, connection } from "mongoose";
+import { config } from "dotenv";
+import { AddressInfo } from "net";
+
+// Load environment variables
+config();
 
 // Import Routers
 import helloRoutes from './routes/hello';
-import apiRoutes from "./routes/Api"
-import userRoutes from "./routes/user"
+import apiRoutes from "./routes/Api";
+import userRoutes from "./routes/user";
 
-const app = express()
-config()
+const app = express();
 
-app.use(express.json(({ limit: "500mb" })));
+app.use(express.json({ limit: "500mb" }));
 app.use(cors());
 app.use(express.static('public'));
 
-// Routes
-app.use('/hello', helloRoutes);
-apiRoutes.then((apiRouter) => {
-  app.use('/api', apiRouter)
-})
+// Database connection string
+const databaseUrl: string = process.env.DATABASE_URL!;
+if (!databaseUrl) {
+  console.error('DATABASE_URL is not defined in environment variables');
+  process.exit(1);
+}
 
-// const port = Number.parseInt(process.env.PORT || '3000');
-// app.listen(port, () => {
-//   console.log(`Listening on port ${port}`);
-// });
+// Global error handlers
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  process.exit(1);
+});
 
-const databaseUrl: string = process.env.DATABASE_URL!
-// const databaseUrl: string = "mongodb+srv://inezchong7:WDCCpa55p0rt@cluster0.hviqnfy.mongodb.net/WDCC_Passport?retryWrites=true&w=majority&appName=Cluster0"
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
 
-connect(databaseUrl)
-  .then(() => {
-    console.log("Connected to MongoDB")
-    // Start the server after successful connection
-    const port = Number.parseInt(process.env.PORT || "3000")
-    app.listen(port, () => {
-      console.log(`Listening on port ${port}`)
-    })
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error)
-    process.exit(1) // Exit the process with a non-zero status code to indicate failure
-  })
+let server: any;
 
-app.use(json())
-app.use(cors())
-app.use(express.static("public"))
+async function startServer() {
+  try {
+    // Connect to MongoDB
+    await connect(databaseUrl);
+    console.log("Connected to MongoDB");
 
-// Routes
-app.use("/hello", helloRoutes)
-app.use("/api/user", userRoutes)
-// app.use("/api/events")
+    // Routes
+    app.use('/hello', helloRoutes);
+    app.use("/api/user", userRoutes);
+
+    // Async route setup
+    try {
+      const apiRouter = await apiRoutes;
+      app.use('/api', apiRouter);
+    } catch (err) {
+      console.error("Error initializing API routes:", err);
+      process.exit(1);
+    }
+
+    // Start the server
+    const port = Number.parseInt(process.env.PORT || "3000", 10);
+    server = app.listen(port, () => {
+      console.log(`Listening on port ${port}`);
+    });
+
+    // Handle graceful shutdown
+    const shutdown = async () => {
+      console.log("Shutting down gracefully...");
+
+      // Close MongoDB connection
+      await connection.close();
+
+      // Close HTTP server
+      server.close((err: any) => {
+        if (err) {
+          console.error('Error closing server:', err);
+          process.exit(1);
+        }
+        console.log('Server closed.');
+        process.exit(0);
+      });
+    };
+
+    // Listen for termination signals
+    process.on('SIGTERM', shutdown);
+    process.on('SIGINT', shutdown);
+
+  } catch (error) {
+    console.error("Error starting server:", error);
+    process.exit(1);
+  }
+}
+
+startServer();
