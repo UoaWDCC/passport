@@ -1,8 +1,7 @@
 import { useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import PassportMain from "@components/PassportMain";
 import PassportPage from "@components/PassportPage";
-import LeftButton from "../components/LeftButton.tsx";
-import RightButton from "../components/RightButton.tsx";
 import HamburgerMenu from "@components/HamburgerMenu";
 import "../styles/page styles/Passport.css";
 import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
@@ -36,9 +35,15 @@ export default function Passport() {
     // retrieves the page component from the array
     const CurrentView = views[currentIndex];
 
+    // handlers for swiping
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: goToNextView,
+        onSwipedRight: goToPreviousView,
+    })
+
     return (
         <CheckLoggedIn>
-            <div className="background flex flex-col h-screen justify-center items-center ">
+            <div {...swipeHandlers} className="background flex flex-col h-screen justify-center items-center ">
 
                 {/* <HamburgerMenu pages={pageArray} links={linkArray} /> */}
                 <HamburgerMenu />
@@ -53,27 +58,7 @@ export default function Passport() {
                         <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
                     </div>
                 <CurrentView />
-
-                <div className="text-black w-88">
-                    {/* display arrows depending on the current page index */}
-                    {currentIndex > 0 && (
-                        <button
-                            className="nav-button float-left"
-                            onClick={goToPreviousView}
-                        >
-                            <LeftButton />
-                        </button>
-                    )}
-                    {currentIndex < views.length - 1 && (
-                        <button
-                            className="nav-button float-right"
-                            onClick={goToNextView}
-                        >
-                            <RightButton />
-                        </button>
-                    )}
-                </div>
-
+                
                 <p>Page {currentIndex + 1}</p>
             </div>
         </CheckLoggedIn>
