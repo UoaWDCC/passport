@@ -1,12 +1,12 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Passport from "@pages/Passport"
-import SignInPage from './pages/SignInPage';
-import SignInErrorPage from "./pages/SignInErrorPage";
-import AdminLogin from "./pages/Admin-Login";
-import Form from "@pages/Form";
-import PrivacyPolicy from "@pages/privacy-policy";
-import QRErrorPage from "@pages/QrErrorPage";
+import SignInPage from "./pages/SignInPage"
+import SignInErrorPage from "./pages/SignInErrorPage"
+import AdminLogin from "./pages/Admin-Login"
+import Form from "@pages/Form"
+import PrivacyPolicy from "@pages/privacy-policy"
+import QRErrorPage from "@pages/QrErrorPage"
 import MeetTheTeam from "@pages/MeetTheTeam"
 import { HomePage } from "@pages/Landing-Page"
 import Leaderboard from "@pages/Leaderboard"
@@ -18,21 +18,21 @@ const router = createBrowserRouter([
   {
     //landing page
     path: "/",
-    element: <HomePage />
+    element: <HomePage />,
   },
 
   {
     //landing page with qr code
     path: "/:id",
-    element: <HomePage />
+    element: <HomePage />,
   },
   {
     path: "/sign-in",
-    element: <SignInPage />
+    element: <SignInPage />,
   },
   {
     path: "/sign-in/:id", //using this to testing qr code functionality
-    element: <SignInPage />
+    element: <SignInPage />,
   },
   {
     path: "/passport",
@@ -67,21 +67,24 @@ const router = createBrowserRouter([
     element: <Form />,
   },
   {
+    //Form page with event details
+    path: "/form/:id",
+    element: <Form />,
+  },
+  {
     path: "/privacy-policy",
     element: <PrivacyPolicy />,
   },
-{
-  path: "/qr-error/:eventId?",
-  element: <QRErrorPage />,
-},
-{
-  path: "/team",
-  element: <MeetTheTeam />,
-}
-]);
+  {
+    path: "/qr-error/:eventId?",
+    element: <QRErrorPage />,
+  },
+  {
+    path: "/team",
+    element: <MeetTheTeam />,
+  },
+])
 
 export default function App() {
-    return (
-      <RouterProvider router={router} />
-    );
+  return <RouterProvider router={router} />
 }
