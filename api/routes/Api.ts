@@ -14,7 +14,6 @@ import multerS3 from 'multer-s3';
 // const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 
-
 // AWS.config.update({
 //   accessKeyId: process.env.AWS_ACCESS_KEY,
 //   secretAccessKey: process.env.AWS_SECRET_KEY,
@@ -28,7 +27,6 @@ const awsAccessKeyId: string = process.env.AWS_ACCESS_KEY_ID!;
 const awsRegion: string = process.env.AWS_REGION!;
 const awsSecretAccessKey: string = process.env.AWS_SECRET_ACCESS_KEY!;
 const bucketName: string = process.env.BUCKET_NAME!;
-
 
 
 const s3 = new S3Client({
@@ -77,22 +75,20 @@ async function run() {
     const Api: any = Router();
 
     //Test route for s3 bucket image upload 
-    // Api.post('/imageTest', upload.single('file'), async (req: Request, res: Response) =>{
-    //   // const image = req.body.image;
-    //   console.log("skeet", process.env.AWS_ACCESS_KEY!)
-    //   if(req.file){
-    //     const params = {
-    //       Bucket: bucketName,
-    //       Key: req.file.originalname,
-    //       Body: req.file.buffer,
-    //     };
-    //   }
-      
-
-    //   console.log("aldensImage", req.file)
-
-    //   return res.json(req.file)
-    // })
+    Api.post('/imageTest', upload.single('image'), (req: Request, res: Response) => {
+      // multer-s3 has already uploaded the file at this point
+      // if (req.file) {
+      //     return res.json({
+      //         message: "File uploaded successfully",
+      //         file: req.file,
+      //     });
+      // } else {
+      //     return res.status(400).json({
+      //         error: "No file uploaded",
+      //     });
+      // }
+      console.log("Req.file ACTUAL: ", req.file)
+  });
 
     //Route to add information into mongoDB
     Api.post('/event', upload.single('file'), async (req: Request, res: Response) => {
@@ -121,7 +117,12 @@ async function run() {
         const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173//${result.insertedId}&amp;size=100x100`
         const result2 = await eventCollection.updateOne(
           { _id: new ObjectId(result.insertedId) },
-          { $set: { QRcode: qrCode} }
+          { 
+            $set: { 
+              QRcode: qrCode,
+              stamp64: `https://wdcc-passport-storage.fly.storage.tigris.dev/${key}` 
+            }
+          }
         );
         // console.log("updated event to hold correct key")
         // console.log(qrCode)
@@ -149,21 +150,21 @@ async function run() {
           } else {
             result[i]["status"] = false
           }
-          try {
-            const key = result[i].stamp64;
-            const command = new GetObjectCommand({
-              Bucket: bucketName,
-              Key: key
-            });
+          // try {
+          //   const key = result[i].stamp64;
+          //   const command = new GetObjectCommand({
+          //     Bucket: bucketName,
+          //     Key: key
+          //   });
 
             
-            const response = await s3.send(command)
-            console.log(i, response)
-            result[i].stamp64 = `https://wdcc-passport-storage.fly.storage.tigris.dev/${key}`
-
-          } catch (err) {
-            continue; 
-          }
+          //   // const response = await s3.send(command)
+            
+          //   // result[i].stamp64 = `https://wdcc-passport-storage.fly.storage.tigris.dev/${key}`
+          //   // console.log(result[i].eventName)
+          // } catch (err) {
+          //   continue; 
+          // }
         }
 
 

@@ -25,7 +25,7 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
     const uploadImageFile = async() =>{
         if(actualFile){
             const formData = new FormData()
-            formData.append('image', actualFile)
+            formData.append('image', actualFile[0])
             await axios.post(
                 `${import.meta.env.VITE_SERVER_URL}/api/imageTest`,
                 formData
