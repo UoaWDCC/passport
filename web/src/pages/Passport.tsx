@@ -9,6 +9,7 @@ import GetLeaderboardStats from "@components/LeaderboardStats.tsx";
 
 export default function Passport() {
     const userData = GetLeaderboardStats();
+    // console.log("userdata: ", userData.eventList.length)
     // initialise index state
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -54,7 +55,9 @@ export default function Passport() {
                 </div>
                 <div>
                     <div className="border-b-4 welcome-line w-88 mb-1 mt-3"></div>
-                        <div className=" text-center text-blue-950 ">  <span className="text-4xl font-semibold">{userData.totalStamps} </span> <span className="text-xl">Stamps Collected</span></div>
+                        <div className=" text-center text-blue-950 ">  <span className="text-4xl font-semibold">{userData.eventList.length} </span> <span className="text-xl">
+                            {userData.eventList.length === 1 ? 'Stamp Collected' : 'Stamps Collected'}    
+                        </span></div>
                         <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
                     </div>
                 <CurrentView />
