@@ -92,8 +92,8 @@ body {
 }
 
 .load-more-button {
-  display: block; /* Change from absolute to block */
-  margin: 30px auto; /* Center the button horizontally */
+  display: block; 
+  margin: 10px auto; 
   background-color: #03045e;
   color: white;
   padding: 10px 20px;

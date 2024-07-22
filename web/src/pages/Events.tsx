@@ -86,7 +86,9 @@ export default function Events() {
         ) : (
           <h1>Loading</h1>
         )}
-        <div
+        
+      </div>
+      <div
           style={{
             display: "flex",
             justifyContent: "center",
@@ -100,7 +102,7 @@ export default function Events() {
             </button>
           )}
         </div>
-      </div>
     </div>
+    
   );
 }
