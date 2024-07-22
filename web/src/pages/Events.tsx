@@ -15,6 +15,7 @@ interface Event {
 
 export default function Events() {
     const [events, setEvents] = useState<Event[]>([]);
+    const [eventsToShow, setEventsToShow] = useState(10);
 
     useEffect(() => {
         getEvents();
@@ -25,7 +26,14 @@ export default function Events() {
             const eventsResponse = await axios.get(
                 `${import.meta.env.VITE_SERVER_URL}/api/get-all-events`
             );
-            setEvents(eventsResponse.data);
+            const activeEvents = eventsResponse.data.filter(
+                (event: Event) => event.status
+            );
+            const inactiveEvents = eventsResponse.data.filter(
+                (event: Event) => !event.status
+            );
+            const combinedEvents = inactiveEvents.concat(activeEvents).reverse();
+            setEvents(combinedEvents);
         } catch (error) {
             console.error("Error fetching events:", error);
         }
@@ -51,7 +59,7 @@ export default function Events() {
                 </div>
                 {events ? (
                     <ul className="event-list">
-                        {events.map((event: Event) => (
+                        {events.slice(0, eventsToShow).map((event: Event) => (
                             <li key={event._id} className="event-item">
                                 <div className="column">{event.eventName}</div>
                                 <div className="column">
@@ -92,6 +100,11 @@ export default function Events() {
                 ) : (
                     <h1>Loading</h1>
                 )}
+                <div>
+                    {eventsToShow < events.length && 
+                    <button onClick={() => setEventsToShow(10 + eventsToShow)}>BUTTON</button>
+                    }
+                </div>
             </div>
         </div>
     );
