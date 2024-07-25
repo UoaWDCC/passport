@@ -37,11 +37,11 @@ export default function Passport() {
     useEffect(() => {
         const fetchStamps = async () => {
         if (events.length > 0 && userData.eventList.length > 0) {
-            const stamps = userData.eventList.map(eventId => events.find(event => event._id === eventId));
+            const stamps = userData.eventList.map(eventId => events.find(event => (event as any)._id === eventId));
             setUserStamps(stamps);
         }
     };
-
+    
     fetchStamps();
     }, [events, userData.eventList]);
 
