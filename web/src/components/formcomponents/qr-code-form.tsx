@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StampSection from "./stamp-section";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,22 +12,26 @@ function QRCodeForm() {
     const [image64, setImage64] = useState("");
     const [validSubmit, setValidSubmit] = useState("no");
     const [_, setImageName] = useState("");
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     const navigate = useNavigate();
-
+    
     const submitForm = async () => {
-        if (eventName && startDate && endDate) {
+        console.log(imageFile)
+        if (eventName && startDate && endDate && imageFile) {
+            const formData = new FormData()
+            formData.append('eventName', eventName)
+            formData.append('startDate', startDate)
+            formData.append('endDate', endDate)
+            formData.append('file', imageFile)
+
             await axios.post(
                 `${import.meta.env.VITE_SERVER_URL}/api/event`,
-                {
-                    eventName: eventName,
-                    stamp64: image64,
-                    startDate: startDate,
-                    endDate: endDate,
-                },
+                    formData
+                ,
                 {
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "form-data",
                     },
                 }
             );
@@ -38,6 +42,14 @@ function QRCodeForm() {
         setValidSubmit("error");
         console.log("clicked");
     };
+
+    useEffect(()=>{
+        console.log("test", imageFile)
+    },[imageFile])
+
+    const getImageFile = (img: File | null) => {
+        setImageFile(img);
+    }
 
     const getImageName = (img: string) => {
         console.log(img);
@@ -137,6 +149,7 @@ function QRCodeForm() {
                 </div>
 
                 <StampSection
+                    getImageFile = {getImageFile}
                     getImageName={getImageName}
                     getImage64={getImage64}
                 />
