@@ -15,11 +15,18 @@ export default function PassportPage({ stamps }: PassportPageProps) {
     );
     const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
     const [clickedIndex, setClickedIndex] = useState<number | null>(null);
+    const [randomStartAngle, setRandomStartAngle] = useState<number>(0);
 
     useEffect(() => {
+        // generate a random start angle when the component mounts
+        setRandomStartAngle(Math.random() * 360);
+    }, []);
+
+    useEffect(() => {
+        // calculate positions based on the random start angle
         const newPositions = stamps.map((_, index) => getRandomPosition(index));
         setPositions(newPositions);
-    }, [stamps]);
+    }, [stamps, randomStartAngle]);
 
     const handleStampClick = (index: number) => {
         setHighlightedIndex(index);
@@ -29,13 +36,18 @@ export default function PassportPage({ stamps }: PassportPageProps) {
     // generate a random direction for a stamp
     const getRandomPosition = (index: number) => {
         const numSections = 4;
-        const sectionAngle = (index % numSections) * (360 / numSections);
-        const angle = sectionAngle + Math.random() * (360 / numSections);
         const radius = 80;
 
+        // calculate the angle for the current stamp position
+        const sectionAngle = (index % numSections) * (360 / numSections);
+        const angle = randomStartAngle + sectionAngle;
+
+        // convert angle to radians
+        const angleInRadians = angle * (Math.PI / 180);
+
         // calculate x and y positions for stamp
-        const x = radius * Math.cos(angle * (Math.PI / 180)) + 100;
-        const y = radius * Math.sin(angle * (Math.PI / 180)) + 150;
+        const x = radius * Math.cos(angleInRadians) + 100;
+        const y = radius * Math.sin(angleInRadians) + 180;
 
         return { x, y };
     };
