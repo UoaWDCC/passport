@@ -1,39 +1,61 @@
-import { useEffect, useState } from "react"
-import axios from "axios"
-import "../styles/page styles/event.css"
-import logo from "../assets/primary_logo.svg"
-import HamburgerMenu from "@components/HamburgerMenuAdmin"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "../styles/page styles/event.css";
+import logo from "../assets/primary_logo.svg";
+import HamburgerMenu from "@components/HamburgerMenuAdmin";
+import { useNavigate } from "react-router-dom";
+import DeleteModal from "@components/DeleteModal";
 
 interface Event {
-  _id: string
-  eventName: string
-  QRcode: string
-  stamp64: string
-  status: boolean
-  totalAttended: number
+  _id: string;
+  eventName: string;
+  QRcode: string;
+  stamp64: string;
+  status: boolean;
+  totalAttended: number;
 }
 
 export default function Events() {
-  const [events, setEvents] = useState<Event[]>([])
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   useEffect(() => {
-    getEvents()
-  }, [])
+    getEvents();
+  }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    if (selectedEventId) {
+      try {
+        // Perform the delete request
+        await axios.delete(
+          `${
+            import.meta.env.VITE_SERVER_URL
+          }/api/delete-event/${selectedEventId}`
+        );
+        // Refresh events list
+        getEvents();
+        console.log("Item deleted");
+      } catch (error) {
+        console.error("Error deleting event:", error);
+      }
+      setIsModalOpen(false);
+      setSelectedEventId(null);
+    }
+  };
 
   const getEvents = async () => {
     try {
       const eventsResponse = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/api/get-all-events`
-      )
-      await console.log(eventsResponse.data)
-      setEvents(eventsResponse.data)
+      );
+      setEvents(eventsResponse.data);
     } catch (error) {
-      console.error("Error fetching events:", error)
+      console.error("Error fetching events:", error);
     }
-  }
+  };
 
   return (
     <div className="text-gray-800">
@@ -53,7 +75,7 @@ export default function Events() {
           <div className="column"># of People Attended</div>
           <div className="column">Edit/Delete</div>
         </div>
-        {events ? (
+        {events.length > 0 ? (
           <ul className="event-list">
             {events.map((event: Event) => (
               <li key={event._id} className="event-item">
@@ -76,15 +98,18 @@ export default function Events() {
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => {
-                      //Need to pass the event id to the form page, so that we can retreive the event details
-                      console.log(event._id)
-                      // navigate(`/form`)
-                      navigate(`/form/${event._id}`)
+                      navigate(`/form/${event._id}`);
                     }}
                   >
                     Edit
                   </button>
-                  <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                  <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => {
+                      setSelectedEventId(event._id);
+                      setIsModalOpen(true);
+                    }}
+                  >
                     Delete
                   </button>
                 </div>
@@ -94,7 +119,12 @@ export default function Events() {
         ) : (
           <h1>Loading</h1>
         )}
+        <DeleteModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={handleDelete}
+        />
       </div>
     </div>
-  )
+  );
 }

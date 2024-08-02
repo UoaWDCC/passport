@@ -1,44 +1,44 @@
-import { useEffect, useState } from "react"
-import StampSection from "./stamp-section"
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
+import StampSection from "./stamp-section";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
-  id: string | undefined | null
+  id: string | undefined | null;
 }
 
 function QRCodeForm({ id }: Props) {
-  const [eventName, setEventName] = useState("")
-  const [startDate, setStartDate] = useState("")
-  const [validStartDate, setValidStartDate] = useState("")
-  const [validEndDate, setValidEndDate] = useState("")
-  const [endDate, setEndDate] = useState("")
-  const [image64, setImage64] = useState("")
-  const [validSubmit, setValidSubmit] = useState("no")
-  const [_, setImageName] = useState("")
+  const [eventName, setEventName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [validStartDate, setValidStartDate] = useState("");
+  const [validEndDate, setValidEndDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [image64, setImage64] = useState("");
+  const [validSubmit, setValidSubmit] = useState("no");
+  const [_, setImageName] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (id == null || id == undefined) {
-      return
+    if (id == null || id == undefined || id == "") {
+      return;
     }
     const getEvent = async () => {
       try {
         const eventResponse = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/api/get-event/${id}`
-        )
-        setEventName(eventResponse.data.eventName)
-        setStartDate(eventResponse.data.startDate)
-        setEndDate(eventResponse.data.endDate)
-        setImage64(eventResponse.data.stamp64)
-        console.log(eventResponse.data)
+        );
+        setEventName(eventResponse.data.eventName);
+        setStartDate(eventResponse.data.startDate);
+        setEndDate(eventResponse.data.endDate);
+        setImage64(eventResponse.data.stamp64);
+        console.log(eventResponse.data);
       } catch (error) {
-        console.error("Error fetching event:", error)
+        console.error("Error fetching event:", error);
       }
-    }
-    getEvent()
-  }, [id])
+    };
+    getEvent();
+  }, [id]);
 
   const submitForm = async () => {
     if (eventName && startDate && endDate) {
@@ -55,50 +55,50 @@ function QRCodeForm({ id }: Props) {
             "Content-Type": "application/json",
           },
         }
-      )
-      setEventName("")
-      setImage64("")
-      navigate("/dashboard/events")
+      );
+      setEventName("");
+      setImage64("");
+      navigate("/dashboard/events");
     }
-    setValidSubmit("error")
-    console.log("clicked")
-  }
+    setValidSubmit("error");
+    console.log("clicked");
+  };
 
   const getImageName = (img: string) => {
-    console.log(img)
-    setImageName(img)
-  }
+    console.log(img);
+    setImageName(img);
+  };
 
   const getImage64 = (img: string) => {
-    console.log(img)
-    setImage64(img)
-  }
+    console.log(img);
+    setImage64(img);
+  };
 
   const checkValidStartDate = (date: any) => {
     if (
       new Date(date).setHours(0, 0, 0, 0) >= new Date().setHours(0, 0, 0, 0) &&
       startDate >= endDate
     ) {
-      setStartDate(date)
-      setValidStartDate("yes")
+      setStartDate(date);
+      setValidStartDate("yes");
     } else {
-      setStartDate("")
-      setValidStartDate("no")
+      setStartDate("");
+      setValidStartDate("no");
     }
-  }
+  };
 
   const checkValidEndDate = (date: any) => {
     if (
       new Date(date).setHours(0, 0, 0, 0) >=
       new Date(startDate).setHours(0, 0, 0, 0)
     ) {
-      setEndDate(date)
-      setValidEndDate("yes")
+      setEndDate(date);
+      setValidEndDate("yes");
     } else {
-      setEndDate("")
-      setValidEndDate("no")
+      setEndDate("");
+      setValidEndDate("no");
     }
-  }
+  };
 
   return (
     <div className="qr-code-form">
@@ -158,7 +158,11 @@ function QRCodeForm({ id }: Props) {
           />
         </div>
 
-        <StampSection getImageName={getImageName} getImage64={getImage64} />
+        <StampSection
+          getImageName={getImageName}
+          getImage64={getImage64}
+          initialImage64={image64}
+        />
 
         <div className="submit-button-container">
           <div className="submit-link">
@@ -169,7 +173,7 @@ function QRCodeForm({ id }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default QRCodeForm
+export default QRCodeForm;
