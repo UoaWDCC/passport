@@ -3,7 +3,7 @@ const RedeemPrizeButton = () => (
     <button
       className="btn bg-[#03045e] text-white hover:bg-[#03045e]"
       onClick={async () => {
-        const accessToken = localStorage.getItem("accessToken")
+        const accessToken = localStorage.getItem("accessToken");
         // Redeem prize
         await fetch(
           `${
@@ -17,16 +17,16 @@ const RedeemPrizeButton = () => (
           }
         )
           .then((res) => {
-            console.log(res.json())
+            console.log(res.json());
           })
           .catch((error) => {
-            console.error(error)
-          })
+            console.error(error);
+          });
       }}
     >
       Click to Redeem Prize
     </button>
   </div>
-)
+);
 
-export default RedeemPrizeButton
+export default RedeemPrizeButton;
