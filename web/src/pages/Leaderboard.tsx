@@ -11,7 +11,7 @@ export default function Leaderboard() {
   const userData = GetLeaderboardStats()
   const stampsLeft = userData.stampsLeft
   const prizes = userData.prizesAchieved
-  const height = 5 - stampsLeft
+  const height = 3 - stampsLeft
 
   return (
     <CheckLoggedIn>
@@ -21,7 +21,7 @@ export default function Leaderboard() {
           <ProgressBar height={height} />
           <StampsAwayCount height={stampsLeft} />
         </div>
-        {height == 5 ? (
+        {height == 3 ? (
           <button className="mt-6">
             <RedeemPrizeButton />
           </button>

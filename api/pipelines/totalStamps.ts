@@ -23,11 +23,11 @@ const totalStampsCalc = async (accessToken: String) => {
                     'stampsLeft': {
                         '$cond': [
                             { '$eq': [{ '$size': '$eventList' }, 0] },
-                            5,
-                            { '$subtract': [5, { '$mod': [{ '$size': '$eventList' }, 5] }] }
+                            3,
+                            { '$subtract': [3, { '$mod': [{ '$size': '$eventList' }, 3] }] }
                         ]
                     },
-                    'prizesAchieved': { '$floor': { '$divide': [{ '$size': '$eventList' }, 5] } }
+                    'prizesAchieved': { '$floor': { '$divide': [{ '$size': '$eventList' }, 3] } }
                 }
             }
         ]);
