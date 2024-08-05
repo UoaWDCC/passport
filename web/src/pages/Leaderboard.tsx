@@ -7,25 +7,36 @@ import HamburgerMenu from "@components/HamburgerMenu";
 import CheckLoggedIn from "@components/CheckLoggedIn";
 import LeaderboardStats from "@components/LeaderboardStats";
 import GetRedeemedPrizes from "@components/LeaderboardRedeemedPrizes";
+import { useEffect } from "react";
 
 export default function Leaderboard() {
   const userData = LeaderboardStats();
   const redeemedPrizes = GetRedeemedPrizes() ?? 0;
   const redeemed = userData.eventList.length / 5 == redeemedPrizes;
-  console.log("Redeemed:" + redeemed);
-  // const redeemed = true;
 
   let stampsLeft = 5 - (userData.eventList.length % 5);
   let height = userData.eventList.length % 5;
 
-  // let stampsLeft = 5 - (10 % 5);
-  // let height = 10 % 5;
   if (!redeemed && userData.eventList.length % 5 == 0) {
     height += 5;
     stampsLeft -= 5;
   }
 
-  console.log(redeemedPrizes);
+  useEffect(() => {
+    if (
+      redeemedPrizes == undefined ||
+      redeemedPrizes == null ||
+      redeemedPrizes == 0 ||
+      userData == undefined ||
+      userData == null
+    ) {
+      return;
+    }
+    if (!redeemed && userData.eventList.length % 5 == 0) {
+      console.log("Redirect to leaderboards");
+      window.location.href = "/leaderboard-prize";
+    }
+  }, [redeemedPrizes]);
 
   return (
     <CheckLoggedIn>

@@ -15,7 +15,6 @@ export default function GetRedeemedPrizes() {
           throw new Error("Error retrieving data");
         }
         const result = await response.json();
-        console.log(result);
         setData(result);
       } catch (err) {
         console.log(err);
