@@ -8,7 +8,7 @@ import GetLeaderboardStats from "@components/LeaderboardStats";
 function CongratsPage() {
   const userData = GetLeaderboardStats();
   const height = userData.totalStamps; // To be removed when other vals in Mongo
-  const prizes = Math.floor(height/5); // To be updated when it gets calced in Mongo
+  const prizes = Math.floor(height/3); // To be updated when it gets calced in Mongo
   return (
     <CheckLoggedIn>
       <div className="background flex flex-col h-screen justify-center items-center ">
