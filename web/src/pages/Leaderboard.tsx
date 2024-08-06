@@ -6,11 +6,9 @@ import PrizesAchieved from "@components/PrizesAchieved";
 import HamburgerMenu from "@components/HamburgerMenu";
 import CheckLoggedIn from "@components/CheckLoggedIn";
 import LeaderboardStats from "@components/LeaderboardStats";
-import GetRedeemedPrizes from "@components/LeaderboardRedeemedPrizes";
-import { useEffect } from "react";
 
 export default function Leaderboard() {
-  const userData = GetLeaderboardStats()
+  const userData = LeaderboardStats()
   const stampsLeft = userData.stampsLeft
   const prizes = userData.prizesAchieved
   const height = 3 - stampsLeft
