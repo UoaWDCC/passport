@@ -10,26 +10,46 @@ const totalStampsCalc = async (accessToken: String) => {
     try {
         const result = await User.aggregate([
             { '$match': { 'accessToken': accessToken } },
-            {
-                '$project': {
-                    '_id': 1,
-                    'firstName': 1,
-                    'lastName': 1,
-                    'email': 1,
-                    'accessToken': 1,
-                    'upi': 1,
-                    'eventList': 1,
-                    'totalStamps': { '$size': '$eventList' },
-                    'stampsLeft': {
+                {
+                    '$project': {
+                      '_id': 1, 
+                      'firstName': 1, 
+                      'lastName': 1, 
+                      'email': 1, 
+                      'accessToken': 1, 
+                      'upi': 1, 
+                      'eventList': 1, 
+                      'totalStamps': {
+                        '$size': '$eventList'
+                      }, 
+                      'stampsLeft': {
                         '$cond': [
-                            { '$eq': [{ '$size': '$eventList' }, 0] },
-                            3,
-                            { '$subtract': [3, { '$mod': [{ '$size': '$eventList' }, 3] }] }
+                          {
+                            '$eq': [
+                              {
+                                '$size': '$eventList'
+                              }, 0
+                            ]
+                          }, 3, {
+                            '$mod': [
+                              {
+                                '$size': '$eventList'
+                              }, 3
+                            ]
+                          }
                         ]
-                    },
-                    'prizesAchieved': { '$floor': { '$divide': [{ '$size': '$eventList' }, 3] } }
-                }
-            }
+                      }, 
+                      'prizesAchieved': {
+                        '$floor': {
+                          '$divide': [
+                            {
+                              '$size': '$eventList'
+                            }, 3
+                          ]
+                        }
+                      }
+                    }
+                  }
         ]);
 
         if (result.length > 0) {
