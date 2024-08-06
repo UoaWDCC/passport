@@ -13,7 +13,7 @@ export default function ProgressBar({ height}: { height: number }) {
             bottom: "16px", // Adjust this value
             left: "96px", // Adjust this value
             width: "36px", // Adjust this value
-            height: `${height * 108}px`, // max: 540px (108 per height unit)
+            height: `${height * 180}px`, // max: 540px (108 per height unit)
           }}
         ></div>
         <img
@@ -22,14 +22,14 @@ export default function ProgressBar({ height}: { height: number }) {
           className="absolute"
           style={{ left: "119px", bottom: "50px" }}
         />
-        {height >= 1 && height <= 4 && (
+        {height >= 1 && height <= 2 && (
           <img
             src={airplane}
             alt=""
             className="absolute"
             style={{
               left: "90px", // Adjust this value
-              bottom: `${height * 108 - 13}px`, // Adjust this value
+              bottom: `${height * 180 - 13}px`, // Adjust this value
             }}
           />
         )}

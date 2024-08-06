@@ -10,33 +10,10 @@ import GetRedeemedPrizes from "@components/LeaderboardRedeemedPrizes";
 import { useEffect } from "react";
 
 export default function Leaderboard() {
-  const userData = LeaderboardStats();
-  const redeemedPrizes = GetRedeemedPrizes() ?? 0;
-  const redeemed = userData.eventList.length / 5 == redeemedPrizes;
-
-  let stampsLeft = 5 - (userData.eventList.length % 5);
-  let height = userData.eventList.length % 5;
-
-  if (!redeemed && userData.eventList.length % 5 == 0) {
-    height += 5;
-    stampsLeft -= 5;
-  }
-
-  useEffect(() => {
-    if (
-      redeemedPrizes == undefined ||
-      redeemedPrizes == null ||
-      redeemedPrizes == 0 ||
-      userData == undefined ||
-      userData == null
-    ) {
-      return;
-    }
-    if (!redeemed && userData.eventList.length % 5 == 0) {
-      console.log("Redirect to leaderboards");
-      window.location.href = "/leaderboard-prize";
-    }
-  }, [redeemedPrizes]);
+  const userData = GetLeaderboardStats()
+  const stampsLeft = userData.stampsLeft
+  const prizes = userData.prizesAchieved
+  const height = 3 - stampsLeft
 
   return (
     <CheckLoggedIn>
@@ -46,16 +23,16 @@ export default function Leaderboard() {
           <ProgressBar height={height} />
           <StampsAwayCount height={stampsLeft} />
         </div>
-        {height == 5 ? (
+        {height == 3 ? (
           <button className="mt-6">
             <RedeemPrizeButton />
           </button>
         ) : (
           <div className="mt-6">
-            <PrizesAchieved height={redeemedPrizes} />
+            <PrizesAchieved height={prizes} />
           </div>
         )}
       </div>
     </CheckLoggedIn>
-  );
+  )
 }
