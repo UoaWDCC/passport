@@ -1,11 +1,13 @@
-import StampsAwayCount from "@components/StampsAwayCount"
-import ProgressBar from "@components/ProgressBar"
-import RedeemPrizeButton from "@components/RedeemPrizeButton"
-import "../styles/page styles/Leaderboard.css"
-import PrizesAchieved from "@components/PrizesAchieved"
-import HamburgerMenu from "@components/HamburgerMenu"
-import CheckLoggedIn from "@components/CheckLoggedIn"
-import GetLeaderboardStats from "@components/LeaderboardStats"
+import StampsAwayCount from "@components/StampsAwayCount";
+import ProgressBar from "@components/ProgressBar";
+import RedeemPrizeButton from "@components/RedeemPrizeButton";
+import "../styles/page styles/Leaderboard.css";
+import PrizesAchieved from "@components/PrizesAchieved";
+import HamburgerMenu from "@components/HamburgerMenu";
+import CheckLoggedIn from "@components/CheckLoggedIn";
+import LeaderboardStats from "@components/LeaderboardStats";
+import GetRedeemedPrizes from "@components/LeaderboardRedeemedPrizes";
+import { useEffect } from "react";
 
 export default function Leaderboard() {
   const userData = GetLeaderboardStats()
