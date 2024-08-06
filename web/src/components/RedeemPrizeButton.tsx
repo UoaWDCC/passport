@@ -1,3 +1,6 @@
+import {useNavigate} from "react-router-dom"
+
+const nav = useNavigate();
 const RedeemPrizeButton = () => (
   <div>
     <button
@@ -18,6 +21,7 @@ const RedeemPrizeButton = () => (
         )
           .then((res) => {
             console.log(res.json())
+            nav('../pages/LeaderboardCongratsPage.tsx')
           })
           .catch((error) => {
             console.error(error)
