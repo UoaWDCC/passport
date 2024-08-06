@@ -5,9 +5,10 @@ import Bin from '../../assets/bin.svg';
 interface StampSectionProps {
     getImageName: (name:string) => void;
     getImage64: (name: string) => void;
+    getImageFile: (name: File | null) => void;
 }
 
-function StampSection({getImageName, getImage64}: StampSectionProps) {
+function StampSection({getImageName, getImage64, getImageFile}: StampSectionProps) {
     const [stamp, setStamp] = useState('');
     const [fileSize, setFileSize] = useState('');
     const [fileName, setFileName] = useState('');
@@ -21,6 +22,10 @@ function StampSection({getImageName, getImage64}: StampSectionProps) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         console.log(e.target.files)
+        const files = e.target.files
+        const file = files && files.length > 0 ? files[0] : null;
+        getImageFile(file)
+        
         if (e.target.files) {
             let stampSize = e.target.files[0].size
             if (stampSize < 1000000) {

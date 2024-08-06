@@ -5,6 +5,11 @@ import { config } from 'dotenv';
 import { object } from 'zod';
 import User from '../db/User';
 import mongoose from 'mongoose';
+import axios from 'axios';
+import { S3Client } from '@aws-sdk/client-s3';
+import multer from "multer";
+const multerS3 = require('multer-s3')
+
 
 config();
 
@@ -17,6 +22,25 @@ const client = new MongoClient(uri, {
     strict: true,
     deprecationErrors: true,
   }
+});
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3Client,
+    bucket: process.env.BUCKET_NAME,
+    acl: 'public-read',
+    key: function (req: Request, file: Express.Multer.File, cb: (error: any, key?: string) => void) {
+      cb(null, file.originalname);
+    }
+  })
 });
 
 //Mongo connected routes
@@ -32,15 +56,25 @@ async function run() {
     const Api: any = Router();
 
     //Route to add information into mongoDB
-    Api.post('/event', async (req: Request, res: Response) => {
+    Api.post('/event',upload.single('file'), async (req: Request, res: Response) => {
       const eventName = req.body.eventName;
-      const stamp64 = req.body.stamp64;
       const startDate = req.body.startDate;
       const endDate = req.body.endDate;
+      const file = req.file as any;
+      let fileLink = "";
+
+      if (file && file.location){
+        fileLink = file.location
+      } else {
+        return res.status(400).json({error: "S3 bucket image upload failed"})
+      }
+    
+      const body = req.body
+      console.log(body)
 
       const event = {
         "eventName": eventName,
-        "stamp64": stamp64,
+        "stamp64": fileLink,
         "startDate": new Date(startDate),
         "endDate": new Date(endDate),
         "totalAttended": 0
@@ -53,9 +87,8 @@ async function run() {
         const result = await eventCollection.insertOne(event);
         console.log(`A document was inserted with id ${result.insertedId}`);
 
-        const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173//${result.insertedId}&amp;size=100x100`
+        const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport-staging.fly.dev/qr-error/${result.insertedId}&amp;size=100x100`
         const result2 = await eventCollection.updateOne({ _id: new ObjectId(result.insertedId) }, { $set: { "QRcode": qrCode } })
-        console.log(qrCode)
 
       } catch (error) {
         console.log(error);
