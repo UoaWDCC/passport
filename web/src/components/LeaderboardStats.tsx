@@ -1,41 +1,40 @@
-import { useEffect, useState } from 'react';
-//import PrizesAchieved from './PrizesAchieved';
+// LeaderboardStats.js
+import { useEffect, useState } from "react";
 
-const GetLeaderboardStats = () => {
-    const [data, setData] = useState({
-        accessToken : "null",
-        email : "null",
-        eventList: [],
-        firstName : "null",
-        lastName : "null", 
-        totalStamps : 0,
-        stampsLeft : 0,
-        prizesAchieved : 0,
-        upi : "null",
-        __v : 0,
-        _id : "0"
+export default function LeaderboardStats() {
+  const [data, setData] = useState({
+    accessToken: "null",
+    email: "null",
+    eventList: [],
+    firstName: "null",
+    lastName: "null",
+    totalStamps: 0,
+    stampsLeft: 0,
+    prizesAchieved: 0,
+    upi: "null",
+    __v: 0,
+    _id: "0",
+  });
 
-    });
+  const upi = localStorage.getItem("userUpi");
 
-    const upi = localStorage.getItem('userUpi');
-
-    useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
-        try {
-        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/` + upi);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/api/user/` + upi
+        );
         if (!response.ok) {
-            throw new Error('Error retrieving data');
+          throw new Error("Error retrieving data");
         }
         const result = await response.json();
         setData(result);
-        } catch (error) {
-        console.error('Error fetching data');
-        }
+      } catch (error) {
+        console.error("Error fetching data");
+      }
     };
 
     fetchData();
-    }, [upi]);
-    return data;
-};
-
-export default GetLeaderboardStats;
+  }, [upi]);
+  return data;
+}

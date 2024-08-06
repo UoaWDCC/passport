@@ -1,17 +1,42 @@
-import StampsAwayCount from "@components/StampsAwayCount"
-import ProgressBar from "@components/ProgressBar"
-import RedeemPrizeButton from "@components/RedeemPrizeButton"
-import "../styles/page styles/Leaderboard.css"
-import PrizesAchieved from "@components/PrizesAchieved"
-import HamburgerMenu from "@components/HamburgerMenu"
-import CheckLoggedIn from "@components/CheckLoggedIn"
-import GetLeaderboardStats from "@components/LeaderboardStats"
+import StampsAwayCount from "@components/StampsAwayCount";
+import ProgressBar from "@components/ProgressBar";
+import RedeemPrizeButton from "@components/RedeemPrizeButton";
+import "../styles/page styles/Leaderboard.css";
+import PrizesAchieved from "@components/PrizesAchieved";
+import HamburgerMenu from "@components/HamburgerMenu";
+import CheckLoggedIn from "@components/CheckLoggedIn";
+import LeaderboardStats from "@components/LeaderboardStats";
+import GetRedeemedPrizes from "@components/LeaderboardRedeemedPrizes";
+import { useEffect } from "react";
 
 export default function Leaderboard() {
-  const userData = GetLeaderboardStats()
-  const stampsLeft = userData.stampsLeft
-  const prizes = userData.prizesAchieved
-  const height = 5 - stampsLeft
+  const userData = LeaderboardStats();
+  const redeemedPrizes = GetRedeemedPrizes() ?? 0;
+  const redeemed = userData.eventList.length / 5 == redeemedPrizes;
+
+  let stampsLeft = 5 - (userData.eventList.length % 5);
+  let height = userData.eventList.length % 5;
+
+  if (!redeemed && userData.eventList.length % 5 == 0) {
+    height += 5;
+    stampsLeft -= 5;
+  }
+
+  useEffect(() => {
+    if (
+      redeemedPrizes == undefined ||
+      redeemedPrizes == null ||
+      redeemedPrizes == 0 ||
+      userData == undefined ||
+      userData == null
+    ) {
+      return;
+    }
+    if (!redeemed && userData.eventList.length % 5 == 0) {
+      console.log("Redirect to leaderboards");
+      window.location.href = "/leaderboard-prize";
+    }
+  }, [redeemedPrizes]);
 
   return (
     <CheckLoggedIn>
@@ -27,10 +52,10 @@ export default function Leaderboard() {
           </button>
         ) : (
           <div className="mt-6">
-            <PrizesAchieved height={prizes} />
+            <PrizesAchieved height={redeemedPrizes} />
           </div>
         )}
       </div>
     </CheckLoggedIn>
-  )
+  );
 }
