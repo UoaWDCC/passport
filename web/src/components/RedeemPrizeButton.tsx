@@ -24,7 +24,7 @@ const RedeemPrizeButton = () => {
         )
           .then((res) => {
             console.log(res.json())
-            nav('../pages/LeaderboardCongratsPage.tsx')
+            nav('/leaderboard-prize')
           })
           .catch((error) => {
             console.error(error)
