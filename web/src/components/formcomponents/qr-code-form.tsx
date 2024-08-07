@@ -9,7 +9,7 @@ function QRCodeForm() {
     const [validStartDate, setValidStartDate] = useState("");
     const [validEndDate, setValidEndDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [image64, setImage64] = useState("");
+    // const [image64, setImage64] = useState("");
     const [validSubmit, setValidSubmit] = useState("no");
     const [_, setImageName] = useState("");
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -36,7 +36,7 @@ function QRCodeForm() {
                 }
             );
             setEventName("");
-            setImage64("");
+            // setImage64("");
             navigate("/dashboard/events");
         }
         setValidSubmit("error");
@@ -58,7 +58,7 @@ function QRCodeForm() {
 
     const getImage64 = (img: string) => {
         console.log(img);
-        setImage64(img);
+        // setImage64(img);
     };
 
     const checkValidStartDate = (date: any) => {
