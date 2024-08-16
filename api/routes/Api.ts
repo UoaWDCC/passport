@@ -123,6 +123,24 @@ async function run() {
       }
     });
 
+    //Route to get single evenet 
+    Api.get("/get-single-event/:eventId", async (req:Request, res:Response) =>{
+      try {
+        const eventId = req.params.eventId
+        const database = client.db("WDCC_Passport");
+        const eventCollection = database.collection("Events");
+
+        const objectId = new ObjectId(eventId)
+        const result = await eventCollection.findOne({_id: objectId})
+
+        console.log(result)
+
+        return res.status(200).json(result)
+      } catch (error) {
+        return res.status(400).json({"error message": error})
+      }
+    })
+
     //check event validity 
     Api.get("/check-event-status/:eventId", async (req: Request, res: Response) => {
       try {
