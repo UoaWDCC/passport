@@ -7,6 +7,7 @@ type PrizeData = {
     redeemed: boolean;
     firstName: string;
     lastName: string;
+    email: string;
 };
 
 // const data: PrizeData[] = []
@@ -72,6 +73,7 @@ function PrizeTable() {
         redeemed: boolean;
         firstName: string;
         lastName: string;
+        email: string;
     }>[] = [
         // { name: "userId", selector: (row) => row.userId, sortable: true },
         {
@@ -80,6 +82,7 @@ function PrizeTable() {
             sortable: true,
         },
         { name: "Last Name", selector: (row) => row.lastName, sortable: true },
+        { name: "Email", selector: (row) => row.email, sortable: true },
         {
             name: "Prize Recevied",
             selector: (row) => row.redeemed,

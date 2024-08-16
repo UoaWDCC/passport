@@ -138,6 +138,7 @@ userRoutes.post(
                     redeemedTime: Date.now(),
                     firstName: user.firstName,
                     lastName: user.lastName,
+                    email: user.email,
                 });
                 const savedPrize = await prize.save();
                 res.status(201).json(savedPrize);
