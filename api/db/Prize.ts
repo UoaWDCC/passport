@@ -1,13 +1,14 @@
-import { Schema, model } from "mongoose"
+import { Schema, model } from "mongoose";
 
 const prizeSchema = new Schema({
-  userId: String,
-  redeemed: Boolean,
-  redeemedTime: Date,
-  firstName: String,
-  lastName: String,
-})
+    userId: String,
+    redeemed: Boolean,
+    redeemedTime: Date,
+    firstName: String,
+    lastName: String,
+    email: String,
+});
 
-const Prize = model("Prize", prizeSchema, "Prizes")
+const Prize = model("Prize", prizeSchema, "Prizes");
 
-export default Prize
+export default Prize;
