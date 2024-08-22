@@ -1,12 +1,16 @@
 import React from 'react';
+import "../styles/page styles/ScreensizeError.css"
 
-const ErrorPage = () => {
+
+function ErrorPage() {
     return (
-        <div className="flex flex-col h-screen justify-center items-center text-red-600">
-            <h1 className="text-3xl font-bold">Error</h1>
-            <p className="text-xl">This page is only accessible on desktop.</p>
+        <div className="error-page-container">
+            <h1 className="error-title">SORRY!</h1>
+            <p className="error-message">
+                This page is only accessible on desktop screens.
+            </p>
         </div>
     );
-};
+}
 
 export default ErrorPage;
