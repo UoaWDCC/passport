@@ -36,7 +36,7 @@ export default function PassportPage({ stamps }: PassportPageProps) {
     // generate a random direction for a stamp
     const getRandomPosition = (index: number) => {
         const numSections = 4;
-        const radius = 80;
+        const radius = 90;
 
         // calculate the angle for the current stamp position
         const sectionAngle = (index % numSections) * (360 / numSections);
@@ -46,7 +46,7 @@ export default function PassportPage({ stamps }: PassportPageProps) {
         const angleInRadians = angle * (Math.PI / 180);
 
         // calculate x and y positions for stamp
-        const x = radius * Math.cos(angleInRadians) + 100;
+        const x = radius * Math.cos(angleInRadians) + 93;
         const y = radius * Math.sin(angleInRadians) + 180;
 
         return { x, y };

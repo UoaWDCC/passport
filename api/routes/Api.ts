@@ -129,7 +129,6 @@ async function run() {
         const eventId = req.params.eventId
         const database = client.db("WDCC_Passport");
         const eventCollection = database.collection("Events");
-        
         const objectId = new ObjectId(eventId)
         const result = await eventCollection.findOne({_id: objectId})
 
