@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import styles from "../styles/page styles/Landing-Page.module.css";
 import axios from "axios";
 import updateStampValues from "@components/GetTotalStamps";
+import checkEventStatus from "@components/event-valid";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,13 @@ export const HomePage = () => {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
           try {
-            await updateStampValues(accessToken);
+            checkEventStatus(eventId).then(async (eventStatus) => {
+            if (eventStatus.status) {
+              await updateStampValues(accessToken);
+            } else {
+              navigate("/qr-error/" + eventId);
+            }
+          });
           } catch (error) {
             navigate("/qr-error/" + eventId);
           }

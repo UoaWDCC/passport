@@ -2,6 +2,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import updateStampValues from "@components/GetTotalStamps";
+import checkEventStatus from "@components/event-valid";
 
 interface UserData {
     family_name: string;
@@ -127,7 +128,7 @@ const useGoogleSignIn = (
               //passing userUPI to member checker
               const text = await checkUser(userUPI);
               //checking if email is in domain and user is in WDCC
-              const eventId = location.pathname.split('/').pop();
+              const eventId = location.pathname.split('/').pop() + "";
 
               if (
                   userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
@@ -165,7 +166,13 @@ const useGoogleSignIn = (
                                           tokenResponse.access_token
                                       );
                                       try {
-                                        await updateStampValues(tokenResponse.access_token);
+                                        checkEventStatus(eventId).then(async (eventStatus) => {
+                                        if (eventStatus.status) {
+                                          await updateStampValues(tokenResponse.access_token);
+                                        } else {
+                                          navigate("/qr-error/" + eventId);
+                                        }
+                                      });
                                       } catch (error) {
                                         navigate("/qr-error/" + eventId);
                                       }
@@ -185,7 +192,13 @@ const useGoogleSignIn = (
                                           tokenResponse.access_token
                                       );
                                       try {
-                                        await updateStampValues(tokenResponse.access_token);
+                                        checkEventStatus(eventId).then(async (eventStatus) => {
+                                        if (eventStatus.status) {
+                                          await updateStampValues(tokenResponse.access_token);
+                                        } else {
+                                          navigate("/qr-error/" + eventId);
+                                        }
+                                      });
                                       } catch (error) {
                                         navigate("/qr-error/" + eventId);
                                       }
