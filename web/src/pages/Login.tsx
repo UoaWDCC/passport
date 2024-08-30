@@ -11,6 +11,7 @@ interface UserData {
     UserUPI: string;
 }
 
+
 // Navigate user to correct page
 const NavigateUser = (currentPage: string, navigate: Function ) => {
   const prevLocation = localStorage.getItem('prevLocation'); 
@@ -126,6 +127,7 @@ const useGoogleSignIn = (
               //passing userUPI to member checker
               const text = await checkUser(userUPI);
               //checking if email is in domain and user is in WDCC
+              const eventId = location.pathname.split('/').pop();
 
               if (
                   userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
@@ -156,12 +158,17 @@ const useGoogleSignIn = (
                                       email: userInfo.data.email,
                                       accessToken: tokenResponse.access_token,
                                       UserUPI: userUPI,
-                                  }).then(() => {
+                                  }).then(async () => {
                                       console.log("successs");
                                       localStorage.setItem(
                                           "accessToken",
                                           tokenResponse.access_token
                                       );
+                                      try {
+                                        await updateStampValues(tokenResponse.access_token);
+                                      } catch (error) {
+                                        navigate("/qr-error/" + eventId);
+                                      }
                                       NavigateUser(currentPage, navigate);
                                   });
                               } else {
@@ -172,11 +179,16 @@ const useGoogleSignIn = (
                                       email: userInfo.data.email,
                                       accessToken: tokenResponse.access_token,
                                       UserUPI: userUPI,
-                                  }).then(() => {
+                                  }).then(async () => {
                                       localStorage.setItem(
                                           "accessToken",
                                           tokenResponse.access_token
                                       );
+                                      try {
+                                        await updateStampValues(tokenResponse.access_token);
+                                      } catch (error) {
+                                        navigate("/qr-error/" + eventId);
+                                      }
                                       NavigateUser(currentPage, navigate);
                                   });
                               }
@@ -184,10 +196,6 @@ const useGoogleSignIn = (
                           .catch((error) => {
                               console.log(error);
                           });
-                        const eventId = location.pathname.split('/')[2];
-                        if (eventId) {
-                            updateStampValues(tokenResponse.access_token);
-                        }
                   };
 
                   // Check MongoDB if user is in DB, then updates/posts user data accordingly

@@ -8,14 +8,18 @@ export const HomePage = () => {
   const navigate = useNavigate();
   const handleButtonClick = async () => {
     try {
-      const eventId = location.pathname.split('/')[1];
+      const eventId = location.pathname.split('/').pop();
       const accessToken = localStorage.getItem('accessToken');
 
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, { accessToken });
       if (eventId) {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
-          await updateStampValues(accessToken);
+          try {
+            await updateStampValues(accessToken);
+          } catch (error) {
+            navigate("/qr-error/" + eventId);
+          }
           navigate("/passport");
         } else {
           console.log("User is not logged in");
