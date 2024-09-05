@@ -6,6 +6,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 import mongoose from "mongoose";
 const multerS3 = require('multer-s3')
+import User from '../db/User';
 
 interface Event {
     eventName: string;
@@ -123,7 +124,7 @@ eventsRoute.get("/get-single-event1/:eventId", async (req: Request, res: Respons
     }
 })
 
-eventsRoute.get("/check-event-status/:eventId", async (req: Request, res: Response) => {
+eventsRoute.get("/check-event-status1/:eventId", async (req: Request, res: Response) => {
     try {
         const eventId = req.params.eventId;
 
@@ -152,7 +153,7 @@ eventsRoute.get("/check-event-status/:eventId", async (req: Request, res: Respon
                     error: "event not active"
                 });
             } else {
-                return res.status(200).json({ result: { error: "event not found", status: false }});
+                return res.status(200).json({ result: { error: "event not found", status: false } });
             }
         } else {
             return res.status(200).json({ result: { status: false }, error: "event not found" });
@@ -162,5 +163,52 @@ eventsRoute.get("/check-event-status/:eventId", async (req: Request, res: Respon
         return res.status(500).json({ error: "Issue with database" });
     }
 });
+
+eventsRoute.post("/attend-event1", async (req: Request, res: Response) => {
+    const eventId = req.body.eventId;
+    const user = req.body.upi;
+    console.log("hello")
+    console.log(eventId);
+
+    if (mongoose.Types.ObjectId.isValid(eventId)) {
+        console.log(user);
+
+        const resUser = await User.updateOne(
+            { upi: user },
+            { $addToSet: { eventList: eventId } }
+        ).exec();
+
+        if (resUser.modifiedCount == 1) {
+            const eventAddRes = await Events.updateOne(
+                { _id: eventId },
+                { $inc: { totalAttended: 1 } }
+            ).exec();
+
+            return res.status(200).json({
+                user: user,
+                eventId: eventId,
+                added: true,
+                message: "successfully attended event"
+            });
+        } else if (resUser.modifiedCount == 0) {
+            return res.status(200).json({
+                user: user,
+                eventId: eventId,
+                added: false,
+                message: "Already attended event"
+            });
+        } else {
+            return res.status(200).json({
+                user: user,
+                eventId: eventId,
+                added: false,
+                message: "QR code error"
+            });
+        }
+    } else {
+        return res.json({ added: false, message: "Invalid event Id" });
+    }
+});
+
 
 export default eventsRoute
