@@ -9,6 +9,6 @@ const EventsSchema = new Schema({
    QRcode: {type: String}
 })
 
-const Events = model("Event", EventsSchema, "Events1")
+const Events = model("Event", EventsSchema, "Events")
 
 export default Events
