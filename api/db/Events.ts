@@ -1,14 +1,14 @@
 import { Schema, model } from "mongoose"
 
 const EventsSchema = new Schema({
-   eventName: {type: String, req: true},
-   stamp64: {type: String, req: true},
-   startDate:{type:Date, req:true},
-   endDate: {type: Date, req:true},
+   eventName: {type: String},
+   stamp64: {type: String},
+   startDate:{type:Date},
+   endDate: {type: Date},
    totalAttended: {type: Number, default: 0, req:true},
-   QRcode: {type: String, req:true}
+   QRcode: {type: String}
 })
 
-const Events = model("Event", EventsSchema)
+const Events = model("Event", EventsSchema, "Events1")
 
 export default Events

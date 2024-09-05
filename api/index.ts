@@ -12,6 +12,7 @@ import helloRoutes from "./routes/hello";
 import apiRoutes from "./routes/Api";
 import userRoutes from "./routes/user";
 import prizeRoutes from "./routes/prize";
+import eventsRoute from "./routes/events";
 
 const app = express();
 
@@ -47,6 +48,7 @@ async function startServer() {
 
     // Routes
     app.use("/hello", helloRoutes);
+    app.use("/api/event", eventsRoute)
     app.use("/api/user", userRoutes);
     app.use("/api/prize", prizeRoutes);
 
