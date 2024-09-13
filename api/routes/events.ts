@@ -56,12 +56,10 @@ eventsRoute.post('/add-event', upload.single('file'), async (req: Request, res: 
     console.log(body)
 
     const event = {
-        "eventName": "eventName",
+        "eventName": eventName,
         "stamp64": fileLink,
-        // "startDate": new Date(startDate),
-        // "endDate": new Date(endDate),
-        "startDate": new Date(),
-        "endDate": new Date(),
+        "startDate": new Date(startDate),
+        "endDate": new Date(endDate),
         "totalAttended": 0
     };
     try {
@@ -86,7 +84,7 @@ eventsRoute.post('/add-event', upload.single('file'), async (req: Request, res: 
 });
 
 //Route to get all events created
-eventsRoute.get("/get-all-events1", async (req: Request, res: Response) => {
+eventsRoute.get("/get-all-events", async (req: Request, res: Response) => {
     try {
         const events: Event[] = await Events.find({}).lean();
         const result = events ?? [];
@@ -110,7 +108,7 @@ eventsRoute.get("/get-all-events1", async (req: Request, res: Response) => {
 });
 
 //Route to get single evenet 
-eventsRoute.get("/get-single-event1/:eventId", async (req: Request, res: Response) => {
+eventsRoute.get("/get-single-event/:eventId", async (req: Request, res: Response) => {
     const eventId = req.params.eventId
     try {
         if (!mongoose.Types.ObjectId.isValid(eventId)) {
@@ -124,7 +122,7 @@ eventsRoute.get("/get-single-event1/:eventId", async (req: Request, res: Respons
     }
 })
 
-eventsRoute.get("/check-event-status1/:eventId", async (req: Request, res: Response) => {
+eventsRoute.get("/check-event-status/:eventId", async (req: Request, res: Response) => {
     try {
         const eventId = req.params.eventId;
 
@@ -164,7 +162,7 @@ eventsRoute.get("/check-event-status1/:eventId", async (req: Request, res: Respo
     }
 });
 
-eventsRoute.post("/attend-event1", async (req: Request, res: Response) => {
+eventsRoute.post("/attend-event", async (req: Request, res: Response) => {
     const eventId = req.body.eventId;
     const user = req.body.upi;
     console.log("hello")

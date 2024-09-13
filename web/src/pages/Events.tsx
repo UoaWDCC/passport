@@ -24,7 +24,7 @@ export default function Events() {
   const getEvents = async () => {
     try {
       const eventsResponse = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/get-all-events`
+        `${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`
       );
       const activeEvents = eventsResponse.data.filter(
         (event: Event) => event.status

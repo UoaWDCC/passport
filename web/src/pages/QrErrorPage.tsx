@@ -21,7 +21,7 @@ const QRErrorPage: React.FC = () => {
   console.log(eventId)
 
   const attendEvent = (eventId: string, upi: string) => {
-    axios.post(`${import.meta.env.VITE_SERVER_URL}/api/attend-event`, {
+    axios.post(`${import.meta.env.VITE_SERVER_URL}/api/event/attend-event`, {
       // eventId: location.state.event,
       // upi: location.state.upi
       eventId: eventId,
@@ -54,7 +54,7 @@ const QRErrorPage: React.FC = () => {
             if (response.data.success) {
               
               setUser(response.data.user)
-              axios.get(`${import.meta.env.VITE_SERVER_URL}/api/check-event-status/${eventId}`)
+              axios.get(`${import.meta.env.VITE_SERVER_URL}/api/event/check-event-status/${eventId}`)
                 .then((res) => {
                   console.log(res)
                   if (res.status == 401 || res.data.result.status == false) {
