@@ -5,21 +5,19 @@ import { useNavigate } from "react-router-dom";
 
 function QRCodeForm() {
     const [eventName, setEventName] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [endTime, setEndTime] = useState("");
+    const [startDateTime, setStartDateTime] = useState("");
+    const [endDateTime, setEndDateTime] = useState("");
     const [validSubmit, setValidSubmit] = useState("no");
     const [imageFile, setImageFile] = useState<File | null>(null);
 
     const navigate = useNavigate();
 
     const submitForm = async () => {
-        const startDateTime = combineDateAndTime(startDate, startTime);
-        const endDateTime = combineDateAndTime(endDate, endTime);
-
         if (eventName && startDateTime && endDateTime && imageFile) {
-            if (endDateTime < startDateTime) {
+            const startDate = new Date(startDateTime);
+            const endDate = new Date(endDateTime);
+
+            if (endDate < startDate) {
                 setValidSubmit("errorEndBeforeStart");
                 return;
             }
@@ -29,8 +27,8 @@ function QRCodeForm() {
 
             const formData = new FormData();
             formData.append("eventName", eventName);
-            formData.append("startDate", startDateTime.toISOString());
-            formData.append("endDate", endDateTime.toISOString());
+            formData.append("startDate", startDate.toISOString());
+            formData.append("endDate", endDate.toISOString());
             formData.append("utcOffset", utcOffset.toString()); // Store UTC offset
             formData.append("file", imageFile);
 
@@ -50,41 +48,28 @@ function QRCodeForm() {
         }
     };
 
-    const combineDateAndTime = (date: string, time: string): Date => {
-        const [year, month, day] = date.split("-");
-        const [hours, minutes] = time.split(":");
-
-        return new Date(
-            Number(year),
-            Number(month) - 1, // month is zero-based in ts
-            Number(day),
-            Number(hours),
-            Number(minutes)
-        );
-    };
-
-    const checkValidStartDate = (date: any) => {
+    const checkValidStartDate = (dateTime: string) => {
         const today = new Date();
-        const selectedStartDate = new Date(date);
+        const selectedStartDate = new Date(dateTime);
 
         if (selectedStartDate >= today) {
-            setStartDate(date);
+            setStartDateTime(dateTime);
             setValidSubmit("no");
         } else {
-            setStartDate("");
+            setStartDateTime("");
             setValidSubmit("errorStartDate");
         }
     };
 
-    const checkValidEndDate = (date: any) => {
-        const selectedEndDate = new Date(date);
-        const selectedStartDate = new Date(startDate);
+    const checkValidEndDate = (dateTime: string) => {
+        const selectedEndDate = new Date(dateTime);
+        const selectedStartDate = new Date(startDateTime);
 
         if (selectedEndDate >= selectedStartDate) {
-            setEndDate(date);
+            setEndDateTime(dateTime);
             setValidSubmit("no");
         } else {
-            setEndDate("");
+            setEndDateTime("");
             setValidSubmit("errorEndDate");
         }
     };
@@ -125,42 +110,28 @@ function QRCodeForm() {
                 </div>
 
                 <div className="input-section">
-                    <label className="input-label" htmlFor="start-date">
+                    <label className="input-label" htmlFor="start-datetime">
                         Start Date & Time
                     </label>
                     <input
                         className="event-inputs date-inputs"
-                        id="start-date"
-                        type="date"
-                        value={startDate}
+                        id="start-datetime"
+                        type="datetime-local"
+                        value={startDateTime}
                         onChange={(e) => checkValidStartDate(e.target.value)}
-                    />
-                    <input
-                        className="event-inputs time-inputs mt-2"
-                        id="start-time"
-                        type="time"
-                        value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
                     />
                 </div>
 
                 <div className="input-section">
-                    <label className="input-label" htmlFor="end-date">
+                    <label className="input-label" htmlFor="end-datetime">
                         End Date & Time
                     </label>
                     <input
                         className="event-inputs date-inputs"
-                        id="end-date"
-                        type="date"
-                        value={endDate}
+                        id="end-datetime"
+                        type="datetime-local"
+                        value={endDateTime}
                         onChange={(e) => checkValidEndDate(e.target.value)}
-                    />
-                    <input
-                        className="event-inputs time-inputs mt-2"
-                        id="end-time"
-                        type="time"
-                        value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
                     />
                 </div>
 
