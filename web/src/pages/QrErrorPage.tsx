@@ -45,7 +45,7 @@ const QRErrorPage: React.FC = () => {
               }
             })
             .catch((error) => {
-              setErrorMessage("Error checking event status");
+              setErrorMessage("Error: ") + error;
             })
             .finally(() => setIsLoading(false));
         } else {
