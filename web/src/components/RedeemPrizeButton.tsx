@@ -1,4 +1,10 @@
-const RedeemPrizeButton = () => (
+import {useNavigate} from "react-router-dom"
+
+
+const RedeemPrizeButton = () => {
+  const nav = useNavigate();
+
+  return (
   <div>
     <button
       className="btn bg-[#03045e] text-white hover:bg-[#03045e]"
@@ -18,6 +24,7 @@ const RedeemPrizeButton = () => (
         )
           .then((res) => {
             console.log(res.json())
+            nav('/leaderboard-prize')
           })
           .catch((error) => {
             console.error(error)
@@ -27,6 +34,7 @@ const RedeemPrizeButton = () => (
       Click to Redeem Prize
     </button>
   </div>
-)
+  )
+}
 
 export default RedeemPrizeButton

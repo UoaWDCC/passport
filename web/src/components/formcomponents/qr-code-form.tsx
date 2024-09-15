@@ -3,65 +3,55 @@ import StampSection from "./stamp-section";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-interface Props {
-  id: string | undefined | null;
-}
-
-function QRCodeForm({ id }: Props) {
+function QRCodeForm() {
   const [eventName, setEventName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [validStartDate, setValidStartDate] = useState("");
   const [validEndDate, setValidEndDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [image64, setImage64] = useState("");
+  // const [image64, setImage64] = useState("");
   const [validSubmit, setValidSubmit] = useState("no");
   const [_, setImageName] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (id == null || id == undefined || id == "") {
-      return;
-    }
-    const getEvent = async () => {
-      try {
-        const eventResponse = await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/api/get-event/${id}`
-        );
-        setEventName(eventResponse.data.eventName);
-        setStartDate(eventResponse.data.startDate);
-        setEndDate(eventResponse.data.endDate);
-        setImage64(eventResponse.data.stamp64);
-        console.log(eventResponse.data);
-      } catch (error) {
-        console.error("Error fetching event:", error);
-      }
-    };
-    getEvent();
-  }, [id]);
-
   const submitForm = async () => {
-    if (eventName && startDate && endDate) {
+    console.log(imageFile);
+    if (eventName && startDate && endDate && imageFile) {
+      const formData = new FormData();
+      formData.append("eventName", eventName);
+      formData.append("startDate", startDate);
+      formData.append("endDate", endDate);
+      formData.append("file", imageFile);
+
       await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/event`,
-        {
-          eventName: eventName,
-          stamp64: image64,
-          startDate: startDate,
-          endDate: endDate,
-        },
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "form-data",
           },
         }
       );
       setEventName("");
-      setImage64("");
+      // setImage64("");
       navigate("/dashboard/events");
     }
-    setValidSubmit("error");
-    console.log("clicked");
+
+    setEventName("");
+    setImage64("");
+    navigate("/dashboard/events");
+  };
+  setValidSubmit("error");
+  console.log("clicked");
+
+  useEffect(() => {
+    console.log("test", imageFile);
+  }, [imageFile]);
+
+  const getImageFile = (img: File | null) => {
+    setImageFile(img);
   };
 
   const getImageName = (img: string) => {
@@ -71,7 +61,7 @@ function QRCodeForm({ id }: Props) {
 
   const getImage64 = (img: string) => {
     console.log(img);
-    setImage64(img);
+    // setImage64(img);
   };
 
   const checkValidStartDate = (date: any) => {
@@ -159,9 +149,9 @@ function QRCodeForm({ id }: Props) {
         </div>
 
         <StampSection
+          getImageFile={getImageFile}
           getImageName={getImageName}
           getImage64={getImage64}
-          initialImage64={image64}
         />
 
         <div className="submit-button-container">

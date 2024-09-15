@@ -2,9 +2,11 @@ import { Router } from "express";
 import type { Request, Response } from "express";
 import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 import { config } from "dotenv";
-import { object } from "zod";
 import User from "../db/User";
 import mongoose from "mongoose";
+import { S3Client } from "@aws-sdk/client-s3";
+import multer from "multer";
+const multerS3 = require("multer-s3");
 
 config();
 
@@ -17,6 +19,29 @@ const client = new MongoClient(uri, {
     strict: true,
     deprecationErrors: true,
   },
+});
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3Client,
+    bucket: process.env.BUCKET_NAME,
+    acl: "public-read",
+    key: function (
+      req: Request,
+      file: Express.Multer.File,
+      cb: (error: any, key?: string) => void
+    ) {
+      cb(null, file.originalname);
+    },
+  }),
 });
 
 //Mongo connected routes
@@ -34,40 +59,55 @@ async function run() {
     const Api: any = Router();
 
     //Route to add information into mongoDB
-    Api.post("/event", async (req: Request, res: Response) => {
-      const eventName = req.body.eventName;
-      const stamp64 = req.body.stamp64;
-      const startDate = req.body.startDate;
-      const endDate = req.body.endDate;
+    Api.post(
+      "/event",
+      upload.single("file"),
+      async (req: Request, res: Response) => {
+        const eventName = req.body.eventName;
+        const startDate = req.body.startDate;
+        const endDate = req.body.endDate;
+        const file = req.file as any;
+        let fileLink = "";
 
-      const event = {
-        eventName: eventName,
-        stamp64: stamp64,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        totalAttended: 0,
-      };
-      try {
-        const database = client.db("WDCC_Passport");
-        const eventCollection = database.collection("Events");
+        if (file && file.location) {
+          fileLink = file.location;
+        } else {
+          return res
+            .status(400)
+            .json({ error: "S3 bucket image upload failed" });
+        }
 
-        //inserting event into DB
-        const result = await eventCollection.insertOne(event);
-        console.log(`A document was inserted with id ${result.insertedId}`);
+        const body = req.body;
+        console.log(body);
 
-        const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=192.168.178.30:5173//${result.insertedId}&amp;size=100x100`;
-        const result2 = await eventCollection.updateOne(
-          { _id: new ObjectId(result.insertedId) },
-          { $set: { QRcode: qrCode } }
-        );
-        console.log(qrCode);
-      } catch (error) {
-        console.log(error);
-        return res.status(500).send("Error inserting document into MongoDB.");
+        const event = {
+          eventName: eventName,
+          stamp64: fileLink,
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+          totalAttended: 0,
+        };
+        try {
+          const database = client.db("WDCC_Passport");
+          const eventCollection = database.collection("Events");
+
+          //inserting event into DB
+          const result = await eventCollection.insertOne(event);
+          console.log(`A document was inserted with id ${result.insertedId}`);
+
+          const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport-staging.fly.dev/qr-error/${result.insertedId}&amp;size=100x100`;
+          const result2 = await eventCollection.updateOne(
+            { _id: new ObjectId(result.insertedId) },
+            { $set: { QRcode: qrCode } }
+          );
+        } catch (error) {
+          console.log(error);
+          return res.status(500).send("Error inserting document into MongoDB.");
+        }
+
+        return res.status(200).send(`Event successfully created`);
       }
-
-      return res.status(200).send(`Event successfully created`);
-    });
+    );
 
     //Route to get all events created
     Api.get("/get-all-events", async (req: Request, res: Response) => {
@@ -96,26 +136,49 @@ async function run() {
       }
     });
 
-    //Route to get single events created
-    Api.get("/get-event/:id", async (req: Request, res: Response) => {
-      try {
-        const database = client.db("WDCC_Passport");
-        const eventCollection = database.collection("Events");
+    //Route to get single evenet
+    Api.get(
+      "/get-single-event/:eventId",
+      async (req: Request, res: Response) => {
+        try {
+          const eventId = req.params.eventId;
+          const database = client.db("WDCC_Passport");
+          const eventCollection = database.collection("Events");
+          const objectId = new ObjectId(eventId);
+          const result = await eventCollection.findOne({ _id: objectId });
 
-        const eventId = req.params.id;
-        const result = await eventCollection.findOne({
-          _id: new ObjectId(eventId),
-        });
-        console.log(result);
-        // const cursor = await eventCollection.find({})
-        // const result = await cursor.toArray()
+          console.log(result);
 
-        res.status(200).send(result);
-      } catch (error) {
-        console.log(error);
-        return res.status(500).send("Issue with database");
+          return res.status(200).json(result);
+        } catch (error) {
+          return res.status(400).json({ "error message": error });
+        }
       }
-    });
+    );
+
+    //check event validity
+    Api.get(
+      "/check-event-status/:eventId",
+      async (req: Request, res: Response) => {
+        try {
+          const database = client.db("WDCC_Passport");
+          const eventCollection = database.collection("Events");
+
+          const eventId = req.params.id;
+          const result = await eventCollection.findOne({
+            _id: new ObjectId(eventId),
+          });
+          console.log(result);
+          // const cursor = await eventCollection.find({})
+          // const result = await cursor.toArray()
+
+          res.status(200).send(result);
+        } catch (error) {
+          console.log(error);
+          return res.status(500).send("Issue with database");
+        }
+      }
+    );
 
     // Route to delete an event by ID
     Api.delete("/delete-event/:id", async (req: Request, res: Response) => {

@@ -5,18 +5,18 @@ import Bin from "../../assets/bin.svg";
 interface StampSectionProps {
   getImageName: (name: string) => void;
   getImage64: (name: string) => void;
-  initialImage64: string; // Add this prop to receive initial image base64 data
+  getImageFile: (name: File | null) => void;
 }
 
 function StampSection({
   getImageName,
   getImage64,
-  initialImage64,
+  getImageFile,
 }: StampSectionProps) {
   const [stamp, setStamp] = useState("");
   const [fileSize, setFileSize] = useState("");
   const [fileName, setFileName] = useState("");
-  const [imageBase64, setBase64String] = useState(initialImage64); // Initialize with initialImage64
+  const [imageBase64, setBase64String] = useState("");
 
   useEffect(() => {
     getImage64(imageBase64);
@@ -24,19 +24,27 @@ function StampSection({
   }, [imageBase64, fileName]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.files);
+    const files = e.target.files;
+    const file = files && files.length > 0 ? files[0] : null;
+    getImageFile(file);
+
     if (e.target.files) {
-      const file = e.target.files[0];
-      const stampSize = file.size;
-      setFileSize(
-        stampSize < 1000000
-          ? `${(stampSize / 1000).toFixed(2)} kb`
-          : `${(stampSize / 1000000).toFixed(2)} mb`
-      );
-      const stampName = file.name;
-      setStamp(e.target.value);
-      setFileName(
-        stampName.length < 23 ? stampName : `${stampName.substring(0, 19)}...`
-      );
+      let stampSize = e.target.files[0].size;
+      if (stampSize < 1000000) {
+        setFileSize((stampSize / 1000).toFixed(2) + " kb");
+      } else {
+        setFileSize((stampSize / 1000000).toFixed(2) + " mb");
+      }
+      let stampName = e.target.value;
+      let stampDisplayName = e.target.files[0].name;
+      setStamp(stampName);
+      if (stampDisplayName.length < 23) {
+        setFileName(stampDisplayName);
+        getImageName(fileName);
+      } else {
+        setFileName(stampDisplayName.substring(0, 19) + "...");
+      }
 
       const reader = new FileReader();
       reader.onloadend = () => {

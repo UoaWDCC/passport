@@ -19,6 +19,7 @@ export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [eventsToShow, setEventsToShow] = useState(10);
 
   useEffect(() => {
     getEvents();
@@ -52,6 +53,14 @@ export default function Events() {
         `${import.meta.env.VITE_SERVER_URL}/api/get-all-events`
       );
       setEvents(eventsResponse.data);
+      const activeEvents = eventsResponse.data.filter(
+        (event: Event) => event.status
+      );
+      const inactiveEvents = eventsResponse.data.filter(
+        (event: Event) => !event.status
+      );
+      const combinedEvents = inactiveEvents.concat(activeEvents).reverse();
+      setEvents(combinedEvents);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
@@ -75,9 +84,9 @@ export default function Events() {
           <div className="column"># of People Attended</div>
           <div className="column">Edit/Delete</div>
         </div>
-        {events.length > 0 ? (
+        {events ? (
           <ul className="event-list">
-            {events.map((event: Event) => (
+            {events.slice(0, eventsToShow).map((event: Event) => (
               <li key={event._id} className="event-item">
                 <div className="column">{event.eventName}</div>
                 <div className="column">
@@ -124,6 +133,24 @@ export default function Events() {
           onClose={() => setIsModalOpen(false)}
           onConfirm={handleDelete}
         />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        {eventsToShow < events.length && (
+          <button
+            className="load-more-button"
+            onClick={() => setEventsToShow(10 + eventsToShow)}
+          >
+            LOAD MORE
+          </button>
+        )}
       </div>
     </div>
   );

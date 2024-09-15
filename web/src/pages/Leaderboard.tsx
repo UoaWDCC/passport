@@ -1,17 +1,17 @@
-import StampsAwayCount from "@components/StampsAwayCount"
-import ProgressBar from "@components/ProgressBar"
-import RedeemPrizeButton from "@components/RedeemPrizeButton"
-import "../styles/page styles/Leaderboard.css"
-import PrizesAchieved from "@components/PrizesAchieved"
-import HamburgerMenu from "@components/HamburgerMenu"
-import CheckLoggedIn from "@components/CheckLoggedIn"
-import GetLeaderboardStats from "@components/LeaderboardStats"
+import StampsAwayCount from "@components/StampsAwayCount";
+import ProgressBar from "@components/ProgressBar";
+import RedeemPrizeButton from "@components/RedeemPrizeButton";
+import "../styles/page styles/Leaderboard.css";
+import PrizesAchieved from "@components/PrizesAchieved";
+import HamburgerMenu from "@components/HamburgerMenu";
+import CheckLoggedIn from "@components/CheckLoggedIn";
+import LeaderboardStats from "@components/LeaderboardStats";
 
 export default function Leaderboard() {
-  const userData = GetLeaderboardStats()
+  const userData = LeaderboardStats()
   const stampsLeft = userData.stampsLeft
   const prizes = userData.prizesAchieved
-  const height = 5 - stampsLeft
+  const height = 3 - stampsLeft
 
   return (
     <CheckLoggedIn>
@@ -21,7 +21,7 @@ export default function Leaderboard() {
           <ProgressBar height={height} />
           <StampsAwayCount height={stampsLeft} />
         </div>
-        {height == 5 ? (
+        {height == 3 ? (
           <button className="mt-6">
             <RedeemPrizeButton />
           </button>

@@ -1,32 +1,58 @@
 .background {
-  background-color: #e1ebff;
+    background-color: #e1ebff;
 }
 
 .passport {
-  height: 35em;
-  width: 22em;
+    position: relative;
+    overflow: hidden;
+    height: 35em;
+    width: 22em;
+}
+
+.stamp-container {
+    position: absolute;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.stamp-container img {
+    width: 165px;
+    height: 165px;
+    border-radius: 50%;
+}
+
+.stamp-container.highlighted img {
+    /* box-shadow: 0 0 20px #03045e; */
+    border: 3px solid #03045e;
+}
+
+.stamp-container.clicked img {
+    transform: translateY(-10px);
+}
+
+.stamp-container.clicked {
+    z-index: 100;
 }
 
 .passport-main {
-  background-color: #03045e;
+    background-color: #03045e;
 }
 
 .nav-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
 .nav-button:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 .nav-button svg {
-  width: 50px;
-  height: 50px;
+    width: 50px;
+    height: 50px;
 }
 
 .welcome-line {
-  border-color: #03045e;
+    border-color: #03045e;
 }

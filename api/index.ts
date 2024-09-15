@@ -8,31 +8,32 @@ import { AddressInfo } from "net";
 config();
 
 // Import Routers
-import helloRoutes from './routes/hello';
+import helloRoutes from "./routes/hello";
 import apiRoutes from "./routes/Api";
 import userRoutes from "./routes/user";
+import prizeRoutes from "./routes/prize";
 
 const app = express();
 
 app.use(express.json({ limit: "500mb" }));
 app.use(cors());
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // Database connection string
 const databaseUrl: string = process.env.DATABASE_URL!;
 if (!databaseUrl) {
-  console.error('DATABASE_URL is not defined in environment variables');
+  console.error("DATABASE_URL is not defined in environment variables");
   process.exit(1);
 }
 
 // Global error handlers
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
   process.exit(1);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
   process.exit(1);
 });
 
@@ -45,13 +46,14 @@ async function startServer() {
     console.log("Connected to MongoDB");
 
     // Routes
-    app.use('/hello', helloRoutes);
+    app.use("/hello", helloRoutes);
     app.use("/api/user", userRoutes);
+    app.use("/api/prize", prizeRoutes);
 
     // Async route setup
     try {
       const apiRouter = await apiRoutes;
-      app.use('/api', apiRouter);
+      app.use("/api", apiRouter);
     } catch (err) {
       console.error("Error initializing API routes:", err);
       process.exit(1);
@@ -73,18 +75,17 @@ async function startServer() {
       // Close HTTP server
       server.close((err: any) => {
         if (err) {
-          console.error('Error closing server:', err);
+          console.error("Error closing server:", err);
           process.exit(1);
         }
-        console.log('Server closed.');
+        console.log("Server closed.");
         process.exit(0);
       });
     };
 
     // Listen for termination signals
-    process.on('SIGTERM', shutdown);
-    process.on('SIGINT', shutdown);
-
+    process.on("SIGTERM", shutdown);
+    process.on("SIGINT", shutdown);
   } catch (error) {
     console.error("Error starting server:", error);
     process.exit(1);
