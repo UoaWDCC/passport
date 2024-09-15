@@ -3,126 +3,100 @@ import WDCC_Login from '../assets/WDCC_Logo.svg';
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
-// import { useSearchParams } from "react-router-dom";
-// import { set } from "zod";
 
 const QRErrorPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [_, setUser] = useState();
 
-  const [isLoading, setIsLoading] = useState(true)
-  const [success, setSuccess] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
-  const [_, setUser] = useState()
-
-  // const location = useLocation()
-  const params = useParams()
-
+  const params = useParams();
   const navigate = useNavigate();
-  const eventId = params.eventId
-  console.log(eventId)
+  const eventId = params.eventId;
 
   const attendEvent = (eventId: string, upi: string) => {
     axios.post(`${import.meta.env.VITE_SERVER_URL}/api/attend-event`, {
-      // eventId: location.state.event,
-      // upi: location.state.upi
       eventId: eventId,
       upi: upi
     }).then((res) => {
-      if (res.data.added == true) {
-        console.log(res)
-        setSuccess(true)
-        setIsLoading(false)
+      if (res.data.added) {
+        setSuccess(true);
       } else {
-        setErrorMessage(res.data.message)
-        setIsLoading(false)
+        setErrorMessage(res.data.message);
       }
-    })
-  }
-
-  // useEffect(()=>{
-
-  // })
+      setIsLoading(false);
+    });
+  };
 
   useEffect(() => {
-    
-    if (localStorage.getItem("accessToken") != null) {
-      if (eventId) {
-        
-        axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, {
-          accessToken: localStorage.getItem("accessToken")
-        })
-          .then((response) => {
-            if (response.data.success) {
-              
-              setUser(response.data.user)
-              axios.get(`${import.meta.env.VITE_SERVER_URL}/api/check-event-status/${eventId}`)
-                .then((res) => {
-                  console.log(res)
-                  if (res.status == 401 || res.data.result.status == false) {
-                    console.log("here",res)
-                    setSuccess(false)
-                    setErrorMessage(res.data.error)
-                    setIsLoading(false)
-                  } else {
-                    console.log(response.data.user.upi)
-                    attendEvent(eventId, response.data.user.upi)
-                  }
-                })
-              console.log("Verify QrCode")
-            } else {
-              navigate("/sign-in/" + eventId)
-            }
-          })
-          .catch((error) => {
-            console.error('error:', error);
-          });
-      } else {
-        setErrorMessage("QR is not valid")
-        setIsLoading(false)
-      }
+    if (localStorage.getItem("accessToken") !== null && eventId) {
+      axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, {
+        accessToken: localStorage.getItem("accessToken")
+      })
+      .then((response) => {
+        if (response.data.success) {
+          setUser(response.data.user);
+          axios.get(`${import.meta.env.VITE_SERVER_URL}/api/check-event-status/${eventId}`)
+            .then((res) => {
+              if (res.status === 401 || !res.data.result.status) {
+                setErrorMessage(res.data.error);
+              } else {
+                attendEvent(eventId, response.data.user.upi);
+              }
+            })
+            .catch((error) => {
+              setErrorMessage("Error: ") + error;
+            })
+            .finally(() => setIsLoading(false));
+        } else {
+          navigate("/sign-in/" + eventId);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setErrorMessage("User verification failed");
+        setIsLoading(false);
+      });
     } else {
-      navigate("/sign-in")
+      navigate("/sign-in");
     }
-  }, []);
+  }, [eventId, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className={styles.container}></div>
+    );
+  }
 
   return (
-    <>
-
-      <div className={styles.container}>
-        <div className={styles.topsection}>
-          <img src={WDCC_Login} className="h-80" />
-        </div>
-
-        {isLoading
-          ? 
-          <div
-          >
-            <img
-              src="https://i.stack.imgur.com/NKEOW.jpg"
-              style={{ height: "50px", width: "50px"}}></img>
-          </div>
-          : (success
-            ? <div className={styles.bottomsection}>
-              <p className={styles.successbig}>YAY!</p>
-              <p className={styles.successsmall}>successfully attended event :D </p>
-              <button
-                className={styles.continue_btn}
-                onClick={() => {
-                  navigate("/passport")
-                }}
-              >continue to passport</button>
-            </div>
-            : <div className={styles.bottomsection}>
-              <p className={styles.errorbig}>OOPS!</p>
-              <p className={styles.errorsmall}>{errorMessage} </p>
-              <button
-                className={styles.continue_btn}
-                onClick={() => {
-                  navigate("/passport")
-                }}
-              >continue to passport</button>
-            </div>)}
+    <div className={styles.container}>
+      <div className={styles.topsection}>
+        <img src={WDCC_Login} className="h-80" />
       </div>
-    </>
+      {success ? (
+        <div className={styles.bottomsection}>
+          <p className={styles.successbig}>YAY!</p>
+          <p className={styles.successsmall}>Successfully attended event :D</p>
+          <button
+            className={styles.continue_btn}
+            onClick={() => navigate("/passport")}
+          >
+            Continue to passport
+          </button>
+        </div>
+      ) : (
+        <div className={styles.bottomsection}>
+          <p className={styles.errorbig}>OOPS!</p>
+          <p className={styles.errorsmall}>{errorMessage}</p>
+          <button
+            className={styles.continue_btn}
+            onClick={() => navigate("/passport")}
+          >
+            Continue to passport
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 

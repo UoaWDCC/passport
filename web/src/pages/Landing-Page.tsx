@@ -3,19 +3,30 @@ import { useNavigate } from "react-router";
 import styles from "../styles/page styles/Landing-Page.module.css";
 import axios from "axios";
 import updateStampValues from "@components/GetTotalStamps";
+import checkEventStatus from "@components/event-valid";
 
 export const HomePage = () => {
   const navigate = useNavigate();
   const handleButtonClick = async () => {
     try {
-      const eventId = location.pathname.split('/')[1];
+      const eventId = location.pathname.split('/').pop();
       const accessToken = localStorage.getItem('accessToken');
 
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, { accessToken });
       if (eventId) {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
-          await updateStampValues(accessToken);
+          try {
+            checkEventStatus(eventId).then(async (eventStatus) => {
+            if (eventStatus.status) {
+              await updateStampValues(accessToken);
+            } else {
+              navigate("/qr-error/" + eventId);
+            }
+          });
+          } catch (error) {
+            navigate("/qr-error/" + eventId);
+          }
           navigate("/passport");
         } else {
           console.log("User is not logged in");
