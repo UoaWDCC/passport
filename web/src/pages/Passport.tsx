@@ -8,6 +8,9 @@ import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
 import GetLeaderboardStats from "@components/LeaderboardStats.tsx";
 import axios from "axios";
 
+
+import PopUpNotif from "@components/PopUpNotif";
+
 type PageComponent = React.ComponentType<any> | (() => ReactElement);
 
 export default function Passport() {
@@ -103,6 +106,10 @@ export default function Passport() {
                         </span></div>
                         <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
                     </div>
+
+
+                    {/* Popup Notification */}
+                    <PopUpNotif />
                 {typeof CurrentView === 'function' ? <CurrentView /> : CurrentView}
                 
                 <p>Page {currentIndex + 1}</p>
