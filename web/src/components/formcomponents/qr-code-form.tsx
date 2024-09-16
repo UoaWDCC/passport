@@ -25,26 +25,29 @@ function QRCodeForm() {
       formData.append("endDate", endDate);
       formData.append("file", imageFile);
 
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/event`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "form-data",
-          },
-        }
-      );
-      setEventName("");
-      // setImage64("");
-      navigate("/dashboard/events");
+      try {
+        await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/api/event`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", 
+            },
+          }
+        );
+        // Reset the form only if the request succeeds
+        setEventName("");
+        setImageFile(null); 
+        setValidSubmit("yes"); 
+        navigate("/dashboard/events");
+      } catch (error) {
+        console.error("Error submitting form", error);
+        setValidSubmit("error"); 
+      }
+    } else {
+      setValidSubmit("error"); 
     }
-
-    setEventName("");
-    setImage64("");
-    navigate("/dashboard/events");
   };
-  setValidSubmit("error");
-  console.log("clicked");
 
   useEffect(() => {
     console.log("test", imageFile);

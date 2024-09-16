@@ -9,10 +9,10 @@ function Form() {
   useEffect(() => {
     const url = window.location.href
     const id = url.split("/").pop()
-    if (id) {
-      setEvent(id)
+    if (id && !event) {  
+      setEvent(id);
     }
-  }, [])
+  }, [event]);
   return (
     <div className="form-outer background-form">
       <div className="form-inner">
