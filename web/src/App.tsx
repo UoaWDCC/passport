@@ -68,7 +68,7 @@ const router = createBrowserRouter([
   },
   {
     //Form page with event details
-    path: "/form/:id",
+    path: "/form/:eventId",
     element: <Form />,
   },
   {

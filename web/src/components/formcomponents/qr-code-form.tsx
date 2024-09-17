@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import StampSection from "./stamp-section";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function QRCodeForm() {
+  const { eventId } = useParams();
   const [eventName, setEventName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [validStartDate, setValidStartDate] = useState("");
@@ -13,8 +14,35 @@ function QRCodeForm() {
   const [validSubmit, setValidSubmit] = useState("no");
   const [_, setImageName] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const navigate = useNavigate();
+  
+  // Fetch event details when editing
+  useEffect(() => {
+    if (eventId) {
+      setIsEditMode(true);
+      fetchEventDetails();
+    }
+  }, [eventId]);
+
+  const fetchEventDetails = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/get-single-event/${eventId}`
+      );
+      const event = response.data;
+
+      // Populate form with event data
+      setEventName(event.eventName);
+      setStartDate(event.startDate.split("T")[0]); // Assuming these fields exist in your API response
+      setEndDate(event.endDate.split("T")[0]);
+      // Handle image if necessary
+      // setImageFile(); - You would need to handle the image data here if needed
+    } catch (error) {
+      console.error("Error fetching event data", error);
+    }
+  };
 
   const submitForm = async () => {
     console.log(imageFile);
@@ -24,19 +52,27 @@ function QRCodeForm() {
       formData.append("startDate", startDate);
       formData.append("endDate", endDate);
       formData.append("file", imageFile);
+      
+      if (isEditMode) {
+        formData.append("eventId", eventId!); 
+      }
 
       try {
+        // Use POST for both creating and updating
         await axios.post(
           `${import.meta.env.VITE_SERVER_URL}/api/event`,
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data", 
+              "Content-Type": "multipart/form-data",
             },
           }
         );
+
         // Reset the form only if the request succeeds
         setEventName("");
+        setStartDate("");
+        setEndDate("");
         setImageFile(null); 
         setValidSubmit("yes"); 
         navigate("/dashboard/events");
@@ -95,7 +131,7 @@ function QRCodeForm() {
 
   return (
     <div className="qr-code-form">
-      <h1 className="header">QR Code Generator</h1>
+      <h1 className="header">{isEditMode ? "Edit Event" : "Create Event"}</h1>
       {validSubmit == "error" ? (
         <p className="error-msg">Please fill in the required areas</p>
       ) : null}
