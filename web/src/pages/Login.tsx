@@ -9,22 +9,21 @@ interface UserData {
     email: string;
     accessToken: string;
     UserUPI: string;
+    isAdmin: boolean; // Field to handle admin check
 }
 
-// Navigate user to correct page
-const NavigateUser = (currentPage: string, navigate: Function ) => {
-  const prevLocation = localStorage.getItem('prevLocation'); 
-  if (prevLocation) {
-    localStorage.removeItem('prevLocation');
-    navigate(prevLocation); // Takes them back to previous location if theyve been logged out
-  }
-  else if (currentPage === "/dashboard") {
-    navigate('/dashboard/events');
-  }
-  else {
-    navigate('/passport');
-  }
-}
+// Navigate user to the correct page
+const NavigateUser = (currentPage: string, navigate: Function) => {
+    const prevLocation = localStorage.getItem("prevLocation");
+    if (prevLocation) {
+        localStorage.removeItem("prevLocation");
+        navigate(prevLocation); // Takes them back to the previous location if they've been logged out
+    } else if (currentPage === "/dashboard") {
+        navigate("/dashboard/events");
+    } else {
+        navigate("/passport");
+    }
+};
 
 // New user to MongoDB
 const postUserData = async (data: UserData) => {
@@ -48,7 +47,7 @@ const postUserData = async (data: UserData) => {
         });
 };
 
-//updating User in MongoDB
+// Updating User in MongoDB
 const updateUserData = async (data: UserData) => {
     try {
         const response = await fetch(
@@ -76,137 +75,145 @@ const updateUserData = async (data: UserData) => {
     }
 };
 
-
-// Passes UPI to WDCC member checker API
+// Check user in WDCC member checker API
 const checkUser = async (upi: string): Promise<string | undefined> => {
-  try {
-      const response = await fetch(
-          `https://membership.wdcc.co.nz/api/verify/${
-              import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS
-          }/UPI/${upi}`,
-          {
-              method: "GET",
-          }
-      );
+    try {
+        const response = await fetch(
+            `https://membership.wdcc.co.nz/api/verify/${
+                import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS
+            }/UPI/${upi}`,
+            {
+                method: "GET",
+            }
+        );
 
-      if (!response.ok) {
-          throw new Error("Failed to connect to verification API");
-      }
+        if (!response.ok) {
+            throw new Error("Failed to connect to verification API");
+        }
 
-      const text = await response.text();
-      return text;
-  } catch (error) {
-      console.error("Error verifying user:", error);
-  }
+        const text = await response.text();
+        return text;
+    } catch (error) {
+        console.error("Error verifying user:", error);
+    }
 };
 
-// Passes UPI to WDCC member checker API
+// Google Sign-In handler
 const useGoogleSignIn = (
-  currentPage: string,
-  setLoading: (loading: boolean) => void
+    currentPage: string,
+    setLoading: (loading: boolean) => void
 ) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleSignIn = useGoogleLogin({
-      onSuccess: async (tokenResponse) => {
-          try {
-              setLoading(true);
-              const userInfo = await axios.get(
-                  "https://www.googleapis.com/oauth2/v3/userinfo",
-                  {
-                      headers: {
-                          Authorization: `Bearer ${tokenResponse.access_token}`,
-                      },
-                  }
-              );
+    const handleSignIn = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            try {
+                setLoading(true);
+                const userInfo = await axios.get(
+                    "https://www.googleapis.com/oauth2/v3/userinfo",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${tokenResponse.access_token}`,
+                        },
+                    }
+                );
 
-              //extracting user UPI
-              const userUPI: string = userInfo.data.email.split("@")[0];
-              localStorage.setItem("userUpi", userUPI);
-              //passing userUPI to member checker
-              const text = await checkUser(userUPI);
-              //checking if email is in domain and user is in WDCC
+                // Extracting user UPI
+                const userUPI: string = userInfo.data.email.split("@")[0];
+                localStorage.setItem("userUpi", userUPI);
 
-              if (
-                  userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
-                  text === "value found in column"
-              ) {
-                  console.log("YOU'RE IN WDCC!!");
-                  const getUserData = async () => {
-                      //TODO Fix up this method - FIXED
-                      await fetch(
-                          `${import.meta.env.VITE_SERVER_URL}/api/user/` +
-                              userUPI,
-                          {
-                              method: "GET",
-                          }
-                      )
-                          .then((response) => {
-                              console.log(
-                                  "Fetch response for user data - Checking if user is in DB"
-                              );
-                              // If we get something then, update the user data. Else post.
+                // Passing user UPI to member checker
+                const text = await checkUser(userUPI);
 
-                              if (response.status == 200) {
-                                  console.log("Updating User Data");
+                // Checking if email is in domain and user is in WDCC and if user is an admin
+                if (
+                    userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
+                    text === "value found in column" && userInfo.data.isAdmin == true
+                ) {
+                    console.log("User is in WDCC!");
+                    console.log("User is an admin!");
+                    const getUserData = async () => {
+                        await fetch(
+                            `${import.meta.env.VITE_SERVER_URL}/api/user/` +
+                                userUPI,
+                            {
+                                method: "GET",
+                            }
+                        )
+                            .then((response) => {
+                                console.log(
+                                    "Checking if user is in the database."
+                                );
 
-                                  updateUserData({
-                                      family_name: userInfo.data.family_name,
-                                      given_name: userInfo.data.given_name,
-                                      email: userInfo.data.email,
-                                      accessToken: tokenResponse.access_token,
-                                      UserUPI: userUPI,
-                                  }).then(() => {
-                                      console.log("successs");
-                                      localStorage.setItem(
-                                          "accessToken",
-                                          tokenResponse.access_token
-                                      );
-                                      NavigateUser(currentPage, navigate);
-                                  });
-                              } else {
-                                  console.log("Posting User Data");
-                                  postUserData({
-                                      family_name: userInfo.data.family_name,
-                                      given_name: userInfo.data.given_name,
-                                      email: userInfo.data.email,
-                                      accessToken: tokenResponse.access_token,
-                                      UserUPI: userUPI,
-                                  }).then(() => {
-                                      localStorage.setItem(
-                                          "accessToken",
-                                          tokenResponse.access_token
-                                      );
-                                      NavigateUser(currentPage, navigate);
-                                  });
-                              }
-                          })
-                          .catch((error) => {
-                              console.log(error);
-                          });
-                        const eventId = location.pathname.split('/')[2];
+                                if (response.status == 200) {
+                                    console.log("User found. Updating User Data");
+
+                                    updateUserData({
+                                        family_name: userInfo.data.family_name,
+                                        given_name: userInfo.data.given_name,
+                                        email: userInfo.data.email,
+                                        accessToken: tokenResponse.access_token,
+                                        UserUPI: userUPI,
+                                        isAdmin: userInfo.data.isAdmin,
+                                    }).then(() => {
+                                        console.log("User data updated successfully");
+                                        localStorage.setItem(
+                                            "accessToken",
+                                            tokenResponse.access_token
+                                        );
+                                        NavigateUser(currentPage, navigate);
+                                    });
+                                } else {
+                                    console.log("User not found. Adding new user.");
+                                    postUserData({
+                                        family_name: userInfo.data.family_name,
+                                        given_name: userInfo.data.given_name,
+                                        email: userInfo.data.email,
+                                        accessToken: tokenResponse.access_token,
+                                        UserUPI: userUPI,
+                                        isAdmin: userInfo.data.isAdmin,
+                                    }).then(() => {
+                                        localStorage.setItem(
+                                            "accessToken",
+                                            tokenResponse.access_token
+                                        );
+                                        NavigateUser(currentPage, navigate);
+                                    });
+                                }
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+
+                        const eventId = location.pathname.split("/")[2];
                         if (eventId) {
                             updateStampValues(tokenResponse.access_token);
                         }
-                  };
+                    };
 
-                  // Check MongoDB if user is in DB, then updates/posts user data accordingly
-                  getUserData();
-              } else {
-                  // Redirect to error page if user is not in WDCC
-                  navigate("/sign-in-error");
-              }
-          } catch (error) {
-              console.error("Failed to fetch user info:", error);
-          }
-      },
-      onError: (error) => {
-          console.log("Login failed:", error);
-      },
-      // Assuming implicit flow as default; no need to specify unless changing
-  });
+                    // Check MongoDB if user is in DB, then update or post user data accordingly
+                    getUserData();
+                } else if (
+                    userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
+                    text !== "value found in column"
+                ) {
+                    console.log("User is not a member of WDCC.");
+                    navigate("/sign-in-error");
+                } else {
+                    // Redirect the user to /not-an-admin if the user isn't an admin
+                    console.log("User is not an admin. Redirecting to /not-an-admin.");
+                    navigate("/dashboard/not-an-admin");
+                }
+            } catch (error) {
+                console.error("Failed to fetch user info:", error);
+            }
+        },
+        onError: (error) => {
+            console.log("Login failed:", error);
+        },
+    });
 
-  return handleSignIn;
+    return handleSignIn;
 };
 
 export default useGoogleSignIn;
