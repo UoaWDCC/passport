@@ -7,8 +7,6 @@ import "../styles/page styles/Passport.css";
 import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
 import GetLeaderboardStats from "@components/LeaderboardStats.tsx";
 import axios from "axios";
-
-
 import PopUpNotif from "@components/PopUpNotif";
 
 type PageComponent = React.ComponentType<any> | (() => ReactElement);
@@ -109,7 +107,7 @@ export default function Passport() {
 
 
                     {/* Popup Notification */}
-                    <PopUpNotif />
+                    <PopUpNotif events={events} />
                 {typeof CurrentView === 'function' ? <CurrentView /> : CurrentView}
                 
                 <p>Page {currentIndex + 1}</p>

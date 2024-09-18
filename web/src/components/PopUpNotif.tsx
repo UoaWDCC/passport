@@ -1,11 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default function PopUpNotif() {
+type PopUpNotifProps = {
+    events: any[];
+};
+
+export default function PopUpNotif({ events }: PopUpNotifProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [nextEvent, setNextEvent] = useState<any>(null);
 
-    const openPopup = () => {
-        setIsOpen(true);
+    // the next event in the next 7 days
+    const getNextEvent = (events: any[]) => {
+        const now = new Date();
+
+        const upcomingEvents = events.filter(event => {
+            const startTime = new Date(event.startDate);
+            return startTime >= now && startTime <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); 
+        });
+
+        // sortig events 
+        const sortedEvents = upcomingEvents.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()); 
+        return sortedEvents[0] || null; 
     };
+
+    // currently showing popup when we find an even in the next 7 days
+    // needa implement something that shows the popup maybe once a session or sumn 
+    useEffect(() => {
+        const upcomingEvent = getNextEvent(events);
+        setNextEvent(upcomingEvent);
+        if (upcomingEvent) {
+            setIsOpen(true); 
+        }
+    }, [events]);
 
     const closePopup = () => {
         setIsOpen(false);
@@ -13,26 +38,47 @@ export default function PopUpNotif() {
 
     return (
         <>
-            {/* Button to open the popup */}
-            <button 
-                onClick={openPopup} 
-                className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition-colors"
-            >
-                Show Notification
-            </button>
-
-            {/* Popup Notification */}
-            {isOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-lg p-6 w-1/3 shadow-lg text-center space-y-4">
-                        <h2 className="text-2xl font-semibold text-gray-800">Notification</h2>
-                        <p className="text-gray-600">This is your notification message.</p>
+            {isOpen && nextEvent && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
+                    <div className="relative rounded-3xl p-6 flex flex-col items-center"
+                        style={{
+                            backgroundColor: "#087DF1",
+                            width: '80%',
+                            maxWidth: '600px',
+                            minWidth: '300px',
+                            height: 'auto',
+                        }}>
+                        
+                        {/* close button */}
                         <button 
-                            onClick={closePopup} 
-                            className="px-4 py-2 bg-red-500 text-white rounded-md shadow hover:bg-red-600 transition-colors"
+                            className="absolute top-3 right-4 text-white text-3xl"
+                            onClick={closePopup}
                         >
-                            Close
+                            &times; 
                         </button>
+                        
+                        <div className="flex flex-col items-center">
+                            <p className="text-white text-center text-lg ">The next event: </p>
+                            <p className="text-white text-center text-6xl font-semibold">{nextEvent.eventName}</p>
+                            <p className="text-white text-center text-lg italic"
+                                style={{color: "#FED066"}}
+                            >
+                                [DESCRIPTION]
+                            </p>
+                            
+
+                            <p className="text-white text-center text-lg mt-2">Starts in: </p>
+                            <p className="text-white text-center text-lg mt-2">[TIMER]</p>
+                            {/* <p className="text-white text-center text-lg mt-2"> {new Date(nextEvent.startDate).toLocaleString()}</p> */}
+
+                            <p className="text-white text-center text-lg mt-1">at:</p>
+                            <p className="text-white text-center text-lg mt-1 italic"
+                                style={{color: "#FED066"}}
+                            >
+                                [LOCATION]
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             )}
