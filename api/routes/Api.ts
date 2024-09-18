@@ -130,7 +130,7 @@ async function run() {
 
                 const cursor = await eventCollection.find({});
                 const result = await cursor.toArray();
-                console.log(result);
+                // console.log(result);
                 for (let i = 0; i < result.length; i++) {
                     if (
                         new Date() >= result[i].startDate &&
