@@ -18,7 +18,7 @@ const NavigateUser = (currentPage: string, navigate: Function) => {
     if (prevLocation) {
         localStorage.removeItem("prevLocation");
         navigate(prevLocation); // Takes them back to the previous location if they've been logged out
-    } else if (currentPage === "/dashboard") {
+    } else if (currentPage === "/dashboard/") {
         navigate("/dashboard/events");
     } else {
         navigate("/passport");
@@ -36,43 +36,16 @@ const postUserData = async (data: UserData) => {
             email: data.email,
             accessToken: data.accessToken,
             upi: data.UserUPI,
+            isAdmin: data.isAdmin, // Ensure isAdmin is passed correctly when creating a new user
         }),
     })
-        .then((response) => {
-            console.log("New User added!!");
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-};
-
-// Updating User in MongoDB
-const updateUserData = async (data: UserData) => {
-    try {
-        const response = await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/api/user/` + data.UserUPI,
-            {
-                method: "PUT",
-                headers: { "Content-type": "application/json" },
-                body: JSON.stringify({
-                    firstName: data.given_name,
-                    lastName: data.family_name,
-                    email: data.email,
-                    accessToken: data.accessToken,
-                    upi: data.UserUPI,
-                }),
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error("Failed to update user data");
-        } else {
-            console.log("User Data Updated");
-        }
-    } catch (error) {
-        console.error(error);
-    }
+    .then((response) => {
+        console.log("New User added!!");
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 // Check user in WDCC member checker API
@@ -98,11 +71,37 @@ const checkUser = async (upi: string): Promise<string | undefined> => {
     }
 };
 
+// Updating User in MongoDB
+const updateUserData = async (data: UserData) => {
+    try {
+        const response = await fetch(
+            `${import.meta.env.VITE_SERVER_URL}/api/user/` + data.UserUPI,
+            {
+                method: "PUT",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify({
+                    firstName: data.given_name,
+                    lastName: data.family_name,
+                    email: data.email,
+                    accessToken: data.accessToken,
+                    upi: data.UserUPI,
+                    isAdmin: data.isAdmin, // Update isAdmin flag as well
+                }),
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to update user data");
+        } else {
+            console.log("User Data Updated");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 // Google Sign-In handler
-const useGoogleSignIn = (
-    currentPage: string,
-    setLoading: (loading: boolean) => void
-) => {
+const useGoogleSignIn = (currentPage: string, setLoading: (loading: boolean) => void) => {
     const navigate = useNavigate();
 
     const handleSignIn = useGoogleLogin({
@@ -125,84 +124,69 @@ const useGoogleSignIn = (
                 // Passing user UPI to member checker
                 const text = await checkUser(userUPI);
 
-                // Checking if email is in domain and user is in WDCC and if user is an admin
-                if (
-                    userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
-                    text === "value found in column" && userInfo.data.isAdmin == true
-                ) {
-                    console.log("User is in WDCC!");
-                    console.log("User is an admin!");
-                    const getUserData = async () => {
-                        await fetch(
-                            `${import.meta.env.VITE_SERVER_URL}/api/user/` +
-                                userUPI,
-                            {
-                                method: "GET",
-                            }
-                        )
-                            .then((response) => {
-                                console.log(
-                                    "Checking if user is in the database."
-                                );
-
-                                if (response.status == 200) {
-                                    console.log("User found. Updating User Data");
-
-                                    updateUserData({
-                                        family_name: userInfo.data.family_name,
-                                        given_name: userInfo.data.given_name,
-                                        email: userInfo.data.email,
-                                        accessToken: tokenResponse.access_token,
-                                        UserUPI: userUPI,
-                                        isAdmin: userInfo.data.isAdmin,
-                                    }).then(() => {
-                                        console.log("User data updated successfully");
-                                        localStorage.setItem(
-                                            "accessToken",
-                                            tokenResponse.access_token
-                                        );
-                                        NavigateUser(currentPage, navigate);
-                                    });
-                                } else {
-                                    console.log("User not found. Adding new user.");
-                                    postUserData({
-                                        family_name: userInfo.data.family_name,
-                                        given_name: userInfo.data.given_name,
-                                        email: userInfo.data.email,
-                                        accessToken: tokenResponse.access_token,
-                                        UserUPI: userUPI,
-                                        isAdmin: userInfo.data.isAdmin,
-                                    }).then(() => {
-                                        localStorage.setItem(
-                                            "accessToken",
-                                            tokenResponse.access_token
-                                        );
-                                        NavigateUser(currentPage, navigate);
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-
-                        const eventId = location.pathname.split("/")[2];
-                        if (eventId) {
-                            updateStampValues(tokenResponse.access_token);
+                // Fetch the user from MongoDB to check admin status
+                const getUserData = async () => {
+                    const response = await fetch(
+                        `${import.meta.env.VITE_SERVER_URL}/api/user/${userUPI}`,
+                        {
+                            method: "GET",
                         }
-                    };
+                    );
+                    
+                    if (response.status === 200) {
+                        const userData = await response.json(); // Parse the user data
+                        
+                        // Checking MongoDB for isAdmin
+                        if (userData.isAdmin == true) {
+                            console.log("User is an admin!");
 
-                    // Check MongoDB if user is in DB, then update or post user data accordingly
+                            // Update user data
+                            updateUserData({
+                                family_name: userInfo.data.family_name,
+                                given_name: userInfo.data.given_name,
+                                email: userInfo.data.email,
+                                accessToken: tokenResponse.access_token,
+                                UserUPI: userUPI,
+                                isAdmin: userData.isAdmin, // Use the isAdmin from MongoDB
+                            }).then(() => {
+                                console.log("User data updated successfully");
+                                localStorage.setItem(
+                                    "accessToken",
+                                    tokenResponse.access_token
+                                );
+                                NavigateUser(currentPage, navigate);
+                            });
+                        } else {
+                            console.log("User is not an admin.");
+                            navigate("/dashboard/not-an-admin");
+                        }
+                    } else {
+                        // User not found, add new user
+                        console.log("User not found. Adding new user.");
+                        postUserData({
+                            family_name: userInfo.data.family_name,
+                            given_name: userInfo.data.given_name,
+                            email: userInfo.data.email,
+                            accessToken: tokenResponse.access_token,
+                            UserUPI: userUPI,
+                            isAdmin: false, // Default to non-admin when adding new users
+                        }).then(() => {
+                            localStorage.setItem(
+                                "accessToken",
+                                tokenResponse.access_token
+                            );
+                            NavigateUser(currentPage, navigate);
+                        });
+                    }
+                };
+
+                // Only proceed if the user is from "aucklanduni.ac.nz" domain and verified in WDCC
+                if (userInfo.data.email.endsWith("aucklanduni.ac.nz") && text === "value found in column") {
+                    console.log("User is in WDCC!");
                     getUserData();
-                } else if (
-                    userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
-                    text !== "value found in column"
-                ) {
+                } else {
                     console.log("User is not a member of WDCC.");
                     navigate("/sign-in-error");
-                } else {
-                    // Redirect the user to /not-an-admin if the user isn't an admin
-                    console.log("User is not an admin. Redirecting to /not-an-admin.");
-                    navigate("/dashboard/not-an-admin");
                 }
             } catch (error) {
                 console.error("Failed to fetch user info:", error);
@@ -217,3 +201,9 @@ const useGoogleSignIn = (
 };
 
 export default useGoogleSignIn;
+
+
+
+
+
+
