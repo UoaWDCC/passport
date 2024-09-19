@@ -118,7 +118,7 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
                 return;
             }
         }
-        navigate("/qr-error/" + eventId);
+        navigate("/passport");
     } catch (error) {
         console.log(error);
         if (eventId) {
