@@ -17,13 +17,14 @@ export const HomePage = () => {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
           try {
-            checkEventStatus(eventId).then(async (eventStatus) => {
+            const eventStatus = await checkEventStatus(eventId)
+            console.log(eventStatus);
             if (eventStatus.status) {
               await updateStampValues(accessToken);
+              navigate("/qr-error/" + eventId);
             } else {
               navigate("/qr-error/" + eventId);
             }
-          });
           } catch (error) {
             navigate("/qr-error/" + eventId);
           }
