@@ -123,13 +123,14 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
             const eventStatus = await checkEventStatus(eventId);
             if (eventStatus.status) {
                 await updateStampValues(tokenResponse.access_token);
+                navigate("/qr-error/" + eventId);
             } else {
                 navigate("/qr-error/" + eventId);
                 return;
             }
         }
 
-        NavigateUser(currentPage, navigate);
+        NavigateUser(currentPage, navigate); // this needs to be integrated with the qr error page
     } catch (error) {
         console.log(error);
         if (eventId) {
