@@ -117,8 +117,7 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
                 return;
             }
         }
-
-        NavigateUser(currentPage, navigate);
+        navigate("/qr-error/" + eventId);
     } catch (error) {
         console.log(error);
         if (eventId) {

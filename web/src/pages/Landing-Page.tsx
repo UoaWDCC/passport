@@ -27,10 +27,10 @@ export const HomePage = () => {
           } catch (error) {
             navigate("/qr-error/" + eventId);
           }
-          navigate("/passport");
+          navigate("/qr-error/" + eventId);
         } else {
           console.log("User is not logged in");
-          navigate("/sign-in/" + eventId); // if not signed in, check after sign in
+          navigate("/sign-in/" + eventId);
         }
 
       } else {
