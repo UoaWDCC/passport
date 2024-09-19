@@ -21,17 +21,16 @@ export const HomePage = () => {
             console.log(eventStatus);
             if (eventStatus.status) {
               await updateStampValues(accessToken);
-              navigate("/qr-error/" + eventId);
             } else {
               navigate("/qr-error/" + eventId);
             }
           } catch (error) {
             navigate("/qr-error/" + eventId);
           }
-          navigate("/passport");
+          navigate("/qr-error/" + eventId);
         } else {
           console.log("User is not logged in");
-          navigate("/sign-in/" + eventId); // if not signed in, check after sign in
+          navigate("/sign-in/" + eventId);
         }
 
       } else {
