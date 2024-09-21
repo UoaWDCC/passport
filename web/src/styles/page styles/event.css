@@ -118,16 +118,3 @@ body {
   background-color: #f2f2f2;
   color: black !important;
 }
-
-.popup {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px 20px;
-  border: 1px solid #f5c6cb;
-  border-radius: 5px;
-  z-index: 100;
-}
