@@ -2,6 +2,7 @@
 
 body {
   background-color: #e1ebff;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   font-family: "Open Sans", sans-serif;
@@ -26,6 +27,7 @@ body {
   width: 90%;
   margin: auto;
   position: relative;
+  flex-grow: 1;
 }
 
 .create-event-button {
