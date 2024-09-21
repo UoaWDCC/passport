@@ -3,6 +3,7 @@ import axios from "axios";
 import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
+import { set } from "zod";
 
 interface Event {
   _id: string;
@@ -16,6 +17,11 @@ interface Event {
 export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [eventsToShow, setEventsToShow] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [noMatches, setNoMatches] = useState(false);
+  const [displayedEvents, setDisplayedEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+
 
   useEffect(() => {
     getEvents();
@@ -34,10 +40,43 @@ export default function Events() {
       );
       const combinedEvents = inactiveEvents.concat(activeEvents).reverse();
       setEvents(combinedEvents);
+      setDisplayedEvents(combinedEvents.slice(0, eventsToShow));
+
+      // console.log("fetched:", eventsResponse);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
   };
+
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+if (query) {
+      const filtered = events.filter((event) =>
+        event.eventName.toLowerCase().includes(query.toLowerCase())
+      );
+
+      console.log("filtered", filtered);
+
+      setFilteredEvents(filtered);
+      setDisplayedEvents(filtered.slice(0, eventsToShow));        
+      setNoMatches(filtered.length === 0);
+    } else {
+      setFilteredEvents([]);
+      setDisplayedEvents(events.slice(0, eventsToShow)); 
+      setNoMatches(false);
+    }
+  };
+
+  const loadMoreEvents = () => {
+    const moreEvents = searchQuery? 
+    filteredEvents.slice(0, eventsToShow + 10) : events.slice(0, eventsToShow + 10);
+    setEventsToShow(eventsToShow + 10);
+    setDisplayedEvents(moreEvents);
+  };
+
 
   return (
     <div className="text-gray-800">
@@ -49,6 +88,17 @@ export default function Events() {
         <a href="/form" className="create-event-button">
           Create new event
         </a>
+        
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="search-input"
+          />
+        </div>
+
         <div className="dashboard-header">
           <div className="column">Name</div>
           <div className="column">QR Code</div>
@@ -59,7 +109,7 @@ export default function Events() {
         </div>
         {events ? (
           <ul className="event-list">
-            {events.slice(0, eventsToShow).map((event: Event) => (
+            {displayedEvents.slice(0, eventsToShow).map((event: Event) => (
               <li key={event._id} className="event-item">
                 <div className="column">{event.eventName}</div>
                 <div className="column">
@@ -96,8 +146,8 @@ export default function Events() {
             height: "100%",
           }}
         >
-          {eventsToShow < events.length && (
-            <button className="load-more-button" onClick={() => setEventsToShow(10 + eventsToShow)}>
+          {eventsToShow < (searchQuery ? filteredEvents.length : events.length) && (
+            <button className="load-more-button" onClick={loadMoreEvents}>
               LOAD MORE
             </button>
           )}
