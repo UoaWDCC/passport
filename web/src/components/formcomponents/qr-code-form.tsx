@@ -33,8 +33,9 @@ function QRCodeForm() {
             formData.append("file", imageFile);
 
             await axios.post(
-                `${import.meta.env.VITE_SERVER_URL}/api/event`,
-                formData,
+                `${import.meta.env.VITE_SERVER_URL}/api/event/add-event`,
+                    formData
+                ,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",
