@@ -165,8 +165,7 @@ const useGoogleSignIn = (
                 // Passing userUPI to member checker
                 const text = await checkUser(userUPI);
                 // Checking if email is in domain and user is in WDCC
-                const eventId = location.pathname.split('/').pop();
-                console.log(location.pathname.split('/'));
+                const eventId = location.pathname.split('/')[1];
 
                 if (
                     userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
