@@ -120,7 +120,7 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
         localStorage.setItem("accessToken", tokenResponse.access_token);
         console.log(eventId);
 
-        if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard") {
+        if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard" && eventId !== "") {
             const eventStatus = await checkEventStatus(eventId);
             if (eventStatus.status) {
                 await updateStampValues(tokenResponse.access_token);
