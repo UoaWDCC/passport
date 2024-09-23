@@ -15,11 +15,10 @@ interface UserData {
 // Navigate user to correct page
 const NavigateUser = (currentPage: string, navigate: Function) => {
     const prevLocation = localStorage.getItem('prevLocation');
-    console.log(currentPage)
     if (prevLocation) {
         localStorage.removeItem('prevLocation');
         navigate(prevLocation); // Takes them back to previous location if they've been logged out
-    } else if (currentPage === "/dashboard") {
+    } else if (currentPage === "/dashboard" || currentPage === "/dashboard/") {
         navigate('/dashboard/events');
     } else {
         navigate('/passport');
