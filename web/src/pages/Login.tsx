@@ -15,6 +15,7 @@ interface UserData {
 // Navigate user to correct page
 const NavigateUser = (currentPage: string, navigate: Function) => {
     const prevLocation = localStorage.getItem('prevLocation');
+    console.log(currentPage)
     if (prevLocation) {
         localStorage.removeItem('prevLocation');
         navigate(prevLocation); // Takes them back to previous location if they've been logged out
@@ -118,7 +119,6 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
 
         console.log("success");
         localStorage.setItem("accessToken", tokenResponse.access_token);
-        console.log(eventId);
 
         if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard") {
             const eventStatus = await checkEventStatus(eventId);
