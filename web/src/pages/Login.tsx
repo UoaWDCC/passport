@@ -118,6 +118,7 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
 
         console.log("success");
         localStorage.setItem("accessToken", tokenResponse.access_token);
+        console.log(eventId);
 
         if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard") {
             const eventStatus = await checkEventStatus(eventId);
