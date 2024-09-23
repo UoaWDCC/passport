@@ -120,7 +120,7 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
         localStorage.setItem("accessToken", tokenResponse.access_token);
         console.log(eventId);
 
-        if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard" && eventId !== "") {
+        if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard") {
             const eventStatus = await checkEventStatus(eventId);
             if (eventStatus.status) {
                 await updateStampValues(tokenResponse.access_token);
@@ -166,6 +166,7 @@ const useGoogleSignIn = (
                 const text = await checkUser(userUPI);
                 // Checking if email is in domain and user is in WDCC
                 const eventId = location.pathname.split('/').pop();
+                console.log(location.pathname.split('/'));
 
                 if (
                     userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
