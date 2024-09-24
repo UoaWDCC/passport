@@ -71,9 +71,9 @@ export const HomePage = () => {
               {" "}
               Scan, attend, and collect rewards as you embark on your journey through WDCC events.
             </p>
-            <a href="/team">Developed by WDCC. Meet our Team!</a>
+            <a href="/team">Developed by WDCC. <u>Meet our Team!</u></a>
             <a className="text-sm" href="/privacy-policy">
-              Our Privacy Policy
+              <u>Our Privacy Policy</u>
             </a>
           </div>
           <div>
