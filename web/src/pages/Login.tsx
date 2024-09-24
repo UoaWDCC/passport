@@ -13,6 +13,17 @@ interface UserData {
 }
 
 // Navigate user to correct page
+const NavigateUser = (currentPage: string, navigate: Function) => {
+    const prevLocation = localStorage.getItem('prevLocation');
+    if (prevLocation) {
+        localStorage.removeItem('prevLocation');
+        navigate(prevLocation); // Takes them back to previous location if they've been logged out
+    } else if (currentPage === "/dashboard" || currentPage === "/dashboard/") {
+        navigate('/dashboard/events');
+    } else {
+        navigate('/passport');
+    }
+}
 
 // New user to MongoDB
 const postUserData = async (data: UserData) => {
@@ -108,7 +119,7 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
         console.log("success");
         localStorage.setItem("accessToken", tokenResponse.access_token);
 
-        if (eventId !== "sign-in" && eventId !== undefined) {
+        if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard") {
             const eventStatus = await checkEventStatus(eventId);
             if (eventStatus.status) {
                 await updateStampValues(tokenResponse.access_token);
@@ -118,7 +129,7 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
                 return;
             }
         }
-        navigate("/passport");
+        NavigateUser(currentPage, navigate);
     } catch (error) {
         console.log(error);
         if (eventId) {
@@ -153,7 +164,7 @@ const useGoogleSignIn = (
                 // Passing userUPI to member checker
                 const text = await checkUser(userUPI);
                 // Checking if email is in domain and user is in WDCC
-                const eventId = location.pathname.split('/').pop();
+                const eventId = location.pathname.split('/')[1];
 
                 if (
                     userInfo.data.email.endsWith("aucklanduni.ac.nz") &&

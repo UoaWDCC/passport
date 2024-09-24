@@ -23,7 +23,7 @@ export default function Passport() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/get-all-events`);
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`);
                 setEvents(response.data);
             } catch (error) {
                 console.error('Error fetching events:', error);
