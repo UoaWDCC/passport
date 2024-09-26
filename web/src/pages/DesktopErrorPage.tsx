@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import "../styles/page styles/ScreensizeError.css"
 
 function ErrorPage() {

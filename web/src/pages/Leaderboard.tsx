@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import StampsAwayCount from "@components/StampsAwayCount";
 import ProgressBar from "@components/ProgressBar";
 import RedeemPrizeButton from "@components/RedeemPrizeButton";

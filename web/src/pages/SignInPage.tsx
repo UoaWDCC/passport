@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/page styles/SignInPage.module.css"; // Import the CSS module
 import GoogleSigninBtn from "../components/GoogleSigninBtn";
 import useGoogleSignIn from "./Login";
