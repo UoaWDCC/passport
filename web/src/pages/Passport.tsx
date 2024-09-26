@@ -12,18 +12,18 @@ type PageComponent = React.ComponentType<any> | (() => ReactElement);
 
 export default function Passport() {
     const userData = GetLeaderboardStats();
-    // console.log("userdata: ", userData.eventList.length)
-    // initialise index state
+    
+    // initialise index and loading state
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [events, setEvents] = useState([])
-    const [userStamps, setUserStamps] = useState<any[]>([])
-
+    const [events, setEvents] = useState([]);
+    const [userStamps, setUserStamps] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true); // Add loading state
 
     //getting all events
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/get-all-events`);
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`);
                 setEvents(response.data);
             } catch (error) {
                 console.error('Error fetching events:', error);
@@ -31,21 +31,21 @@ export default function Passport() {
         };
 
         fetchEvents();
-        }, []);
+    }, []);
 
-    //getting all stamps that user has collected - assuming eventId created by mongo is stored in eventsList of user    
+    //getting all stamps that user has collected
     useEffect(() => {
         const fetchStamps = async () => {
-        if (events.length > 0 && userData.eventList.length > 0) {
-            const stamps = userData.eventList.map(eventId => events.find(event => (event as any)._id === eventId));
-            setUserStamps(stamps);
-        }
-    };
-    
-    fetchStamps();
+            if (events.length > 0 && userData.eventList?.length > 0) {
+                const stamps = userData.eventList.map(eventId => events.find(event => (event as any)._id === eventId));
+                setUserStamps(stamps);
+            }
+            setLoading(false); // Set loading to false once the data is fetched
+        };
+
+        fetchStamps();
     }, [events, userData.eventList]);
 
-    
     // generate PassportPage components based on number of userStamps
     function generatePassportPages(): PageComponent[] {
         const pages: PageComponent[] = [];
@@ -58,7 +58,7 @@ export default function Passport() {
 
         return pages;
     }
-    
+
     // initialise temporary page array
     const views: PageComponent[] = [PassportMain, ...generatePassportPages()];
 
@@ -83,28 +83,36 @@ export default function Passport() {
     const swipeHandlers = useSwipeable({
         onSwipedLeft: goToNextView,
         onSwipedRight: goToPreviousView,
-    })
+    });
+
+    if (loading) {
+        return (
+            <div className="background flex flex-col h-screen justify-center items-center"></div>
+        );
+    }
 
     return (
         <CheckLoggedIn>
             <div {...swipeHandlers} className="background flex flex-col h-screen justify-center items-center ">
-
-                {/* <HamburgerMenu pages={pageArray} links={linkArray} /> */}
                 <HamburgerMenu />
                 <div className=" flex items-start w-88">
                     <div className="pt-3 text-left flex item-start">
-                        <h1 className="text-2xl text-blue-950"><span className="italic">Welcome</span> <span className="font-semibold">{userData.firstName}</span></h1>
+                        <h1 className="text-2xl text-blue-950">
+                            <span className="italic">Welcome</span> <span className="font-semibold">{userData.firstName}</span>
+                        </h1>
                     </div>
                 </div>
                 <div>
                     <div className="border-b-4 welcome-line w-88 mb-1 mt-3"></div>
-                        <div className=" text-center text-blue-950 ">  <span className="text-4xl font-semibold">{userData.eventList.length} </span> <span className="text-xl">
-                            {userData.eventList.length === 1 ? 'Stamp Collected' : 'Stamps Collected'}    
-                        </span></div>
-                        <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
+                    <div className="text-center text-blue-950">
+                        <span className="text-4xl font-semibold">{userData.totalStamps}</span>{" "}
+                        <span className="text-xl">
+                            {userData.totalStamps === 1 ? "Stamp Collected" : "Stamps Collected"}
+                        </span>
                     </div>
-                {typeof CurrentView === 'function' ? <CurrentView /> : CurrentView}
-                
+                    <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
+                </div>
+                {typeof CurrentView === "function" ? <CurrentView /> : CurrentView}
                 <p>Page {currentIndex + 1}</p>
             </div>
         </CheckLoggedIn>

@@ -17,20 +17,21 @@ export const HomePage = () => {
         if (response.data.success && accessToken) {
           console.log("User is logged in");
           try {
-            checkEventStatus(eventId).then(async (eventStatus) => {
+            const eventStatus = await checkEventStatus(eventId)
+            console.log(eventStatus);
             if (eventStatus.status) {
               await updateStampValues(accessToken);
+              navigate("/qr-error/" + eventId);
             } else {
               navigate("/qr-error/" + eventId);
             }
-          });
           } catch (error) {
             navigate("/qr-error/" + eventId);
           }
-          navigate("/passport");
+          navigate("/qr-error/" + eventId);
         } else {
           console.log("User is not logged in");
-          navigate("/sign-in/" + eventId); // if not signed in, check after sign in
+          navigate("/sign-in/" + eventId);
         }
 
       } else {
@@ -70,9 +71,9 @@ export const HomePage = () => {
               {" "}
               Scan, attend, and collect rewards as you embark on your journey through WDCC events.
             </p>
-            <a href="/team">Developed by WDCC. Meet our Team!</a>
+            <a href="/team">Developed by WDCC. <u>Meet our Team!</u></a>
             <a className="text-sm" href="/privacy-policy">
-              Our Privacy Policy
+              <u>Our Privacy Policy</u>
             </a>
           </div>
           <div>

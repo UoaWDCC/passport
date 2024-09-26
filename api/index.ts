@@ -9,9 +9,10 @@ config();
 
 // Import Routers
 import helloRoutes from "./routes/hello";
-import apiRoutes from "./routes/Api";
+// import apiRoutes from "./routes/Api";
 import userRoutes from "./routes/user";
 import prizeRoutes from "./routes/prize";
+import eventsRoute from "./routes/events";
 
 const app = express();
 
@@ -47,17 +48,18 @@ async function startServer() {
 
     // Routes
     app.use("/hello", helloRoutes);
+    app.use("/api/event", eventsRoute)
     app.use("/api/user", userRoutes);
     app.use("/api/prize", prizeRoutes);
 
     // Async route setup
-    try {
-      const apiRouter = await apiRoutes;
-      app.use("/api", apiRouter);
-    } catch (err) {
-      console.error("Error initializing API routes:", err);
-      process.exit(1);
-    }
+    // try {
+    //   const apiRouter = await apiRoutes;
+    //   app.use("/api", apiRouter);
+    // } catch (err) {
+    //   console.error("Error initializing API routes:", err);
+    //   process.exit(1);
+    // }
 
     // Start the server
     const port = Number.parseInt(process.env.PORT || "3000", 10);
