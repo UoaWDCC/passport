@@ -7,6 +7,7 @@ import "../styles/page styles/Passport.css";
 import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
 import GetLeaderboardStats from "@components/LeaderboardStats.tsx";
 import axios from "axios";
+import ErrorPage from "@pages/DesktopErrorPage.tsx";
 
 type PageComponent = React.ComponentType<any> | (() => ReactElement);
 
@@ -15,9 +16,27 @@ export default function Passport() {
     
     // initialise index and loading state
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [events, setEvents] = useState([]);
-    const [userStamps, setUserStamps] = useState<any[]>([]);
+    const [events, setEvents] = useState([])
+    const [userStamps, setUserStamps] = useState<any[]>([])
     const [loading, setLoading] = useState(true); // Add loading state
+
+    const [isMobile, setIsMobile] = useState(true);
+
+
+    // chceck if user on mobile
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
+        };
+
+        handleResize(); // Set initial value
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
 
     //getting all events
     useEffect(() => {
@@ -90,6 +109,12 @@ export default function Passport() {
             <div className="background flex flex-col h-screen justify-center items-center"></div>
         );
     }
+
+    if(!isMobile) {
+        return <ErrorPage />;
+    }
+
+
 
     return (
         <CheckLoggedIn>
