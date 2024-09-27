@@ -87,7 +87,10 @@ export default function Passport() {
 
     if (loading) {
         return (
-            <div className="background flex flex-col h-screen justify-center items-center"></div>
+            <div
+            className="background flex flex-col h-screen justify-center items-center"
+            style={{ backgroundColor: "#e1ebff" }}
+        ></div>
         );
     }
 
