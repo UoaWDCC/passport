@@ -6,10 +6,10 @@ import { useNavigate, useParams } from "react-router-dom";
 function QRCodeForm() {
   const { eventId } = useParams();
   const [eventName, setEventName] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [validStartDate, setValidStartDate] = useState("");
-  const [validEndDate, setValidEndDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDateTime, setStartDateTime] = useState("");
+  const [endDateTime, setEndDateTime] = useState("");
+  // const [validStartDate, setValidStartDate] = useState("");
+  // const [validEndDate, setValidEndDate] = useState("");
   // const [image64, setImage64] = useState("");
   const [validSubmit, setValidSubmit] = useState("no");
   const [_, setImageName] = useState("");
@@ -17,7 +17,7 @@ function QRCodeForm() {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const navigate = useNavigate();
-  
+
   // Fetch event details when editing
   useEffect(() => {
     if (eventId) {
@@ -35,8 +35,8 @@ function QRCodeForm() {
 
       // Populate form with event data
       setEventName(event.eventName);
-      setStartDate(event.startDate.split("T")[0]); // Assuming these fields exist in your API response
-      setEndDate(event.endDate.split("T")[0]);
+      setStartDateTime(event.startDate.split("T")[0]); // Assuming these fields exist in your API response
+      setEndDateTime(event.endDate.split("T")[0]);
       // Handle image if necessary
       // setImageFile(); - You would need to handle the image data here if needed
     } catch (error) {
@@ -46,15 +46,27 @@ function QRCodeForm() {
 
   const submitForm = async () => {
     console.log(imageFile);
-    if (eventName && startDate && endDate && imageFile) {
+    if (eventName && startDateTime && endDateTime && imageFile) {
+      const startDate = new Date(startDateTime);
+      const endDate = new Date(endDateTime);
+
+      if (endDate < startDate) {
+        setValidSubmit("errorEndBeforeStart");
+        return;
+      }
+
+      // Get the user's UTC offset in minutes
+      const utcOffset = new Date().getTimezoneOffset();
+
       const formData = new FormData();
       formData.append("eventName", eventName);
-      formData.append("startDate", startDate);
-      formData.append("endDate", endDate);
+      formData.append("startDate", startDate.toISOString());
+      formData.append("endDate", endDate.toISOString());
+      formData.append("utcOffset", utcOffset.toString());
       formData.append("file", imageFile);
-      
+
       if (isEditMode) {
-        formData.append("eventId", eventId!); 
+        formData.append("eventId", eventId!);
       }
 
       try {
@@ -71,17 +83,17 @@ function QRCodeForm() {
 
         // Reset the form only if the request succeeds
         setEventName("");
-        setStartDate("");
-        setEndDate("");
-        setImageFile(null); 
-        setValidSubmit("yes"); 
+        setStartDateTime("");
+        setEndDateTime("");
+        setImageFile(null);
+        setValidSubmit("yes");
         navigate("/dashboard/events");
       } catch (error) {
         console.error("Error submitting form", error);
-        setValidSubmit("error"); 
+        setValidSubmit("error");
       }
     } else {
-      setValidSubmit("error"); 
+      setValidSubmit("error");
     }
   };
 
@@ -103,103 +115,83 @@ function QRCodeForm() {
     // setImage64(img);
   };
 
-  const checkValidStartDate = (date: any) => {
-    if (
-      new Date(date).setHours(0, 0, 0, 0) >= new Date().setHours(0, 0, 0, 0) &&
-      startDate >= endDate
-    ) {
-      setStartDate(date);
-      setValidStartDate("yes");
+  const checkValidStartDate = (dateTime: string) => {
+    const today = new Date();
+    const selectedStartDate = new Date(dateTime);
+
+    if (selectedStartDate >= today) {
+      setStartDateTime(dateTime);
+      setValidSubmit("no");
     } else {
-      setStartDate("");
-      setValidStartDate("no");
+      setStartDateTime("");
+      setValidSubmit("errorStartDate");
     }
   };
 
-  const checkValidEndDate = (date: any) => {
-    if (
-      new Date(date).setHours(0, 0, 0, 0) >=
-      new Date(startDate).setHours(0, 0, 0, 0)
-    ) {
-      setEndDate(date);
-      setValidEndDate("yes");
+  const checkValidEndDate = (dateTime: string) => {
+    const selectedEndDate = new Date(dateTime);
+    const selectedStartDate = new Date(startDateTime);
+
+    if (selectedEndDate >= selectedStartDate) {
+      setEndDateTime(dateTime);
+      setValidSubmit("no");
     } else {
-      setEndDate("");
-      setValidEndDate("no");
+      setEndDateTime("");
+      setValidSubmit("errorEndDate");
     }
   };
 
   return (
     <div className="qr-code-form">
-      <h1 className="header">{isEditMode ? "Edit Event" : "Create Event"}</h1>
-      {validSubmit == "error" ? (
+      <h1 className="header">QR Code Generator</h1>
+      {validSubmit === "error" && (
         <p className="error-msg">Please fill in the required areas</p>
-      ) : null}
-
-      <div className="form-form">
-        <div className="input-section">
-          <label className="input-label" htmlFor="event-name">
-            Event Name
-          </label>
-          <input
-            className="event-inputs"
-            id="event-name"
-            type="text"
-            placeholder="e.g. The Amazing Race"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-          />
-        </div>
-
-        <div className="input-section">
-          <label className="input-label" htmlFor="event-name">
-            Start Date{" "}
-            {validStartDate == "no" ? (
-              <p className="error-msg-dates">*invalid start date</p>
-            ) : null}
-          </label>
-
-          <input
-            className="event-inputs date-inputs"
-            id="start-date"
-            type="date"
-            placeholder="dd/mm/yy"
-            value={startDate}
-            onChange={(e) => checkValidStartDate(e.target.value)}
-          />
-        </div>
-
-        <div className="input-section">
-          <label className="input-label" htmlFor="event-name">
-            End Date{" "}
-            {validEndDate == "no" ? (
-              <p className="error-msg-dates">*invalid end date</p>
-            ) : null}
-          </label>
-
-          <input
-            className="event-inputs date-inputs"
-            id="end-date"
-            type="date"
-            placeholder="dd/mm/yy"
-            value={endDate}
-            onChange={(e) => checkValidEndDate(e.target.value)}
-          />
-        </div>
-
-        <StampSection
-          getImageFile={getImageFile}
-          getImageName={getImageName}
-          getImage64={getImage64}
+      )}
+      {validSubmit === "errorEndBeforeStart" && (
+        <p className="error-msg">End time cannot be before start time</p>
+      )}
+      {validSubmit === "errorStartDate" && (
+        <p className="error-msg mt-2">Start date must be today or later</p>
+      )}
+      {validSubmit === "errorEndDate" && (
+        <p className="error-msg">End date must be after start date</p>
+      )}
+      <div className="input-section">
+        <label className="input-label" htmlFor="start-datetime">
+          Start Date & Time
+        </label>
+        <input
+          className="event-inputs date-inputs"
+          id="start-datetime"
+          type="datetime-local"
+          value={startDateTime}
+          onChange={(e) => checkValidStartDate(e.target.value)}
         />
+      </div>
 
-        <div className="submit-button-container">
-          <div className="submit-link">
-            <button className="qr-submit-button" onClick={submitForm}>
-              Finish!
-            </button>
-          </div>
-        </div>
+      <div className="input-section">
+        <label className="input-label" htmlFor="end-datetime">
+          End Date & Time
+        </label>
+        <input
+          className="event-inputs date-inputs"
+          id="end-datetime"
+          type="datetime-local"
+          value={endDateTime}
+          onChange={(e) => checkValidEndDate(e.target.value)}
+        />
+      </div>
+
+      <StampSection
+        getImageFile={getImageFile}
+        getImageName={getImageName}
+        getImage64={getImage64}
+      />
+
+      <div className="submit-button-container">
+        <button className="qr-submit-button" onClick={submitForm}>
+          Finish!
+        </button>
       </div>
     </div>
   );

@@ -4,13 +4,14 @@ import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 import { config } from "dotenv";
 import User from "../db/User";
 import mongoose from "mongoose";
+import axios from "axios";
 import { S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 const multerS3 = require("multer-s3");
 
 config();
 
-//setting up Mongo client
+// //setting up Mongo client
 const uri: string = process.env.DATABASE_URL!;
 
 const client = new MongoClient(uri, {
@@ -58,7 +59,6 @@ async function run() {
     // Define routes after successful connection
     const Api: any = Router();
 
-    //Route to add information into mongoDB
     Api.post(
       "/event",
       upload.single("file"),
@@ -66,6 +66,7 @@ async function run() {
         const eventName = req.body.eventName;
         const startDate = req.body.startDate;
         const endDate = req.body.endDate;
+        const utcOffset = parseInt(req.body.utcOffset, 10); // UTC offset in minutes
         const file = req.file as any;
         let fileLink = "";
 
@@ -77,21 +78,24 @@ async function run() {
             .json({ error: "S3 bucket image upload failed" });
         }
 
-        const body = req.body;
-        console.log(body);
+        const convertToUTC = (dateStr: string, offset: number) => {
+          const localDate = new Date(dateStr);
+          return new Date(localDate.getTime() - offset * 60000);
+        };
 
         const event = {
           eventName: eventName,
           stamp64: fileLink,
-          startDate: new Date(startDate),
-          endDate: new Date(endDate),
+          startDate: convertToUTC(startDate, utcOffset),
+          endDate: convertToUTC(endDate, utcOffset),
           totalAttended: 0,
         };
+
         try {
           const database = client.db("WDCC_Passport");
           const eventCollection = database.collection("Events");
 
-          //inserting event into DB
+          // Inserting event into DB
           const result = await eventCollection.insertOne(event);
           console.log(`A document was inserted with id ${result.insertedId}`);
 
@@ -135,26 +139,6 @@ async function run() {
         return res.status(500).send("Issue with database");
       }
     });
-
-    //Route to get single evenet
-    Api.get(
-      "/get-single-event/:eventId",
-      async (req: Request, res: Response) => {
-        try {
-          const eventId = req.params.eventId;
-          const database = client.db("WDCC_Passport");
-          const eventCollection = database.collection("Events");
-          const objectId = new ObjectId(eventId);
-          const result = await eventCollection.findOne({ _id: objectId });
-
-          console.log(result);
-
-          return res.status(200).json(result);
-        } catch (error) {
-          return res.status(400).json({ "error message": error });
-        }
-      }
-    );
 
     //check event validity
     Api.get(
@@ -209,6 +193,28 @@ async function run() {
       }
     });
 
+    //Route to get single evenet
+    Api.get(
+      "/get-single-event/:eventId",
+      async (req: Request, res: Response) => {
+        try {
+          const eventId = req.params.eventId;
+          const database = client.db("WDCC_Passport");
+          const eventCollection = database.collection("Events");
+          const objectId = new ObjectId(eventId);
+          const result = await eventCollection.findOne({
+            _id: objectId,
+          });
+
+          console.log(result);
+
+          return res.status(200).json(result);
+        } catch (error) {
+          return res.status(400).json({ "error message": error });
+        }
+      }
+    );
+
     //check event validity
     Api.get(
       "/check-event-status/:eventId",
@@ -220,7 +226,9 @@ async function run() {
             const database = client.db("WDCC_Passport");
             const eventCollection = database.collection("Events");
 
-            const result = await eventCollection.findOne({ _id: objectId });
+            const result = await eventCollection.findOne({
+              _id: objectId,
+            });
             if (
               result?.startDate &&
               result?.endDate &&
@@ -240,14 +248,18 @@ async function run() {
                 error: "event not active",
               });
             } else {
-              return res
-                .status(200)
-                .json({ result: { error: "event not found", status: false } });
+              return res.status(200).json({
+                result: {
+                  error: "event not found",
+                  status: false,
+                },
+              });
             }
           } else {
-            return res
-              .status(200)
-              .json({ result: { status: false }, error: "event not found" });
+            return res.status(200).json({
+              result: { status: false },
+              error: "event not found",
+            });
           }
         } catch (error) {
           console.log(error);

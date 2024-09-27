@@ -5,6 +5,7 @@ import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "@components/DeleteModal";
+import ErrorPage from "@pages/MobileErrorPage";
 
 interface Event {
   _id: string;
@@ -20,6 +21,21 @@ export default function Events() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [eventsToShow, setEventsToShow] = useState(10);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
+    };
+
+    handleResize(); // Set initial value
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     getEvents();
@@ -50,7 +66,7 @@ export default function Events() {
   const getEvents = async () => {
     try {
       const eventsResponse = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/get-all-events`
+        `${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`
       );
       setEvents(eventsResponse.data);
       const activeEvents = eventsResponse.data.filter(
@@ -65,6 +81,10 @@ export default function Events() {
       console.error("Error fetching events:", error);
     }
   };
+
+  if (isMobile) {
+    return <ErrorPage />;
+  }
 
   return (
     <div className="text-gray-800">
