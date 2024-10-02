@@ -29,7 +29,7 @@ function QRCodeForm() {
   const fetchEventDetails = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/get-single-event/${eventId}`
+        `${import.meta.env.VITE_SERVER_URL}/api/event/get-single-event/${eventId}`
       );
       const event = response.data;
 
