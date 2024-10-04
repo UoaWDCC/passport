@@ -3,6 +3,7 @@ import WDCC_Login from '../assets/WDCC_Logo.svg';
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
+import updateStampValues from "@components/GetTotalStamps";
 
 const QRErrorPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +16,9 @@ const QRErrorPage: React.FC = () => {
   const eventId = params.eventId;
 
   const attendEvent = (eventId: string, upi: string) => {
-    axios.post(`${import.meta.env.VITE_SERVER_URL}/api/attend-event`, {
+    axios.post(`${import.meta.env.VITE_SERVER_URL}/api/event/attend-event`, {
+      // eventId: location.state.event,
+      // upi: location.state.upi
       eventId: eventId,
       upi: upi
     }).then((res) => {
@@ -29,34 +32,43 @@ const QRErrorPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken") !== null && eventId) {
-      axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, {
-        accessToken: localStorage.getItem("accessToken")
-      })
-      .then((response) => {
-        if (response.data.success) {
-          setUser(response.data.user);
-          axios.get(`${import.meta.env.VITE_SERVER_URL}/api/check-event-status/${eventId}`)
-            .then((res) => {
-              if (res.status === 401 || !res.data.result.status) {
-                setErrorMessage(res.data.error);
-              } else {
-                attendEvent(eventId, response.data.user.upi);
-              }
-            })
-            .catch((error) => {
-              setErrorMessage("Error: ") + error;
-            })
-            .finally(() => setIsLoading(false));
-        } else {
-          navigate("/sign-in/" + eventId);
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        setErrorMessage("User verification failed");
-        setIsLoading(false);
-      });
+    
+    if (localStorage.getItem("accessToken") != null) {
+      if (eventId) {
+        
+        axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/check-user`, {
+          accessToken: localStorage.getItem("accessToken")
+        })
+          .then((response) => {
+            if (response.data.success) {
+              
+              setUser(response.data.user)
+              axios.get(`${import.meta.env.VITE_SERVER_URL}/api/event/check-event-status/${eventId}`)
+                .then(async (res) => {
+                  console.log(res)
+                  if (res.status == 401 || res.data.result.status == false) {
+                    console.log("here",res)
+                    setSuccess(false)
+                    setErrorMessage(res.data.error)
+                    setIsLoading(false)
+                  } else {
+                    console.log(response.data.user.upi)
+                    await attendEvent(eventId, response.data.user.upi)
+                    await updateStampValues(localStorage.getItem("accessToken"));
+                  }
+                })
+              console.log("Verify QrCode")
+            } else {
+              navigate("/sign-in/" + eventId)
+            }
+          })
+          .catch((error) => {
+            console.error('error:', error);
+          });
+      } else {
+        setErrorMessage("QR is not valid")
+        setIsLoading(false)
+      }
     } else {
       navigate("/sign-in");
     }

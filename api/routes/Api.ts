@@ -12,7 +12,7 @@ const multerS3 = require("multer-s3");
 
 config();
 
-//setting up Mongo client
+// //setting up Mongo client
 const uri: string = process.env.DATABASE_URL!;
 
 const client = new MongoClient(uri, {

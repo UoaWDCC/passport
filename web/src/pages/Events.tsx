@@ -3,6 +3,8 @@ import axios from "axios";
 import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
+import ErrorPage from "@pages/MobileErrorPage";
+
 
 interface Event {
     _id: string;
@@ -16,38 +18,56 @@ interface Event {
 }
 
 export default function Events() {
-    const [events, setEvents] = useState<Event[]>([]);
-    const [eventsToShow, setEventsToShow] = useState(10);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [eventsToShow, setEventsToShow] = useState(10);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile 
+  useEffect(() => {
+    const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
+    };
+
+    handleResize(); // Set initial value
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+        window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
     useEffect(() => {
         getEvents();
     }, []);
 
-    const getEvents = async () => {
-        try {
-            const eventsResponse = await axios.get(
-                `${import.meta.env.VITE_SERVER_URL}/api/get-all-events`
-            );
-            const activeEvents = eventsResponse.data.filter(
-                (event: Event) => event.status
-            );
-            const inactiveEvents = eventsResponse.data.filter(
-                (event: Event) => !event.status
-            );
-            const combinedEvents = inactiveEvents
-                .concat(activeEvents)
-                .reverse();
-            setEvents(combinedEvents);
-        } catch (error) {
-            console.error("Error fetching events:", error);
-        }
-    };
+  const getEvents = async () => {
+    try {
+      const eventsResponse = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`
+      );
+      const activeEvents = eventsResponse.data.filter(
+        (event: Event) => event.status
+      );
+      const inactiveEvents = eventsResponse.data.filter(
+        (event: Event) => !event.status
+      );
+      const combinedEvents = inactiveEvents.concat(activeEvents).reverse();
+      setEvents(combinedEvents);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
 
-    return (
-        <div className="text-gray-800">
-            <HamburgerMenu />
-            <img src={logo} alt="Logo" className="logo" />
-            <h1 className="title">Event Dashboard</h1>
+  if (isMobile) {
+    return <ErrorPage />;
+  }
+
+
+  return (
+    <div className="text-gray-800">
+      <HamburgerMenu />
+      <img src={logo} alt="Logo" className="logo" />
+      <h1 className="title">Event Dashboard</h1>
 
             <div className="dashboard">
                 <a href="/form" className="create-event-button">

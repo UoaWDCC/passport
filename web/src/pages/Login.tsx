@@ -18,7 +18,7 @@ const NavigateUser = (currentPage: string, navigate: Function) => {
     if (prevLocation) {
         localStorage.removeItem('prevLocation');
         navigate(prevLocation); // Takes them back to previous location if they've been logged out
-    } else if (currentPage === "/dashboard") {
+    } else if (currentPage === "/dashboard" || currentPage === "/dashboard/") {
         navigate('/dashboard/events');
     } else {
         navigate('/passport');
@@ -119,16 +119,16 @@ const handleResponse = async (response: Response, userInfo: AxiosResponse, token
         console.log("success");
         localStorage.setItem("accessToken", tokenResponse.access_token);
 
-        if (eventId !== "sign-in" && eventId !== undefined) {
+        if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard") {
             const eventStatus = await checkEventStatus(eventId);
             if (eventStatus.status) {
                 await updateStampValues(tokenResponse.access_token);
+                navigate("/qr-error/" + eventId);
             } else {
                 navigate("/qr-error/" + eventId);
                 return;
             }
         }
-
         NavigateUser(currentPage, navigate);
     } catch (error) {
         console.log(error);
@@ -164,7 +164,7 @@ const useGoogleSignIn = (
                 // Passing userUPI to member checker
                 const text = await checkUser(userUPI);
                 // Checking if email is in domain and user is in WDCC
-                const eventId = location.pathname.split('/').pop();
+                const eventId = location.pathname.split('/')[1];
 
                 if (
                     userInfo.data.email.endsWith("aucklanduni.ac.nz") &&

@@ -11,6 +11,6 @@ const EventsSchema = new Schema({
     QRcode: { type: String, req: true },
 });
 
-const Events = model("Event", EventsSchema);
+const Events = model("Event", EventsSchema, "Events");
 
 export default Events;

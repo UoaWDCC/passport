@@ -1,12 +1,30 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/page styles/SignInPage.module.css"; // Import the CSS module
 import GoogleSigninBtn from "../components/GoogleSigninBtn";
 import useGoogleSignIn from "./Login";
 import WDCC_Logo from "../assets/WDCC_Logo.svg";
 import { ring, bouncy } from "ldrs";
+import ErrorPage from "@pages/DesktopErrorPage.tsx";
+
 
 const SignInPage: React.FC = () => {
     const [isLoading, setLoading] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState(true);
+
+    // chceck if user on mobile
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
+        };
+
+        handleResize(); // Set initial value
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
 
     const url = window.location.pathname;
 
@@ -14,6 +32,11 @@ const SignInPage: React.FC = () => {
 
     ring.register();
     bouncy.register();
+
+    
+    if(!isMobile) {
+        return <ErrorPage />;
+    }
 
     return (
         <div className={styles.container}>
