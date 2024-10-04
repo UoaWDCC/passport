@@ -44,13 +44,13 @@ export default function Events() {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
+    console.log("delted entered")
     if (selectedEventId) {
       try {
         // Perform the delete request
         await axios.delete(
-          `${
-            import.meta.env.VITE_SERVER_URL
-          }/api/delete-event/${selectedEventId}`
+          `${import.meta.env.VITE_SERVER_URL
+          }/api/event/delete-event/${selectedEventId}`
         );
         // Refresh events list
         getEvents();
@@ -135,12 +135,19 @@ export default function Events() {
                   <button
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => {
+                      console.log(event._id)
                       setSelectedEventId(event._id);
                       setIsModalOpen(true);
                     }}
                   >
                     Delete
                   </button>
+                  <DeleteModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onConfirm={() =>{
+                      handleDelete()}}
+                  />
                 </div>
               </li>
             ))}
@@ -148,11 +155,6 @@ export default function Events() {
         ) : (
           <h1>Loading</h1>
         )}
-        <DeleteModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={handleDelete}
-        />
       </div>
 
       <div
