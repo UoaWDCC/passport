@@ -15,6 +15,7 @@ function QRCodeForm() {
   const [_, setImageName] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [stamp64, setStamp64] = useState("");
 
   const navigate = useNavigate();
 
@@ -32,17 +33,61 @@ function QRCodeForm() {
         `${import.meta.env.VITE_SERVER_URL}/api/event/get-single-event/${eventId}`
       );
       const event = response.data;
+      console.log(event)
 
       // Populate form with event data
       setEventName(event.eventName);
-      setStartDateTime(event.startDate.split("T")[0]); // Assuming these fields exist in your API response
-      setEndDateTime(event.endDate.split("T")[0]);
+      setStartDateTime(event.startDate.split("Z")[0]); // Assuming these fields exist in your API response
+      setEndDateTime(event.endDate.split("Z")[0]);
+      setStamp64(event.stamp64)
       // Handle image if necessary
       // setImageFile(); - You would need to handle the image data here if needed
     } catch (error) {
       console.error("Error fetching event data", error);
     }
   };
+
+  const submitEditForm = async() =>{
+    if (eventName && startDateTime && endDateTime && stamp64) {
+      const startDate = new Date(startDateTime);
+      const endDate = new Date(endDateTime);
+
+      if (endDate < startDate) {
+        setValidSubmit("errorEndBeforeStart");
+        return;
+      }
+
+      const utcOffset = new Date().getTimezoneOffset();
+
+      const formData = new FormData();
+      formData.append("eventId", eventId!);
+      formData.append("eventName", eventName);
+      formData.append("startDate", startDate.toISOString());
+      formData.append("endDate", endDate.toISOString());
+      formData.append("utcOffset", utcOffset.toString());
+      formData.append("file", stamp64[0]);
+
+      try {
+        await axios.put(
+          `${import.meta.env.VITE_SERVER_URL}/api/event/edit-event`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          } 
+        ).then(()=>{
+          navigate('/dashboard/events')
+        });
+      } catch (error) {
+        console.error("Error submitting form", error);
+        setValidSubmit("error");
+      }
+  } else {
+    setValidSubmit("error")
+  }
+}
+
 
   const submitForm = async () => {
     console.log(imageFile);
@@ -72,7 +117,7 @@ function QRCodeForm() {
       try {
         // Use POST for both creating and updating
         await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/event`,
+          `${import.meta.env.VITE_SERVER_URL}/api/event/add-event`,
           formData,
           {
             headers: {
@@ -156,8 +201,22 @@ function QRCodeForm() {
       {validSubmit === "errorEndDate" && (
         <p className="error-msg">End date must be after start date</p>
       )}
+
       <div className="input-section">
-        <label className="input-label" htmlFor="start-datetime">
+
+        <label className="input-label mt-5" htmlFor="event-name">
+          Event Name
+        </label>
+        <input
+          className="event-inputs"
+          id="event-name"
+          type="text"
+          placeholder="e.g. The Amazing Race"
+          value={eventName}
+          onChange={(e) => setEventName(e.target.value)}
+        />
+
+        <label className="input-label mt-5" htmlFor="start-datetime">
           Start Date & Time
         </label>
         <input
@@ -165,11 +224,15 @@ function QRCodeForm() {
           id="start-datetime"
           type="datetime-local"
           value={startDateTime}
-          onChange={(e) => checkValidStartDate(e.target.value)}
+          onChange={(e) => {
+            console.log("inside start date: ",e.target.value)
+            console.log(startDateTime)
+            checkValidStartDate(e.target.value)
+          }}
         />
       </div>
 
-      <div className="input-section">
+      <div className="input-section mt-5">
         <label className="input-label" htmlFor="end-datetime">
           End Date & Time
         </label>
@@ -182,16 +245,25 @@ function QRCodeForm() {
         />
       </div>
 
-      <StampSection
-        getImageFile={getImageFile}
-        getImageName={getImageName}
-        getImage64={getImage64}
-      />
+      <div className="mt-5">
+        <StampSection
+          getImageFile={getImageFile}
+          getImageName={getImageName}
+          getImage64={getImage64}
+          isEditMode= {isEditMode}
+          stamp64 = {stamp64}
+          setStamp64 = {setStamp64}
+        />
+      </div>
 
-      <div className="submit-button-container">
-        <button className="qr-submit-button" onClick={submitForm}>
-          Finish!
-        </button>
+      <div className="submit-button-container mt-5 flex justify-center">
+        
+        {isEditMode
+          ?<button className="qr-submit-button" onClick={submitEditForm}>Confirm Edit</button>
+          :<button className="qr-submit-button" onClick={submitForm}>Finish</button>}
+        <button onClick={()=>{
+          console.log(stamp64)
+        }}>asdf</button>
       </div>
     </div>
   );
