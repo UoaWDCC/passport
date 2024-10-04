@@ -3,6 +3,7 @@ import axios from "axios";
 import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
+import SearchBar from "@components/SearchBar";
 import { set } from "zod";
 
 interface Event {
@@ -89,20 +90,14 @@ if (query) {
           Create new event
         </a>
         
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-input"
-          />
-        </div>
+        <SearchBar 
+          searchQuery={searchQuery} 
+          onSearchChange={handleSearchChange} 
+          noMatches={noMatches} 
+        />
 
-        {noMatches ?( 
-          <div>Sorry, item not found.</div>
-        ) : (
-        <>
+        {!noMatches && (
+          <>
           <div className="dashboard-header">
             <div className="column">Name</div>
             <div className="column">QR Code</div>
