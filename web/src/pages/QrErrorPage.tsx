@@ -53,7 +53,7 @@ const QRErrorPage: React.FC = () => {
                     setIsLoading(false)
                   } else {
                     console.log(response.data.user.upi)
-                    attendEvent(eventId, response.data.user.upi)
+                    await attendEvent(eventId, response.data.user.upi)
                     await updateStampValues(localStorage.getItem("accessToken"));
                   }
                 })
