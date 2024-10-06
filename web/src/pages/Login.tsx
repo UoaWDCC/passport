@@ -1,7 +1,8 @@
-import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
+import axios, { AxiosResponse } from "axios";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import updateStampValues from "@components/GetTotalStamps";
+import checkEventStatus from "@components/event-valid";
 
 interface UserData {
     family_name: string;
@@ -9,7 +10,7 @@ interface UserData {
     email: string;
     accessToken: string;
     UserUPI: string;
-    isAdmin: boolean; // Field to handle admin check
+    isAdmin: boolean; // Now required
 }
 
 // Navigate user to the correct page
@@ -18,7 +19,7 @@ const NavigateUser = (currentPage: string, navigate: Function) => {
     if (prevLocation) {
         localStorage.removeItem("prevLocation");
         navigate(prevLocation); // Takes them back to the previous location if they've been logged out
-    } else if (currentPage === "/dashboard/") {
+    } else if (currentPage === "/dashboard" || currentPage === "/dashboard/") {
         navigate("/dashboard/events");
     } else {
         navigate("/passport");
@@ -46,29 +47,6 @@ const postUserData = async (data: UserData) => {
     .catch((error) => {
         console.log(error);
     });
-};
-
-// Check user in WDCC member checker API
-const checkUser = async (upi: string): Promise<string | undefined> => {
-    try {
-        const response = await fetch(
-            `https://membership.wdcc.co.nz/api/verify/${
-                import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS
-            }/UPI/${upi}`,
-            {
-                method: "GET",
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error("Failed to connect to verification API");
-        }
-
-        const text = await response.text();
-        return text;
-    } catch (error) {
-        console.error("Error verifying user:", error);
-    }
 };
 
 // Updating User in MongoDB
@@ -100,6 +78,91 @@ const updateUserData = async (data: UserData) => {
     }
 };
 
+// Check user in WDCC member checker API
+const checkUser = async (upi: string): Promise<string | undefined> => {
+    try {
+        const response = await fetch(
+            `https://membership.wdcc.co.nz/api/verify/${
+                import.meta.env.VITE_MEMBERSHIP_CHECKER_SECRETS
+            }/UPI/${upi}`,
+            {
+                method: "GET",
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to connect to verification API");
+        }
+
+        const text = await response.text();
+        return text;
+    } catch (error) {
+        console.error("Error verifying user:", error);
+    }
+};
+
+const handleResponse = async (
+    response: Response, 
+    userInfo: AxiosResponse, 
+    tokenResponse: TokenResponse, 
+    userUPI: string, 
+    eventId: string | undefined, 
+    currentPage: string, 
+    navigate: NavigateFunction
+) => {
+    try {
+        const userData: UserData = {
+            family_name: userInfo.data.family_name,
+            given_name: userInfo.data.given_name,
+            email: userInfo.data.email,
+            accessToken: tokenResponse.access_token,
+            UserUPI: userUPI,
+            isAdmin: false, // Default to false; will be updated later based on the database response
+        };
+
+        if (response.status === 200) {
+            // Fetch user data and update admin status
+            const fetchedData = await response.json();
+            userData.isAdmin = fetchedData.isAdmin; // Capture admin status
+
+            console.log("Updating User Data");
+            await updateUserData(userData);
+
+            // If the user is not an admin and tries to access the dashboard, redirect them
+            if (!userData.isAdmin && currentPage.startsWith("/dashboard")) {
+                console.log("User is not an admin, redirecting to not-an-admin");
+                navigate("/dashboard/not-an-admin");
+                return;  // Exit early to prevent further navigation
+            }
+        } else {
+            console.log("Posting new User Data");
+            await postUserData(userData);
+        }
+
+        localStorage.setItem("accessToken", tokenResponse.access_token);
+
+        // After admin check, handle event status
+        if (eventId && eventId !== "sign-in" && eventId !== "dashboard") {
+            const eventStatus = await checkEventStatus(eventId);
+            if (eventStatus.status) {
+                await updateStampValues(tokenResponse.access_token);
+                navigate("/qr-success/" + eventId); // Redirect to success page for events
+            } else {
+                navigate("/qr-error/" + eventId); // Redirect to error page for events
+                return;
+            }
+        }
+
+        // Finally, handle normal page navigation for admins or non-event users
+        NavigateUser(currentPage, navigate);
+    } catch (error) {
+        console.log("Error during user handling:", error);
+        if (eventId) {
+            navigate("/qr-error/" + eventId); // Error case for events
+        }
+    }
+};
+
 // Google Sign-In handler
 const useGoogleSignIn = (currentPage: string, setLoading: (loading: boolean) => void) => {
     const navigate = useNavigate();
@@ -124,68 +187,33 @@ const useGoogleSignIn = (currentPage: string, setLoading: (loading: boolean) => 
                 // Passing user UPI to member checker
                 const text = await checkUser(userUPI);
 
-                // Fetch the user from MongoDB to check admin status
-                const getUserData = async () => {
-                    const response = await fetch(
-                        `${import.meta.env.VITE_SERVER_URL}/api/user/${userUPI}`,
-                        {
-                            method: "GET",
-                        }
-                    );
-                    
-                    if (response.status === 200) {
-                        const userData = await response.json(); // Parse the user data
-                        
-                        // Checking MongoDB for isAdmin
-                        if (userData.isAdmin == true) {
-                            console.log("User is an admin!");
+                // Checking if email is in domain and user is in WDCC
+                const eventId = location.pathname.split('/')[1];
 
-                            // Update user data
-                            updateUserData({
-                                family_name: userInfo.data.family_name,
-                                given_name: userInfo.data.given_name,
-                                email: userInfo.data.email,
-                                accessToken: tokenResponse.access_token,
-                                UserUPI: userUPI,
-                                isAdmin: userData.isAdmin, // Use the isAdmin from MongoDB
-                            }).then(() => {
-                                console.log("User data updated successfully");
-                                localStorage.setItem(
-                                    "accessToken",
-                                    tokenResponse.access_token
-                                );
-                                NavigateUser(currentPage, navigate);
-                            });
-                        } else {
-                            console.log("User is not an admin.");
-                            navigate("/dashboard/not-an-admin");
-                        }
-                    } else {
-                        // User not found, add new user
-                        console.log("User not found. Adding new user.");
-                        postUserData({
-                            family_name: userInfo.data.family_name,
-                            given_name: userInfo.data.given_name,
-                            email: userInfo.data.email,
-                            accessToken: tokenResponse.access_token,
-                            UserUPI: userUPI,
-                            isAdmin: false, // Default to non-admin when adding new users
-                        }).then(() => {
-                            localStorage.setItem(
-                                "accessToken",
-                                tokenResponse.access_token
-                            );
-                            NavigateUser(currentPage, navigate);
-                        });
-                    }
-                };
-
-                // Only proceed if the user is from "aucklanduni.ac.nz" domain and verified in WDCC
-                if (userInfo.data.email.endsWith("aucklanduni.ac.nz") && text === "value found in column") {
+                if (
+                    userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
+                    text === "value found in column"
+                ) {
                     console.log("User is in WDCC!");
+                    const getUserData = async () => {
+                        try {
+                            const response = await fetch(
+                                `${import.meta.env.VITE_SERVER_URL}/api/user/` + userUPI,
+                                {
+                                    method: "GET",
+                                }
+                            );
+                            console.log("Fetch response for user data - Checking if user is in DB");
+                            await handleResponse(response, userInfo, tokenResponse, userUPI, eventId, currentPage, navigate);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    };
+
+                    // Check MongoDB if user is in DB, then updates/posts user data accordingly
                     getUserData();
                 } else {
-                    console.log("User is not a member of WDCC.");
+                    // Redirect to error page if user is not in WDCC
                     navigate("/sign-in-error");
                 }
             } catch (error) {
@@ -201,9 +229,3 @@ const useGoogleSignIn = (currentPage: string, setLoading: (loading: boolean) => 
 };
 
 export default useGoogleSignIn;
-
-
-
-
-
-
