@@ -7,12 +7,14 @@ import ErrorPage from "@pages/MobileErrorPage";
 
 
 interface Event {
-  _id: string;
-  eventName: string;
-  QRcode: string;
-  stamp64: string;
-  status: boolean;
-  totalAttended: number;
+    _id: string;
+    eventName: string;
+    QRcode: string;
+    stamp64: string;
+    eventVenue: string;
+    eventDescription: string;
+    status: boolean;
+    totalAttended: number;
 }
 
 export default function Events() {
@@ -34,10 +36,9 @@ export default function Events() {
     };
   }, []);
 
-
-  useEffect(() => {
-    getEvents();
-  }, []);
+    useEffect(() => {
+        getEvents();
+    }, []);
 
   const getEvents = async () => {
     try {
@@ -68,64 +69,87 @@ export default function Events() {
       <img src={logo} alt="Logo" className="logo" />
       <h1 className="title">Event Dashboard</h1>
 
-      <div className="dashboard">
-        <a href="/form" className="create-event-button">
-          Create new event
-        </a>
-        <div className="dashboard-header">
-          <div className="column">Name</div>
-          <div className="column">QR Code</div>
-          <div className="column">Stamp Image</div>
-          <div className="column">Status</div>
-          <div className="column"># of People Attended</div>
-          <div className="column">Edit/Delete</div>
+            <div className="dashboard">
+                <a href="/form" className="create-event-button">
+                    Create new event
+                </a>
+                <div className="dashboard-header">
+                    <div className="column">Name</div>
+                    <div className="column">QR Code</div>
+                    <div className="column">Stamp Image</div>
+                    <div className="column">Venue</div>
+                    <div className="column">Description</div>
+                    <div className="column">Status</div>
+                    <div className="column"># of People Attended</div>
+                    <div className="column">Edit/Delete</div>
+                </div>
+                {events ? (
+                    <ul className="event-list">
+                        {events.slice(0, eventsToShow).map((event: Event) => (
+                            <li key={event._id} className="event-item">
+                                <div className="column">{event.eventName}</div>
+                                <div className="column">
+                                    <img
+                                        src={event.QRcode}
+                                        alt=""
+                                        className="w-20 mx-auto"
+                                    />
+                                </div>
+
+                                <div className="column">
+                                    <img
+                                        src={event.stamp64}
+                                        alt=""
+                                        className="w-20 mx-auto"
+                                    />
+                                </div>
+
+                                <div className="column">{event.eventVenue}</div>
+
+                                <div className="column">
+                                    {event.eventDescription}
+                                </div>
+
+                                <div className="column">
+                                    {event.status ? (
+                                        <p>Active</p>
+                                    ) : (
+                                        <p>Inactive</p>
+                                    )}
+                                </div>
+
+                                <div className="column">
+                                    {event.totalAttended}
+                                </div>
+
+                                <div className="column">
+                                    <button>Edit</button>
+                                    <button>Delete</button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <h1>Loading</h1>
+                )}
+            </div>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                }}
+            >
+                {eventsToShow < events.length && (
+                    <button
+                        className="load-more-button"
+                        onClick={() => setEventsToShow(10 + eventsToShow)}
+                    >
+                        LOAD MORE
+                    </button>
+                )}
+            </div>
         </div>
-        {events ? (
-          <ul className="event-list">
-            {events.slice(0, eventsToShow).map((event: Event) => (
-              <li key={event._id} className="event-item">
-                <div className="column">{event.eventName}</div>
-                <div className="column">
-                  <img src={event.QRcode} alt="" className="w-20 mx-auto" />
-                </div>
-
-                <div className="column">
-                  <img src={event.stamp64} alt="" className="w-20 mx-auto" />
-                </div>
-
-                <div className="column">
-                  {event.status ? <p>Active</p> : <p>Inactive</p>}
-                </div>
-
-                <div className="column">{event.totalAttended}</div>
-
-                <div className="column">
-                  <button>Edit</button>
-                  <button>Delete</button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <h1>Loading</h1>
-        )}
-        
-      </div>
-      <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          {eventsToShow < events.length && (
-            <button className="load-more-button" onClick={() => setEventsToShow(10 + eventsToShow)}>
-              LOAD MORE
-            </button>
-          )}
-        </div>
-    </div>
-    
-  );
+    );
 }

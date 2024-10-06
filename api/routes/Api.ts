@@ -67,6 +67,8 @@ async function run() {
                 const eventName = req.body.eventName;
                 const startDate = req.body.startDate;
                 const endDate = req.body.endDate;
+                const eventVenue = req.body.eventVenue;
+                const eventDescription = req.body.eventDescription;
                 const utcOffset = parseInt(req.body.utcOffset, 10); // UTC offset in minutes
                 const file = req.file as any;
                 let fileLink = "";
@@ -89,6 +91,8 @@ async function run() {
                     stamp64: fileLink,
                     startDate: convertToUTC(startDate, utcOffset),
                     endDate: convertToUTC(endDate, utcOffset),
+                    eventVenue: eventVenue,
+                    eventDescription: eventDescription,
                     totalAttended: 0,
                 };
 
@@ -126,7 +130,7 @@ async function run() {
 
                 const cursor = await eventCollection.find({});
                 const result = await cursor.toArray();
-                // console.log(result)
+                // console.log(result);
                 for (let i = 0; i < result.length; i++) {
                     if (
                         new Date() >= result[i].startDate &&

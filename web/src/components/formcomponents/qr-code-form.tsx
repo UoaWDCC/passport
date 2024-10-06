@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 function QRCodeForm() {
     const [eventName, setEventName] = useState("");
+    const [eventVenue, setEventVenue] = useState("");
+    const [eventDescription, setEventDescription] = useState("");
     const [startDateTime, setStartDateTime] = useState("");
     const [endDateTime, setEndDateTime] = useState("");
     const [validSubmit, setValidSubmit] = useState("no");
@@ -30,6 +32,8 @@ function QRCodeForm() {
             formData.append("startDate", startDate.toISOString());
             formData.append("endDate", endDate.toISOString());
             formData.append("utcOffset", utcOffset.toString()); // Store UTC offset
+            formData.append("eventVenue", eventVenue);
+            formData.append("eventDescription", eventDescription);
             formData.append("file", imageFile);
 
             await axios.post(
@@ -133,6 +137,34 @@ function QRCodeForm() {
                         type="datetime-local"
                         value={endDateTime}
                         onChange={(e) => checkValidEndDate(e.target.value)}
+                    />
+                </div>
+
+                <div className="input-section">
+                    <label className="input-label" htmlFor="event-name">
+                        Venue Details
+                    </label>
+                    <input
+                        className="event-inputs"
+                        id="event-venue"
+                        type="text"
+                        placeholder="e.g. OGGB 206-213"
+                        value={eventVenue}
+                        onChange={(e) => setEventVenue(e.target.value)}
+                    />
+                </div>
+
+                <div className="input-section">
+                    <label className="input-label" htmlFor="event-name">
+                        Event Description
+                    </label>
+                    <input
+                        className="event-inputs"
+                        id="event-description"
+                        type="text"
+                        placeholder="e.g. A fun day"
+                        value={eventDescription}
+                        onChange={(e) => setEventDescription(e.target.value)}
                     />
                 </div>
 
