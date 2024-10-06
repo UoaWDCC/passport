@@ -7,6 +7,7 @@ import "../styles/page styles/Passport.css";
 import CheckLoggedIn from "@components/CheckLoggedIn.tsx";
 import GetLeaderboardStats from "@components/LeaderboardStats.tsx";
 import axios from "axios";
+import PopUpNotif from "@components/PopUpNotif";
 import ErrorPage from "@pages/DesktopErrorPage.tsx";
 
 type PageComponent = React.ComponentType<any> | (() => ReactElement);
@@ -140,6 +141,7 @@ export default function Passport() {
                     </div>
                     <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
                 </div>
+                <PopUpNotif events={events} />
                 {typeof CurrentView === "function" ? <CurrentView /> : CurrentView}
                 <p>Page {currentIndex + 1}</p>
             </div>

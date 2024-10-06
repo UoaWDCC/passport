@@ -13,6 +13,7 @@ import Leaderboard from "@pages/Leaderboard"
 import LeaderboardPrize from "@pages/LeaderboardCongratsPage"
 import DashboardPrizes from "@pages/DashboardPrizes"
 import Events from "@pages/Events"
+import NotAnAdmin from "@pages/Not-An-Admin";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
 {
   path: "/qr-error/:eventId?",
   element: <QRErrorPage />,
+},
+{
+  path: "/dashboard/not-an-admin",
+  element: <NotAnAdmin />,
 },
 {
   path: "/team",
