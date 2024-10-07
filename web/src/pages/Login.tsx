@@ -142,8 +142,10 @@ const handleResponse = async (
         localStorage.setItem("accessToken", tokenResponse.access_token);
 
         // After admin check, handle event status
-        if (eventId && eventId !== "sign-in" && eventId !== "dashboard") {
+        if (eventId && eventId !== "dashboard" && eventId !== "sign-in") {
             const eventStatus = await checkEventStatus(eventId);
+            console.log("Event ID:", eventId);
+            console.log("Event status:", eventStatus);
             if (eventStatus.status) {
                 await updateStampValues(tokenResponse.access_token);
                 navigate("/qr-success/" + eventId); // Redirect to success page for events
@@ -152,7 +154,9 @@ const handleResponse = async (
                 return;
             }
         }
-
+        else if (eventId === "dashboard" || eventId === "sign-in") {
+            await updateStampValues(tokenResponse.access_token);
+        }
         // Finally, handle normal page navigation for admins or non-event users
         NavigateUser(currentPage, navigate);
     } catch (error) {
