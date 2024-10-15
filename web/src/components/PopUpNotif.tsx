@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import CountdownTimer from './CountdownTimer';
 
 type PopUpNotifProps = {
     events: any[];
@@ -14,12 +15,12 @@ export default function PopUpNotif({ events }: PopUpNotifProps) {
 
         const upcomingEvents = events.filter(event => {
             const startTime = new Date(event.startDate);
-            return startTime >= now && startTime <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); 
+            return startTime >= now && startTime <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
         });
 
-        // sortig events 
-        const sortedEvents = upcomingEvents.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()); 
-        return sortedEvents[0] || null; 
+        // sorting events 
+        const sortedEvents = upcomingEvents.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+        return sortedEvents[0] || null;
     };
 
     // currently showing popup when we find an even in the next 7 days
@@ -27,13 +28,15 @@ export default function PopUpNotif({ events }: PopUpNotifProps) {
     useEffect(() => {
         const upcomingEvent = getNextEvent(events);
         setNextEvent(upcomingEvent);
+        // console.log(upcomingEvent);
         if (upcomingEvent) {
-            setIsOpen(true); 
+            setIsOpen(true);
         }
     }, [events]);
 
     const closePopup = () => {
         setIsOpen(false);
+        sessionStorage.setItem("sameSession", "true"); //setting item in session storage, so that I can check for this in the passport page and display notification accordingly
     };
 
     return (
@@ -48,35 +51,40 @@ export default function PopUpNotif({ events }: PopUpNotifProps) {
                             minWidth: '300px',
                             height: 'auto',
                         }}>
-                        
+
                         {/* close button */}
-                        <button 
+                        <button
                             className="absolute top-3 right-4 text-white text-3xl"
                             onClick={closePopup}
                         >
-                            &times; 
+                            &times;
                         </button>
-                        
-                        <div className="flex flex-col items-center">
-                            <p className="text-white text-center text-lg ">The next event: </p>
-                            <p className="text-white text-center text-6xl font-semibold">{nextEvent.eventName}</p>
-                            <p className="text-white text-center text-lg italic"
-                                style={{color: "#FED066"}}
-                            >
-                                [DESCRIPTION]
-                            </p>
-                            
 
-                            <p className="text-white text-center text-lg mt-2">Starts in: </p>
-                            <p className="text-white text-center text-lg mt-2">[TIMER]</p>
-                            {/* <p className="text-white text-center text-lg mt-2"> {new Date(nextEvent.startDate).toLocaleString()}</p> */}
+                        <div className="flex flex-col justify-between items-center">
+                            {/* Event Name and Description */}
+                            <div>
+                                <p className="text-white text-center text-2xl">The next event:</p>
+                                <p className="text-white text-center text-4xl font-semibold ">
+                                    {nextEvent?.eventName || "Stay Tuned!"}
+                                </p>
+                                <p className="text-white text-center text-lg italic mt-3" style={{ color: "#FED066" }}>
+                                    {nextEvent?.eventDescription || "Stay tuned for more information!!"}
+                                </p>
+                            </div>
 
-                            <p className="text-white text-center text-lg mt-1">at:</p>
-                            <p className="text-white text-center text-lg mt-1 italic"
-                                style={{color: "#FED066"}}
-                            >
-                                [LOCATION]
-                            </p>
+                            <div className='mt-5'>
+                                {/* Countdown Timer */}
+                                <p className="text-white text-center text-2xl">Starts in:</p>
+                                {nextEvent?.startDate && <CountdownTimer targetDate={nextEvent.startDate} />}
+                            </div>
+
+                            <div className='mt-5'>
+                                {/* Location of event */}
+                                <p className="text-white text-center text-2xl">at:</p>
+                                <p className="text-white text-center text-lg italic" style={{ color: "#FED066" }}>
+                                    {nextEvent?.eventVenue || "To be announced!"}
+                                </p>
+                            </div>
                         </div>
 
                     </div>

@@ -35,7 +35,7 @@ const CountdownTimer: React.FC<{ targetDate: string }> = ({ targetDate }) => {
     }, [targetDate]);
 
     return (
-        <div className="flex justify-center space-x-4 mt-10">
+        <div className="flex justify-center space-x-4 mt-2">
             <TimeBox value={timeLeft.days} label="Days" />
             <TimeBox value={timeLeft.hours} label="Hours" />
             <TimeBox value={timeLeft.minutes} label="Minutes" />
