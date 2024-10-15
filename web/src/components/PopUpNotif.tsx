@@ -36,6 +36,7 @@ export default function PopUpNotif({ events }: PopUpNotifProps) {
 
     const closePopup = () => {
         setIsOpen(false);
+        sessionStorage.setItem("sameSession", "true"); //setting item in session storage, so that I can check for this in the passport page and display notification accordingly
     };
 
     return (
@@ -63,7 +64,7 @@ export default function PopUpNotif({ events }: PopUpNotifProps) {
                             {/* Event Name and Description */}
                             <div>
                                 <p className="text-white text-center text-2xl">The next event:</p>
-                                <p className="text-white text-center text-5xl font-semibold ">
+                                <p className="text-white text-center text-4xl font-semibold ">
                                     {nextEvent?.eventName || "Stay Tuned!"}
                                 </p>
                                 <p className="text-white text-center text-lg italic mt-3" style={{ color: "#FED066" }}>

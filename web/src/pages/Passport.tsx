@@ -14,13 +14,13 @@ type PageComponent = React.ComponentType<any> | (() => ReactElement);
 
 export default function Passport() {
     const userData = GetLeaderboardStats();
-    
+
     // initialise index and loading state
     const [currentIndex, setCurrentIndex] = useState(0);
     const [events, setEvents] = useState([])
     const [userStamps, setUserStamps] = useState<any[]>([])
     const [loading, setLoading] = useState(true); // Add loading state
-
+    const [isPopUpVisible, setIsPopUpVisible] = useState(true);
     const [isMobile, setIsMobile] = useState(true);
 
 
@@ -51,6 +51,12 @@ export default function Passport() {
         };
 
         fetchEvents();
+
+        //tracking session - showing popUpNotif once a session :)
+        if (sessionStorage.getItem("sameSession")) {
+            setIsPopUpVisible(false);
+        }
+
     }, []);
 
     //getting all stamps that user has collected
@@ -108,13 +114,13 @@ export default function Passport() {
     if (loading) {
         return (
             <div
-            className="background flex flex-col h-screen justify-center items-center"
-            style={{ backgroundColor: "#e1ebff" }}
-        ></div>
+                className="background flex flex-col h-screen justify-center items-center"
+                style={{ backgroundColor: "#e1ebff" }}
+            ></div>
         );
     }
 
-    if(!isMobile) {
+    if (!isMobile) {
         return <ErrorPage />;
     }
 
@@ -141,7 +147,7 @@ export default function Passport() {
                     </div>
                     <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
                 </div>
-                <PopUpNotif events={events} />
+                {isPopUpVisible && <PopUpNotif events={events} />}
                 {typeof CurrentView === "function" ? <CurrentView /> : CurrentView}
                 <p>Page {currentIndex + 1}</p>
             </div>
