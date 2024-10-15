@@ -10,7 +10,7 @@ const userSchema = new Schema({
   totalStamps: { type: Number, required: true, default: 0 },
   stampsLeft: { type: Number, required: true, default: 3 },
   prizesAchieved: { type: Number, required: true, default: 0 },
-  isAdmin: { type: Boolean, required: true, default: false }
+  isAdmin : { type: Boolean, required: true, default: false }
 })
 
 const User = model("User", userSchema, "Users")
