@@ -5,7 +5,7 @@ import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
 import SearchBar from "@components/SearchBar";
 import ErrorPage from "@pages/MobileErrorPage";
-import Spinner from "@components/Spinner";
+import Spinner from "@components/spinner";
 
 interface Event {
   _id: string;
