@@ -1,7 +1,6 @@
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import axios, { AxiosResponse } from "axios";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import updateStampValues from "@components/GetTotalStamps";
 import checkEventStatus from "@components/event-valid";
 
 interface UserData {
@@ -147,18 +146,15 @@ const handleResponse = async (
             console.log("Event ID:", eventId);
             console.log("Event status:", eventStatus);
             if (eventStatus.status) {
-                await updateStampValues(tokenResponse.access_token);
                 navigate("/qr-success/" + eventId); // Redirect to success page for events
             } else {
                 navigate("/qr-error/" + eventId); // Redirect to error page for events
                 return;
             }
+        } else {
+            // Finally, handle normal page navigation for admins or non-event users
+            NavigateUser(currentPage, navigate);
         }
-        else if (eventId === "dashboard" || eventId === "sign-in") {
-            await updateStampValues(tokenResponse.access_token);
-        }
-        // Finally, handle normal page navigation for admins or non-event users
-        NavigateUser(currentPage, navigate);
     } catch (error) {
         console.log("Error during user handling:", error);
         if (eventId) {

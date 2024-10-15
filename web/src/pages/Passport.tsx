@@ -22,15 +22,16 @@ export default function Passport() {
     const [loading, setLoading] = useState(true); // Add loading state
 
     const [isMobile, setIsMobile] = useState(true);
+    const [totalStamps, setTotalStamps] = useState(userData.totalStamps); // Track total stamps
 
 
-    // chceck if user on mobile
+    // Check if user is on mobile
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
+            setIsMobile(window.innerWidth <= 768);
         };
 
-        handleResize(); // Set initial value
+        handleResize();
         window.addEventListener("resize", handleResize);
 
         return () => {
@@ -39,7 +40,7 @@ export default function Passport() {
     }, []);
 
 
-    //getting all events
+    // Fetching all events
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -53,20 +54,38 @@ export default function Passport() {
         fetchEvents();
     }, []);
 
-    //getting all stamps that user has collected
+    // Fetching all stamps the user has collected
     useEffect(() => {
         const fetchStamps = async () => {
             if (events.length > 0 && userData.eventList?.length > 0) {
                 const stamps = userData.eventList.map(eventId => events.find(event => (event as any)._id === eventId));
                 setUserStamps(stamps);
             }
-            setLoading(false); // Set loading to false once the data is fetched
+            setLoading(false);
         };
 
         fetchStamps();
     }, [events, userData.eventList]);
 
-    // generate PassportPage components based on number of userStamps
+    // Update total stamps when a new event is attended
+    useEffect(() => {
+        const fetchUpdatedStamps = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/user/get-user-stamps`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                });
+                setTotalStamps(response.data.totalStamps);
+            } catch (error) {
+                console.error("Error fetching updated stamp count:", error);
+            }
+        };
+
+        fetchUpdatedStamps(); // Fetch the updated stamp count when Passport loads
+    }, []);
+
+    // Generate PassportPage components based on the number of user stamps
     function generatePassportPages(): PageComponent[] {
         const pages: PageComponent[] = [];
         const pageSize = 4;
@@ -107,24 +126,19 @@ export default function Passport() {
 
     if (loading) {
         return (
-            <div
-            className="background flex flex-col h-screen justify-center items-center"
-            style={{ backgroundColor: "#e1ebff" }}
-        ></div>
+            <div className="background flex flex-col h-screen justify-center items-center" style={{ backgroundColor: "#e1ebff" }}></div>
         );
     }
 
-    if(!isMobile) {
+    if (!isMobile) {
         return <ErrorPage />;
     }
-
-
 
     return (
         <CheckLoggedIn>
             <div {...swipeHandlers} className="background flex flex-col h-screen justify-center items-center ">
                 <HamburgerMenu />
-                <div className=" flex items-start w-88">
+                <div className="flex items-start w-88">
                     <div className="pt-3 text-left flex item-start">
                         <h1 className="text-2xl text-blue-950">
                             <span className="italic">Welcome</span> <span className="font-semibold">{userData.firstName}</span>
@@ -134,9 +148,9 @@ export default function Passport() {
                 <div>
                     <div className="border-b-4 welcome-line w-88 mb-1 mt-3"></div>
                     <div className="text-center text-blue-950">
-                        <span className="text-4xl font-semibold">{userData.totalStamps}</span>{" "}
+                        <span className="text-4xl font-semibold">{totalStamps}</span>{" "}
                         <span className="text-xl">
-                            {userData.totalStamps === 1 ? "Stamp Collected" : "Stamps Collected"}
+                            {totalStamps === 1 ? "Stamp Collected" : "Stamps Collected"}
                         </span>
                     </div>
                     <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
