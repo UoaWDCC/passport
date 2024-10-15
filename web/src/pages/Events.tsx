@@ -6,6 +6,7 @@ import HamburgerMenu from "@components/HamburgerMenuAdmin";
 import SearchBar from "@components/SearchBar";
 import ErrorPage from "@pages/MobileErrorPage";
 import CheckLoggedInAdmin from "@components/CheckLoggedInAdmin";
+import Spinner from "@components/spinner";
 
 interface Event {
   _id: string;
@@ -125,39 +126,53 @@ export default function Events() {
                 <div className="column">Edit/Delete</div>
               </div>
 
-              {events.length ? (
-                <ul className="event-list">
-                  {displayedEvents.map((event: Event) => (
-                    <li key={event._id} className="event-item">
-                      <div className="column">{event.eventName}</div>
-                      <div className="column">
-                        <img src={event.QRcode} alt="" className="w-20 mx-auto" />
-                      </div>
-                      <div className="column">
-                        <img
-                          src={event.stamp64}
-                          alt=""
-                          className="w-20 mx-auto"
-                        />
-                      </div>
-                      <div className="column">{event.eventVenue}</div>
-                      <div className="column">{event.eventDescription}</div>
-                      <div className="column">
-                        {event.status ? <p>Active</p> : <p>Inactive</p>}
-                      </div>
-                      <div className="column">{event.totalAttended}</div>
-                      <div className="column">
-                        <button>Edit</button>
-                        <button>Delete</button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <h1>Loading</h1>
-              )}
-            </>
-          )}
+            {events.length ? (
+              <ul className="event-list">
+                {displayedEvents.map((event: Event) => (
+                  <li key={event._id} className="event-item">
+                    <div className="column">{event.eventName}</div>
+                    <div className="column">
+                      <img src={event.QRcode} alt="" className="w-20 mx-auto" />
+                    </div>
+                    <div className="column">
+                      <img
+                        src={event.stamp64}
+                        alt=""
+                        className="w-20 mx-auto"
+                      />
+                    </div>
+                    <div className="column">{event.eventVenue}</div>
+                    <div className="column">{event.eventDescription}</div>
+                    <div className="column">
+                      {event.status ? <p>Active</p> : <p>Inactive</p>}
+                    </div>
+                    <div className="column">{event.totalAttended}</div>
+                    <div className="column">
+                      <button>Edit</button>
+                      <button>Delete</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Spinner />
+            )}
+          </>
+        )}
+
+        {/* <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          {eventsToShow < (searchQuery ? filteredEvents.length : events.length) && (
+            <button className="load-more-button" onClick={loadMoreEvents}>
+              LOAD MORE
+            </button>
+          )} */}
 
           <div
             style={{
