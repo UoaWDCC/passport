@@ -6,3 +6,6 @@ In recent years, WDCC’s marketing team has always been wondering how they can 
 2. npm install --global yarn 
 3. yarn add vite --dev
 4. yarn run dev
+
+# Documentation
+See [wiki](https://github.com/UoaWDCC/passport/wiki)

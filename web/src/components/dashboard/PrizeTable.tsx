@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
+import "../../styles/component styles/prizetable.css"
 
 type PrizeData = {
     _id: string;
@@ -98,14 +99,15 @@ function PrizeTable() {
     ];
 
     return (
-        <div style={{ width: "75%" }}>
+        <div className="dashboard-container-prize">
+            <div className="dashboard-prize">
             <DataTable
-                title="Prizes"
                 columns={columns}
                 data={prizeData.filter((prize) => !prize.redeemed)}
                 pagination
                 highlightOnHover
             />
+        </div>
         </div>
     );
 }
