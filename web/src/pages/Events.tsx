@@ -5,6 +5,7 @@ import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
 import SearchBar from "@components/SearchBar";
 import ErrorPage from "@pages/MobileErrorPage";
+import Spinner from "@components/spinner";
 
 interface Event {
   _id: string;
@@ -152,7 +153,7 @@ export default function Events() {
                 ))}
               </ul>
             ) : (
-              <h1>Loading</h1>
+              <Spinner />
             )}
           </>
         )}
