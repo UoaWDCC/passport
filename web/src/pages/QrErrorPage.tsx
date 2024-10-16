@@ -70,7 +70,8 @@ const QRErrorPage: React.FC = () => {
         setIsLoading(false)
       }
     } else {
-      navigate("/sign-in");
+      const eventId = location.pathname.split("/").pop();
+      navigate("/sign-in/" + eventId);
     }
   }, [eventId, navigate]);
 
