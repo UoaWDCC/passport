@@ -3,15 +3,20 @@ import axios from "axios";
 import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
+import SearchBar from "@components/SearchBar";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "@components/DeleteModal";
 import ErrorPage from "@pages/MobileErrorPage";
+import CheckLoggedInAdmin from "@components/CheckLoggedInAdmin";
+import Spinner from "@components/spinner";
 
 interface Event {
   _id: string;
   eventName: string;
   QRcode: string;
   stamp64: string;
+  eventVenue: string;
+  eventDescription: string;
   status: boolean;
   totalAttended: number;
 }
@@ -21,8 +26,13 @@ export default function Events() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [eventsToShow, setEventsToShow] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [noMatches, setNoMatches] = useState(false);
+  const [displayedEvents, setDisplayedEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Check if mobile
   // Check if mobile
   useEffect(() => {
     const handleResize = () => {
@@ -77,9 +87,36 @@ export default function Events() {
       );
       const combinedEvents = inactiveEvents.concat(activeEvents).reverse();
       setEvents(combinedEvents);
+      setDisplayedEvents(combinedEvents.slice(0, eventsToShow));
     } catch (error) {
       console.error("Error fetching events:", error);
     }
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    if (query) {
+      const filtered = events.filter((event) =>
+        event.eventName.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredEvents(filtered);
+      setDisplayedEvents(filtered.slice(0, eventsToShow));
+      setNoMatches(filtered.length === 0);
+    } else {
+      setFilteredEvents([]);
+      setDisplayedEvents(events.slice(0, eventsToShow));
+      setNoMatches(false);
+    }
+  };
+
+  const loadMoreEvents = () => {
+    const moreEvents = searchQuery
+      ? filteredEvents.slice(0, eventsToShow + 10)
+      : events.slice(0, eventsToShow + 10);
+    setEventsToShow(eventsToShow + 10);
+    setDisplayedEvents(moreEvents);
   };
 
   if (isMobile) {
@@ -87,44 +124,59 @@ export default function Events() {
   }
 
   return (
-    <div className="text-gray-800">
-      <HamburgerMenu />
-      <img src={logo} alt="Logo" className="logo" />
-      <h1 className="title">Event Dashboard</h1>
+    <CheckLoggedInAdmin>
+      <div className="text-gray-800">
+        <HamburgerMenu />
+        <img src={logo} alt="Logo" className="logo" />
+        <h1 className="title">Event Dashboard</h1>
 
-      <div className="dashboard">
-        <a href="/form" className="create-event-button">
-          Create new event
-        </a>
-        <div className="dashboard-header">
-          <div className="column">Name</div>
-          <div className="column">QR Code</div>
-          <div className="column">Stamp Image</div>
-          <div className="column">Status</div>
-          <div className="column"># of People Attended</div>
-          <div className="column">Edit/Delete</div>
-        </div>
-        {events ? (
-          <ul className="event-list">
-            {events.slice(0, eventsToShow).map((event: Event) => (
-              <li key={event._id} className="event-item">
-                <div className="column">{event.eventName}</div>
-                <div className="column">
-                  <img src={event.QRcode} alt="" className="w-20 mx-auto" />
-                </div>
+        <div className="dashboard">
+          <a href="/form" className="create-event-button">
+            Create new event
+          </a>
 
-                <div className="column">
-                  <img src={event.stamp64} alt="" className="w-20 mx-auto" />
-                </div>
+          <SearchBar
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            noMatches={noMatches}
+          />
 
-                <div className="column">
-                  {event.status ? <p>Active</p> : <p>Inactive</p>}
-                </div>
+          {!noMatches && (
+            <>
+              <div className="dashboard-header">
+                <div className="column">Name</div>
+                <div className="column">QR Code</div>
+                <div className="column">Stamp Image</div>
+                <div className="column">Venue</div>
+                <div className="column">Description</div>
+                <div className="column">Status</div>
+                <div className="column"># of People Attended</div>
+                <div className="column">Edit/Delete</div>
+              </div>
 
-                <div className="column">{event.totalAttended}</div>
-
-                <div className="column">
-                  <button
+            {events.length ? (
+              <ul className="event-list">
+                {displayedEvents.map((event: Event) => (
+                  <li key={event._id} className="event-item">
+                    <div className="column">{event.eventName}</div>
+                    <div className="column">
+                      <img src={event.QRcode} alt="" className="w-20 mx-auto" />
+                    </div>
+                    <div className="column">
+                      <img
+                        src={event.stamp64}
+                        alt=""
+                        className="w-20 mx-auto"
+                      />
+                    </div>
+                    <div className="column">{event.eventVenue}</div>
+                    <div className="column">{event.eventDescription}</div>
+                    <div className="column">
+                      {event.status ? <p>Active</p> : <p>Inactive</p>}
+                    </div>
+                    <div className="column">{event.totalAttended}</div>
+                    <div className="column">
+                      <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => {
                       navigate(`/form/${event._id}`);
@@ -132,7 +184,7 @@ export default function Events() {
                   >
                     Edit
                   </button>
-                  <button
+                      <button
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => {
                       console.log(event._id)
@@ -142,38 +194,52 @@ export default function Events() {
                   >
                     Delete
                   </button>
-                  <DeleteModal
+                      <DeleteModal
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     onConfirm={() =>{
                       handleDelete()}}
                   />
                 </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <h1>Loading</h1>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Spinner />
+            )}
+          </>
         )}
-      </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
-        }}
-      >
-        {eventsToShow < events.length && (
-          <button
-            className="load-more-button"
-            onClick={() => setEventsToShow(10 + eventsToShow)}
+        {/* <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          {eventsToShow < (searchQuery ? filteredEvents.length : events.length) && (
+            <button className="load-more-button" onClick={loadMoreEvents}>
+              LOAD MORE
+            </button>
+          )} */}
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
           >
-            LOAD MORE
-          </button>
-        )}
+            {eventsToShow < (searchQuery ? filteredEvents.length : events.length) && (
+              <button className="load-more-button" onClick={loadMoreEvents}>
+                LOAD MORE
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </CheckLoggedInAdmin>
   );
 }

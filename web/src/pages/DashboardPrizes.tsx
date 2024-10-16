@@ -4,6 +4,7 @@ import HamburgerMenu from "@components/HamburgerMenuAdmin";
 import "../styles/page styles/event.css"
 import logo from "../assets/primary_logo.svg";
 import ErrorPage from "@pages/MobileErrorPage";
+import CheckLoggedInAdmin from "@components/CheckLoggedInAdmin";
 
 
 function DashboardPrizes() {
@@ -28,19 +29,21 @@ function DashboardPrizes() {
     return <ErrorPage />;
   }
     return (
-        <div>
-            <HamburgerMenu />
+        <CheckLoggedInAdmin>
             <div>
-                <h1 className="title">Prize Dashboard</h1>
-                <img src={logo} alt="Logo" className="logo" />
+                <HamburgerMenu />
+                <div>
+                    <h1 className="title">Prize Dashboard</h1>
+                    <img src={logo} alt="Logo" className="logo" />
+                </div>
+                <div
+                    id="prize-table-div"
+                    style={{ display: "flex", justifyContent: "center" }}
+                >
+                    <PrizeTable />
+                </div>
             </div>
-            <div
-                id="prize-table-div"
-                style={{ display: "flex", justifyContent: "center" }}
-            >
-                <PrizeTable />
-            </div>
-        </div>
+        </CheckLoggedInAdmin>
     );
 }
 

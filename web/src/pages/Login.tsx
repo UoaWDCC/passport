@@ -10,20 +10,21 @@ interface UserData {
     email: string;
     accessToken: string;
     UserUPI: string;
+    isAdmin: boolean; // Now required
 }
 
-// Navigate user to correct page
+// Navigate user to the correct page
 const NavigateUser = (currentPage: string, navigate: Function) => {
-    const prevLocation = localStorage.getItem('prevLocation');
+    const prevLocation = localStorage.getItem("prevLocation");
     if (prevLocation) {
-        localStorage.removeItem('prevLocation');
-        navigate(prevLocation); // Takes them back to previous location if they've been logged out
+        localStorage.removeItem("prevLocation");
+        navigate(prevLocation); // Takes them back to the previous location if they've been logged out
     } else if (currentPage === "/dashboard" || currentPage === "/dashboard/") {
-        navigate('/dashboard/events');
+        navigate("/dashboard/events");
     } else {
-        navigate('/passport');
+        navigate("/passport");
     }
-}
+};
 
 // New user to MongoDB
 const postUserData = async (data: UserData) => {
@@ -36,15 +37,16 @@ const postUserData = async (data: UserData) => {
             email: data.email,
             accessToken: data.accessToken,
             upi: data.UserUPI,
+            isAdmin: data.isAdmin, // Ensure isAdmin is passed correctly when creating a new user
         }),
     })
-        .then((response) => {
-            console.log("New User added!!");
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    .then((response) => {
+        console.log("New User added!!");
+        console.log(response);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 // Updating User in MongoDB
@@ -61,6 +63,7 @@ const updateUserData = async (data: UserData) => {
                     email: data.email,
                     accessToken: data.accessToken,
                     upi: data.UserUPI,
+                    isAdmin: data.isAdmin, // Update isAdmin flag as well
                 }),
             }
         );
@@ -75,7 +78,7 @@ const updateUserData = async (data: UserData) => {
     }
 };
 
-// Passes UPI to WDCC member checker API
+// Check user in WDCC member checker API
 const checkUser = async (upi: string): Promise<string | undefined> => {
     try {
         const response = await fetch(
@@ -98,51 +101,74 @@ const checkUser = async (upi: string): Promise<string | undefined> => {
     }
 };
 
-const handleResponse = async (response: Response, userInfo: AxiosResponse, tokenResponse:TokenResponse, userUPI:string, eventId:string|undefined, currentPage:string, navigate:NavigateFunction) => {
+const handleResponse = async (
+    response: Response, 
+    userInfo: AxiosResponse, 
+    tokenResponse: TokenResponse, 
+    userUPI: string, 
+    eventId: string | undefined, 
+    currentPage: string, 
+    navigate: NavigateFunction
+) => {
     try {
-        const userData = {
+        const userData: UserData = {
             family_name: userInfo.data.family_name,
             given_name: userInfo.data.given_name,
             email: userInfo.data.email,
             accessToken: tokenResponse.access_token,
             UserUPI: userUPI,
+            isAdmin: false, // Default to false; will be updated later based on the database response
         };
-        
+
         if (response.status === 200) {
+            // Fetch user data and update admin status
+            const fetchedData = await response.json();
+            userData.isAdmin = fetchedData.isAdmin; // Capture admin status
+
             console.log("Updating User Data");
             await updateUserData(userData);
+
+            // If the user is not an admin and tries to access the dashboard, redirect them
+            if (!userData.isAdmin && currentPage.startsWith("/dashboard")) {
+                console.log("User is not an admin, redirecting to not-an-admin");
+                navigate("/dashboard/not-an-admin");
+                return;  // Exit early to prevent further navigation
+            }
         } else {
-            console.log("Posting User Data");
+            console.log("Posting new User Data");
             await postUserData(userData);
         }
 
-        console.log("success");
         localStorage.setItem("accessToken", tokenResponse.access_token);
 
-        if (eventId !== "sign-in" && eventId !== undefined && eventId !== "dashboard") {
+        // After admin check, handle event status
+        if (eventId && eventId !== "dashboard" && eventId !== "sign-in") {
             const eventStatus = await checkEventStatus(eventId);
+            console.log("Event ID:", eventId);
+            console.log("Event status:", eventStatus);
             if (eventStatus.status) {
                 await updateStampValues(tokenResponse.access_token);
-                navigate("/qr-error/" + eventId);
+                navigate("/qr-success/" + eventId); // Redirect to success page for events
             } else {
-                navigate("/qr-error/" + eventId);
+                navigate("/qr-error/" + eventId); // Redirect to error page for events
                 return;
             }
         }
+        else if (eventId === "dashboard" || eventId === "sign-in") {
+            await updateStampValues(tokenResponse.access_token);
+        }
+        // Finally, handle normal page navigation for admins or non-event users
         NavigateUser(currentPage, navigate);
     } catch (error) {
-        console.log(error);
+        console.log("Error during user handling:", error);
         if (eventId) {
-            navigate("/qr-error/" + eventId);
+            navigate("/qr-error/" + eventId); // Error case for events
         }
     }
 };
 
-// Passes UPI to WDCC member checker API
-const useGoogleSignIn = (
-    currentPage: string,
-    setLoading: (loading: boolean) => void
-) => {
+// Google Sign-In handler
+const useGoogleSignIn = (currentPage: string, setLoading: (loading: boolean) => void) => {
     const navigate = useNavigate();
 
     const handleSignIn = useGoogleLogin({
@@ -161,8 +187,10 @@ const useGoogleSignIn = (
                 // Extracting user UPI
                 const userUPI: string = userInfo.data.email.split("@")[0];
                 localStorage.setItem("userUpi", userUPI);
-                // Passing userUPI to member checker
+
+                // Passing user UPI to member checker
                 const text = await checkUser(userUPI);
+
                 // Checking if email is in domain and user is in WDCC
                 const eventId = location.pathname.split('/')[1];
 
@@ -170,7 +198,7 @@ const useGoogleSignIn = (
                     userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
                     text === "value found in column"
                 ) {
-                    console.log("YOU'RE IN WDCC!!");
+                    console.log("User is in WDCC!");
                     const getUserData = async () => {
                         try {
                             const response = await fetch(
@@ -199,7 +227,6 @@ const useGoogleSignIn = (
         onError: (error) => {
             console.log("Login failed:", error);
         },
-        // Assuming implicit flow as default; no need to specify unless changing
     });
 
     return handleSignIn;

@@ -59,16 +59,18 @@ async function run() {
     // Define routes after successful connection
     const Api: any = Router();
 
-    Api.post(
-      "/event",
-      upload.single("file"),
-      async (req: Request, res: Response) => {
-        const eventName = req.body.eventName;
-        const startDate = req.body.startDate;
-        const endDate = req.body.endDate;
-        const utcOffset = parseInt(req.body.utcOffset, 10); // UTC offset in minutes
-        const file = req.file as any;
-        let fileLink = "";
+        Api.post(
+            "/event",
+            upload.single("file"),
+            async (req: Request, res: Response) => {
+                const eventName = req.body.eventName;
+                const startDate = req.body.startDate;
+                const endDate = req.body.endDate;
+                const eventVenue = req.body.eventVenue;
+                const eventDescription = req.body.eventDescription;
+                const utcOffset = parseInt(req.body.utcOffset, 10); // UTC offset in minutes
+                const file = req.file as any;
+                let fileLink = "";
 
         if (file && file.location) {
           fileLink = file.location;
@@ -83,13 +85,15 @@ async function run() {
           return new Date(localDate.getTime() - offset * 60000);
         };
 
-        const event = {
-          eventName: eventName,
-          stamp64: fileLink,
-          startDate: convertToUTC(startDate, utcOffset),
-          endDate: convertToUTC(endDate, utcOffset),
-          totalAttended: 0,
-        };
+                const event = {
+                    eventName: eventName,
+                    stamp64: fileLink,
+                    startDate: convertToUTC(startDate, utcOffset),
+                    endDate: convertToUTC(endDate, utcOffset),
+                    eventVenue: eventVenue,
+                    eventDescription: eventDescription,
+                    totalAttended: 0,
+                };
 
         try {
           const database = client.db("WDCC_Passport");

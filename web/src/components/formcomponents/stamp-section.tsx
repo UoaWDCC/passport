@@ -148,6 +148,7 @@ function StampSection({
             type="file"
             onChange={changeImageInEditMode}
           />
+          
           <img 
             className="w-[250px] h-[250px] self-center" 
             id="stampImage"

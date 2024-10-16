@@ -2,7 +2,6 @@ import WDCCLogo from "../assets/WDCC_Logo.svg";
 import { useNavigate } from "react-router";
 import styles from "../styles/page styles/Landing-Page.module.css";
 import axios from "axios";
-import updateStampValues from "@components/GetTotalStamps";
 import checkEventStatus from "@components/event-valid";
 
 export const HomePage = () => {
@@ -20,7 +19,6 @@ export const HomePage = () => {
             const eventStatus = await checkEventStatus(eventId)
             console.log(eventStatus);
             if (eventStatus.status) {
-              await updateStampValues(accessToken);
               navigate("/qr-error/" + eventId);
             } else {
               navigate("/qr-error/" + eventId);

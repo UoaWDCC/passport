@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import FormLogo from "../components/formcomponents/form-logo"
 import QRCodeForm from "../components/formcomponents/qr-code-form"
 import "../styles/page styles/form.css"
+import CheckLoggedInAdmin from "../components/CheckLoggedInAdmin";
 
 function Form() {
   const [event, setEvent] = useState<string>("")
@@ -13,14 +14,18 @@ function Form() {
       setEvent(id);
     }
   }, [event]);
-  return (
-    <div className="form-outer background-form">
-      <div className="form-inner">
-        <FormLogo />
-        <QRCodeForm id={event} />
-      </div>
-    </div>
-  )
+
+    return (
+        <CheckLoggedInAdmin>
+            <div className='form-outer background-form'>
+                <div className='form-inner'>
+                    <FormLogo />
+                    <QRCodeForm eventId={event} />
+                </div>
+            </div>
+        </CheckLoggedInAdmin>
+    )
+  
 }
 
 export default Form

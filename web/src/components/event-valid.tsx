@@ -1,7 +1,7 @@
 const checkEventStatus = async (eventId: string) => {
     try {
         const response = await fetch(
-            `${import.meta.env.VITE_SERVER_URL}/api/check-event-status/${eventId}`,
+            `${import.meta.env.VITE_SERVER_URL}/api/event/check-event-status/${eventId}`,
             {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },

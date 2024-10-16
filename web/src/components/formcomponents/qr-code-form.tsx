@@ -3,31 +3,49 @@ import StampSection from "./stamp-section";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-function QRCodeForm() {
-  const { eventId } = useParams();
+interface QRCodeFormProps {
+  eventId: string;  // Example prop
+}
+
+// function QRCodeForm() {
+//   const { eventId } = useParams();
+//   const [eventName, setEventName] = useState("");
+//     const [eventVenue, setEventVenue] = useState("");
+//     const [eventDescription, setEventDescription] = useState("");
+//   const [startDateTime, setStartDateTime] = useState("");
+//   const [endDateTime, setEndDateTime] = useState("");
+//   // const [validStartDate, setValidStartDate] = useState("");
+//   // const [validEndDate, setValidEndDate] = useState("");
+//   // const [image64, setImage64] = useState("");
+//   const [validSubmit, setValidSubmit] = useState("no");
+//   const [_, setImageName] = useState("");
+//   const [imageFile, setImageFile] = useState<File | null>(null);
+//   const [isEditMode, setIsEditMode] = useState(false);
+//   const [stamp64, setStamp64] = useState("");
+//   const navigate = useNavigate();
+
+const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
   const [eventName, setEventName] = useState("");
+  const [eventVenue, setEventVenue] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
   const [startDateTime, setStartDateTime] = useState("");
   const [endDateTime, setEndDateTime] = useState("");
-  // const [validStartDate, setValidStartDate] = useState("");
-  // const [validEndDate, setValidEndDate] = useState("");
-  // const [image64, setImage64] = useState("");
   const [validSubmit, setValidSubmit] = useState("no");
-  const [_, setImageName] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [stamp64, setStamp64] = useState("");
-
+  const [_, setImageName] = useState("");
   const navigate = useNavigate();
 
   // Fetch event details when editing
   useEffect(() => {
     if (eventId) {
       setIsEditMode(true);
-      fetchEventDetails();
+      fetchEventDetails(eventId);
     }
   }, [eventId]);
 
-  const fetchEventDetails = async () => {
+  const fetchEventDetails = async (eventId: string) => {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/api/event/get-single-event/${eventId}`
@@ -108,6 +126,8 @@ function QRCodeForm() {
       formData.append("startDate", startDate.toISOString());
       formData.append("endDate", endDate.toISOString());
       formData.append("utcOffset", utcOffset.toString());
+      formData.append("eventVenue", eventVenue);
+      formData.append("eventDescription", eventDescription);
       formData.append("file", imageFile);
 
       if (isEditMode) {
@@ -244,6 +264,34 @@ function QRCodeForm() {
           onChange={(e) => checkValidEndDate(e.target.value)}
         />
       </div>
+
+                <div className="input-section">
+                    <label className="input-label" htmlFor="event-name">
+                        Venue Details
+                    </label>
+                    <input
+                        className="event-inputs"
+                        id="event-venue"
+                        type="text"
+                        placeholder="e.g. OGGB 206-213"
+                        value={eventVenue}
+                        onChange={(e) => setEventVenue(e.target.value)}
+                    />
+                </div>
+
+                <div className="input-section">
+                    <label className="input-label" htmlFor="event-name">
+                        Event Description
+                    </label>
+                    <input
+                        className="event-inputs"
+                        id="event-description"
+                        type="text"
+                        placeholder="e.g. A fun day"
+                        value={eventDescription}
+                        onChange={(e) => setEventDescription(e.target.value)}
+                    />
+                </div>
 
       <div className="mt-5">
         <StampSection

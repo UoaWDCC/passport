@@ -208,5 +208,92 @@ eventsRoute.post("/attend-event", async (req: Request, res: Response) => {
     }
 });
 
+//route to get upcoming event
+eventsRoute.get('/next-upcoming-event', async (req: Request, res: Response) => {
+    try {
+        // Get today's date (with time set to 00:00:00 for consistent date comparison)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Find the next event with startDate greater than or equal to today
+        const nextEvent = await Events.findOne({ startDate: { $gte: today } })
+            .sort({ startDate: 1 }) 
+            .exec();
+
+        // If no upcoming events found, return an appropriate response
+        if (!nextEvent) {
+            return res.status(404).json({ message: 'No upcoming events found' });
+        }
+
+        // Return the next upcoming event
+        res.json({ message: 'Next upcoming event', event: nextEvent });
+    } catch (error) {
+        console.error('Error retrieving next upcoming event:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+eventsRoute.put('/edit-event', upload.single('file'), async (req: Request, res: Response) => {
+    const eventId = req.body.eventId;
+    const eventName = req.body.eventName;
+    const startDate = req.body.startDate;
+    const endDate = req.body.endDate;
+    const file = req.file as any;
+    let fileLink;
+
+    try {
+        const existingEvent = await Events.findById(eventId);
+        if (!existingEvent) {
+            return res.status(404).json({ error: "Event not found" });
+        }
+
+        if (file && file.location) {
+            fileLink = file.location;
+        } else {
+            fileLink = existingEvent.stamp64;
+        }
+
+        const updatedEvent = {
+            "eventName": eventName,
+            "stamp64": fileLink,
+            "startDate": new Date(startDate),
+            "endDate": new Date(endDate),
+            "totalAttended": existingEvent.totalAttended 
+        };
+        const result = await Events.findOneAndUpdate(
+            { _id: eventId },
+            { $set: updatedEvent },
+            { new: true, upsert: true, runValidators: true }
+        );
+
+        res.json({ message: 'Event updated successfully', event: result });
+    } catch (error) {
+        console.error('Error updating event:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+eventsRoute.delete("/delete-event/:eventId", async(req:Request, res: Response) =>{
+    const eventId = req.params.eventId;
+    console.log(eventId)
+
+    try {
+        // Find the event by ID and delete it
+        const deletedEvent = await Events.findByIdAndDelete(eventId);
+
+        // If event not found, return 404
+        if (!deletedEvent) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        // Return success message
+        res.json({ message: 'Event deleted successfully', event: deletedEvent });
+    } catch (error) {
+        console.error('Error deleting event:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+
+
 
 export default eventsRoute
