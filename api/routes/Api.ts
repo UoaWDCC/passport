@@ -2,7 +2,6 @@ import { Router } from "express";
 import type { Request, Response } from "express";
 import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 import { config } from "dotenv";
-import { object } from "zod";
 import User from "../db/User";
 import mongoose from "mongoose";
 import axios from "axios";
@@ -16,49 +15,49 @@ config();
 const uri: string = process.env.DATABASE_URL!;
 
 const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    },
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
 });
 
 const s3Client = new S3Client({
-    region: process.env.AWS_REGION!,
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-    },
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
 });
 
 const upload = multer({
-    storage: multerS3({
-        s3: s3Client,
-        bucket: process.env.BUCKET_NAME,
-        acl: "public-read",
-        key: function (
-            req: Request,
-            file: Express.Multer.File,
-            cb: (error: any, key?: string) => void
-        ) {
-            cb(null, file.originalname);
-        },
-    }),
+  storage: multerS3({
+    s3: s3Client,
+    bucket: process.env.BUCKET_NAME,
+    acl: "public-read",
+    key: function (
+      req: Request,
+      file: Express.Multer.File,
+      cb: (error: any, key?: string) => void
+    ) {
+      cb(null, file.originalname);
+    },
+  }),
 });
 
 //Mongo connected routes
 async function run() {
-    try {
-        // Connect the client to the server (optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log(
-            "Pinged your deployment. You successfully connected to MongoDB!"
-        );
+  try {
+    // Connect the client to the server (optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
 
-        // Define routes after successful connection
-        const Api: any = Router();
+    // Define routes after successful connection
+    const Api: any = Router();
 
         Api.post(
             "/event",
@@ -73,18 +72,18 @@ async function run() {
                 const file = req.file as any;
                 let fileLink = "";
 
-                if (file && file.location) {
-                    fileLink = file.location;
-                } else {
-                    return res
-                        .status(400)
-                        .json({ error: "S3 bucket image upload failed" });
-                }
+        if (file && file.location) {
+          fileLink = file.location;
+        } else {
+          return res
+            .status(400)
+            .json({ error: "S3 bucket image upload failed" });
+        }
 
-                const convertToUTC = (dateStr: string, offset: number) => {
-                    const localDate = new Date(dateStr);
-                    return new Date(localDate.getTime() - offset * 60000);
-                };
+        const convertToUTC = (dateStr: string, offset: number) => {
+          const localDate = new Date(dateStr);
+          return new Date(localDate.getTime() - offset * 60000);
+        };
 
                 const event = {
                     eventName: eventName,
@@ -96,189 +95,238 @@ async function run() {
                     totalAttended: 0,
                 };
 
-                try {
-                    const database = client.db("WDCC_Passport");
-                    const eventCollection = database.collection("Events");
+        try {
+          const database = client.db("WDCC_Passport");
+          const eventCollection = database.collection("Events");
 
-                    // Inserting event into DB
-                    const result = await eventCollection.insertOne(event);
-                    console.log(
-                        `A document was inserted with id ${result.insertedId}`
-                    );
+          // Inserting event into DB
+          const result = await eventCollection.insertOne(event);
+          console.log(`A document was inserted with id ${result.insertedId}`);
 
-                    const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport-staging.fly.dev/qr-error/${result.insertedId}&amp;size=100x100`;
-                    const result2 = await eventCollection.updateOne(
-                        { _id: new ObjectId(result.insertedId) },
-                        { $set: { QRcode: qrCode } }
-                    );
-                } catch (error) {
-                    console.log(error);
-                    return res
-                        .status(500)
-                        .send("Error inserting document into MongoDB.");
-                }
+          const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport-staging.fly.dev/qr-error/${result.insertedId}&amp;size=100x100`;
+          const result2 = await eventCollection.updateOne(
+            { _id: new ObjectId(result.insertedId) },
+            { $set: { QRcode: qrCode } }
+          );
+        } catch (error) {
+          console.log(error);
+          return res.status(500).send("Error inserting document into MongoDB.");
+        }
 
-                return res.status(200).send(`Event successfully created`);
-            }
-        );
+        return res.status(200).send(`Event successfully created`);
+      }
+    );
 
-        //Route to get all events created
-        Api.get("/get-all-events", async (req: Request, res: Response) => {
-            try {
-                const database = client.db("WDCC_Passport");
-                const eventCollection = database.collection("Events");
+    //Route to get all events created
+    Api.get("/get-all-events", async (req: Request, res: Response) => {
+      try {
+        const database = client.db("WDCC_Passport");
+        const eventCollection = database.collection("Events");
 
-                const cursor = await eventCollection.find({});
-                const result = await cursor.toArray();
-                // console.log(result);
-                for (let i = 0; i < result.length; i++) {
-                    if (
-                        new Date() >= result[i].startDate &&
-                        new Date() <= result[i].endDate
-                    ) {
-                        result[i]["status"] = true;
-                    } else {
-                        result[i]["status"] = false;
-                    }
-                }
+        const cursor = await eventCollection.find({});
+        const result = await cursor.toArray();
+        // console.log(result)
+        for (let i = 0; i < result.length; i++) {
+          if (
+            new Date() >= result[i].startDate &&
+            new Date() <= result[i].endDate
+          ) {
+            result[i]["status"] = true;
+          } else {
+            result[i]["status"] = false;
+          }
+        }
 
-                res.status(200).send(result);
-            } catch (error) {
-                console.log(error);
-                return res.status(500).send("Issue with database");
-            }
+        res.status(200).send(result);
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send("Issue with database");
+      }
+    });
+
+    //check event validity
+    Api.get(
+      "/check-event-status/:eventId",
+      async (req: Request, res: Response) => {
+        try {
+          const database = client.db("WDCC_Passport");
+          const eventCollection = database.collection("Events");
+
+          const eventId = req.params.id;
+          const result = await eventCollection.findOne({
+            _id: new ObjectId(eventId),
+          });
+          console.log(result);
+          // const cursor = await eventCollection.find({})
+          // const result = await cursor.toArray()
+
+          res.status(200).send(result);
+        } catch (error) {
+          console.log(error);
+          return res.status(500).send("Issue with database");
+        }
+      }
+    );
+
+    // Route to delete an event by ID
+    Api.delete("/delete-event/:id", async (req: Request, res: Response) => {
+      try {
+        const eventId = req.params.id;
+
+        // Check if the ID is valid
+        if (!ObjectId.isValid(eventId)) {
+          return res.status(400).json({ message: "Invalid event ID" });
+        }
+
+        const database = client.db("WDCC_Passport");
+        const eventCollection = database.collection("Events");
+
+        // Attempt to delete the event
+        const result = await eventCollection.deleteOne({
+          _id: new ObjectId(eventId),
         });
 
-        //Route to get single evenet
-        Api.get(
-            "/get-single-event/:eventId",
-            async (req: Request, res: Response) => {
-                try {
-                    const eventId = req.params.eventId;
-                    const database = client.db("WDCC_Passport");
-                    const eventCollection = database.collection("Events");
-                    const objectId = new ObjectId(eventId);
-                    const result = await eventCollection.findOne({
-                        _id: objectId,
-                    });
+        if (result.deletedCount === 0) {
+          return res.status(404).json({ message: "Event not found" });
+        }
 
-                    console.log(result);
+        res.status(200).json({ message: "Event successfully deleted" });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).send("Error deleting event from MongoDB.");
+      }
+    });
 
-                    return res.status(200).json(result);
-                } catch (error) {
-                    return res.status(400).json({ "error message": error });
-                }
-            }
-        );
+    //Route to get single evenet
+    Api.get(
+      "/get-single-event/:eventId",
+      async (req: Request, res: Response) => {
+        try {
+          const eventId = req.params.eventId;
+          const database = client.db("WDCC_Passport");
+          const eventCollection = database.collection("Events");
+          const objectId = new ObjectId(eventId);
+          const result = await eventCollection.findOne({
+            _id: objectId,
+          });
 
-        //check event validity
-        Api.get(
-            "/check-event-status/:eventId",
-            async (req: Request, res: Response) => {
-                try {
-                    const eventId = req.params.eventId;
-                    if (mongoose.Types.ObjectId.isValid(eventId)) {
-                        const objectId = new ObjectId(eventId);
-                        const database = client.db("WDCC_Passport");
-                        const eventCollection = database.collection("Events");
+          console.log(result);
 
-                        const result = await eventCollection.findOne({
-                            _id: objectId,
-                        });
-                        if (
-                            result?.startDate &&
-                            result?.endDate &&
-                            new Date() >= result.startDate &&
-                            new Date() <= result.endDate
-                        ) {
-                            result["status"] = true;
-                            console.log("sdfsdfsdfsdfsdf", result);
-                            res.status(200).json({
-                                result: result,
-                                error: "none",
-                            });
-                        } else if (result?.startDate && result?.endDate) {
-                            result["status"] = false;
-                            res.status(200).json({
-                                result: result,
-                                error: "event not active",
-                            });
-                        } else {
-                            return res.status(200).json({
-                                result: {
-                                    error: "event not found",
-                                    status: false,
-                                },
-                            });
-                        }
-                    } else {
-                        return res.status(200).json({
-                            result: { status: false },
-                            error: "event not found",
-                        });
-                    }
-                } catch (error) {
-                    console.log(error);
-                    return res.status(500).json("Issue with database");
-                }
-            }
-        );
+          return res.status(200).json(result);
+        } catch (error) {
+          return res.status(400).json({ "error message": error });
+        }
+      }
+    );
 
-        Api.post("/attend-event", async (req: Request, res: Response) => {
-            const eventId = req.body.eventId;
-            const user = req.body.upi;
-            console.log(eventId);
+    //check event validity
+    Api.get(
+      "/check-event-status/:eventId",
+      async (req: Request, res: Response) => {
+        try {
+          const eventId = req.params.eventId;
+          if (mongoose.Types.ObjectId.isValid(eventId)) {
+            const objectId = new ObjectId(eventId);
+            const database = client.db("WDCC_Passport");
+            const eventCollection = database.collection("Events");
 
-            if (mongoose.Types.ObjectId.isValid(eventId)) {
-                const database = client.db("WDCC_Passport");
-                const eventCollection = database.collection("Events");
-                const objectId = new ObjectId(eventId);
-
-                console.log(user);
-
-                const resUser = await User.updateOne(
-                    { upi: user },
-                    {
-                        $addToSet: { eventList: eventId },
-                    }
-                ).exec();
-
-                if (resUser.modifiedCount == 1) {
-                    const eventAddRes = await eventCollection.updateOne(
-                        { _id: objectId },
-                        {
-                            $inc: { totalAttended: 1 },
-                        }
-                    );
-                    return res.status(200).json({
-                        user: user,
-                        eventId: eventId,
-                        added: true,
-                        message: "successfully attended event",
-                    });
-                } else if (resUser.modifiedCount == 0) {
-                    return res.status(200).json({
-                        user: user,
-                        eventId: eventId,
-                        added: false,
-                        message: "Already attended event",
-                    });
-                } else {
-                    return res.status(200).json({
-                        user: user,
-                        eventId: eventId,
-                        added: false,
-                        message: "QR code error",
-                    });
-                }
+            const result = await eventCollection.findOne({
+              _id: objectId,
+            });
+            if (
+              result?.startDate &&
+              result?.endDate &&
+              new Date() >= result.startDate &&
+              new Date() <= result.endDate
+            ) {
+              result["status"] = true;
+              console.log("sdfsdfsdfsdfsdf", result);
+              res.status(200).json({
+                result: result,
+                error: "none",
+              });
+            } else if (result?.startDate && result?.endDate) {
+              result["status"] = false;
+              res.status(200).json({
+                result: result,
+                error: "event not active",
+              });
             } else {
-                return res.json({ added: false, message: "Invalid event Id" });
+              return res.status(200).json({
+                result: {
+                  error: "event not found",
+                  status: false,
+                },
+              });
             }
-        });
+          } else {
+            return res.status(200).json({
+              result: { status: false },
+              error: "event not found",
+            });
+          }
+        } catch (error) {
+          console.log(error);
+          return res.status(500).json("Issue with database");
+        }
+      }
+    );
 
-        return Api;
-    } finally {
-    }
+    Api.post("/attend-event", async (req: Request, res: Response) => {
+      const eventId = req.body.eventId;
+      const user = req.body.upi;
+      console.log(eventId);
+
+      if (mongoose.Types.ObjectId.isValid(eventId)) {
+        const database = client.db("WDCC_Passport");
+        const eventCollection = database.collection("Events");
+        const objectId = new ObjectId(eventId);
+
+        console.log(user);
+
+        const resUser = await User.updateOne(
+          { upi: user },
+          {
+            $addToSet: { eventList: eventId },
+          }
+        ).exec();
+
+        if (resUser.modifiedCount == 1) {
+          const eventAddRes = await eventCollection.updateOne(
+            { _id: objectId },
+            {
+              $inc: { totalAttended: 1 },
+            }
+          );
+          return res.status(200).json({
+            user: user,
+            eventId: eventId,
+            added: true,
+            message: "successfully attended event",
+          });
+        } else if (resUser.modifiedCount == 0) {
+          return res.status(200).json({
+            user: user,
+            eventId: eventId,
+            added: false,
+            message: "Already attended event",
+          });
+        } else {
+          return res.status(200).json({
+            user: user,
+            eventId: eventId,
+            added: false,
+            message: "QR code error",
+          });
+        }
+      } else {
+        return res.json({ added: false, message: "Invalid event Id" });
+      }
+    });
+
+    return Api;
+  } finally {
+  }
 }
 
 export default run().catch(console.error);

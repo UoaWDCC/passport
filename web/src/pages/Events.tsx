@@ -4,6 +4,8 @@ import "../styles/page styles/event.css";
 import logo from "../assets/primary_logo.svg";
 import HamburgerMenu from "@components/HamburgerMenuAdmin";
 import SearchBar from "@components/SearchBar";
+import { useNavigate } from "react-router-dom";
+import DeleteModal from "@components/DeleteModal";
 import ErrorPage from "@pages/MobileErrorPage";
 import CheckLoggedInAdmin from "@components/CheckLoggedInAdmin";
 import Spinner from "@components/spinner";
@@ -21,6 +23,8 @@ interface Event {
 
 export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [eventsToShow, setEventsToShow] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [noMatches, setNoMatches] = useState(false);
@@ -28,6 +32,7 @@ export default function Events() {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Check if mobile
   // Check if mobile
   useEffect(() => {
     const handleResize = () => {
@@ -46,11 +51,34 @@ export default function Events() {
     getEvents();
   }, []);
 
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    console.log("delted entered")
+    if (selectedEventId) {
+      try {
+        // Perform the delete request
+        await axios.delete(
+          `${import.meta.env.VITE_SERVER_URL
+          }/api/event/delete-event/${selectedEventId}`
+        );
+        // Refresh events list
+        getEvents();
+        console.log("Item deleted");
+      } catch (error) {
+        console.error("Error deleting event:", error);
+      }
+      setIsModalOpen(false);
+      setSelectedEventId(null);
+    }
+  };
+
   const getEvents = async () => {
     try {
       const eventsResponse = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`
       );
+      setEvents(eventsResponse.data);
       const activeEvents = eventsResponse.data.filter(
         (event: Event) => event.status
       );
@@ -148,9 +176,31 @@ export default function Events() {
                     </div>
                     <div className="column">{event.totalAttended}</div>
                     <div className="column">
-                      <button>Edit</button>
-                      <button>Delete</button>
-                    </div>
+                      <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => {
+                      navigate(`/form/${event._id}`);
+                    }}
+                  >
+                    Edit
+                  </button>
+                      <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => {
+                      console.log(event._id)
+                      setSelectedEventId(event._id);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    Delete
+                  </button>
+                      <DeleteModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onConfirm={() =>{
+                      handleDelete()}}
+                  />
+                </div>
                   </li>
                 ))}
               </ul>

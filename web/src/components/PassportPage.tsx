@@ -10,6 +10,9 @@ interface PassportPageProps {
 }
 
 export default function PassportPage({ stamps }: PassportPageProps) {
+
+    console.log("asdfoidshoaf", stamps[0])
+
     const [highlightedIndex, setHighlightedIndex] = useState<number | null>(
         null
     );
