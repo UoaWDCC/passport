@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Upload from "../../assets/upload.svg";
 import Bin from "../../assets/bin.svg";
-import { url } from "inspector";
+// import { url } from "inspector";
 
 interface StampSectionProps {
   getImageName: (name: string) => void;
@@ -24,7 +24,7 @@ function StampSection({
   const [fileSize, setFileSize] = useState("");
   const [fileName, setFileName] = useState("");
   const [imageBase64, setBase64String] = useState("");
-  const [stampDisplay, setStampDisplay] = useState(null);
+  const [stampDisplay, setStampDisplay] = useState<string|null>(null);
 
   useEffect(() => {
     console.log(!isEditMode)
@@ -32,14 +32,14 @@ function StampSection({
     getImageName(fileName);
   }, [imageBase64, fileName]);
 
-  const changeImageInEditMode = (e) =>{
+  const changeImageInEditMode = (e:any) =>{
     console.log("chnageImage",e)
     console.log("skeet ", e.target.files)
     setStamp64(e.target.files)
     setStampDisplay(URL.createObjectURL(e.target.files[0]))
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     console.log(e.target.files);
     const files = e.target.files;
     const file = files && files.length > 0 ? files[0] : null;

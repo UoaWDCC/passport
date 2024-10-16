@@ -12,6 +12,7 @@ import ErrorPage from "@pages/DesktopErrorPage.tsx";
 
 type PageComponent = React.ComponentType<any> | (() => ReactElement);
 
+
 export default function Passport() {
     const userData = GetLeaderboardStats();
 
@@ -43,8 +44,11 @@ export default function Passport() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`);
-                setEvents(response.data);
+                await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`)
+                    .then((res) =>{
+                        setEvents(res.data);
+                    })
+                
             } catch (error) {
                 console.error('Error fetching events:', error);
             }
@@ -65,6 +69,7 @@ export default function Passport() {
             if (events.length > 0 && userData.eventList?.length > 0) {
                 const stamps = userData.eventList.map(eventId => events.find(event => (event as any)._id === eventId));
                 setUserStamps(stamps);
+
             }
             setLoading(false); // Set loading to false once the data is fetched
         };
@@ -140,7 +145,7 @@ export default function Passport() {
                 <div>
                     <div className="border-b-4 welcome-line w-88 mb-1 mt-3"></div>
                     <div className="text-center text-blue-950">
-                        <span className="text-4xl font-semibold">{userData.totalStamps}</span>{" "}
+                        <span className="text-4xl font-semibold">{userData.eventList.length}</span>{" "}
                         <span className="text-xl">
                             {userData.totalStamps === 1 ? "Stamp Collected" : "Stamps Collected"}
                         </span>

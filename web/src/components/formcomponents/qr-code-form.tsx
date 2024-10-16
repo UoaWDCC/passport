@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import StampSection from "./stamp-section";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface QRCodeFormProps {
   eventId: string;  // Example prop
