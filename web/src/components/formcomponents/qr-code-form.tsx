@@ -197,8 +197,12 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
     };
 
     return (
-        <div className="qr-code-form">
-            <h1 className="header">QR Code Generator</h1>
+        <div className="qr-code-form mb-16">
+            {isEditMode ? (
+                <h1 className="header">Edit Event</h1>
+            ) : (
+                <h1 className="header">Create Event</h1>
+            )}
             {validSubmit === "error" && (
                 <p className="error-msg">Please fill in the required areas</p>
             )}
@@ -258,7 +262,7 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                 />
             </div>
 
-            <div className="input-section">
+            <div className="input-section mt-4">
                 <label className="input-label" htmlFor="event-name">
                     Venue Details
                 </label>
@@ -272,7 +276,7 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                 />
             </div>
 
-            <div className="input-section">
+            <div className="input-section mt-4">
                 <label className="input-label" htmlFor="event-name">
                     Event Description
                 </label>
@@ -310,13 +314,6 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                         Finish
                     </button>
                 )}
-                <button
-                    onClick={() => {
-                        console.log(stamp64);
-                    }}
-                >
-                    asdf
-                </button>
             </div>
         </div>
     );
