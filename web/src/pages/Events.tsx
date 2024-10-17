@@ -160,11 +160,13 @@ export default function Events() {
                     <li key={event._id} className="event-item">
                       <div className="column">{event.eventName}</div>
                       <div className="column">
-                        <img
-                          src={event.QRcode}
-                          alt=""
-                          className="w-20 mx-auto"
-                        />
+                        <a href={event.QRcode} target="_blank">
+                          <img
+                            src={event.QRcode}
+                            alt=""
+                            className="w-20 mx-auto"
+                          />
+                        </a>
                       </div>
                       <div className="column">
                         <img
