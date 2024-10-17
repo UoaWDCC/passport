@@ -12,9 +12,9 @@ interface Event {
     eventName: string;
     startDate: Date;
     endDate: Date;
-    status?: boolean; // Optional property
-    totalAttended?: number; // Optional property
-    QRcode?: string | null; // Optional property with null type
+    status?: boolean;
+    totalAttended?: number;
+    QRcode?: string | null;
 }
 
 const eventsRoute = Router();
@@ -42,7 +42,54 @@ const upload = multer({
     }),
 });
 
-//route to get upcoming event
+// GET ------------------------------------------------------
+// get single event
+eventsRoute.get(
+    "/get-single-event/:eventId",
+    async (req: Request, res: Response) => {
+        const eventId = req.params.eventId;
+        try {
+            if (!mongoose.Types.ObjectId.isValid(eventId)) {
+                return res
+                    .status(400)
+                    .json({ "error message": "Invalid event ID" });
+            }
+            const result = await Events.findById(eventId).exec();
+            // console.log(result);
+            return res.status(200).json(result);
+        } catch (error) {
+            return res.status(400).json({ "error message": error });
+        }
+    }
+);
+
+// get all events
+eventsRoute.get("/get-all-events", async (req: Request, res: Response) => {
+    try {
+        const events: Event[] = await Events.find({}).lean();
+        const result = events ?? [];
+        // console.log(result);
+        if (result && result.length > 0) {
+            result.forEach((event) => {
+                if (
+                    new Date() >= event.startDate &&
+                    new Date() <= event.endDate
+                ) {
+                    event.status = true;
+                } else {
+                    event.status = false;
+                    // console.log(event)
+                }
+            });
+        }
+        res.status(200).send(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("Issue with database");
+    }
+});
+
+// get upcoming event
 eventsRoute.get("/next-upcoming-event", async (req: Request, res: Response) => {
     try {
         // Get today's date (with time set to 00:00:00 for consistent date comparison)
@@ -69,156 +116,7 @@ eventsRoute.get("/next-upcoming-event", async (req: Request, res: Response) => {
     }
 });
 
-eventsRoute.put(
-    "/edit-event",
-    upload.single("file"),
-    async (req: Request, res: Response) => {
-        const eventId = req.body.eventId;
-        const eventName = req.body.eventName;
-        const startDate = req.body.startDate;
-        const endDate = req.body.endDate;
-        const eventVenue = req.body.eventVenue;
-        const eventDescription = req.body.eventDescription;
-        const file = req.file as any;
-        let fileLink;
-
-        try {
-            const existingEvent = await Events.findById(eventId);
-            if (!existingEvent) {
-                return res.status(404).json({ error: "Event not found" });
-            }
-
-            if (file && file.location) {
-                fileLink = file.location;
-            } else {
-                fileLink = existingEvent.stamp64;
-            }
-
-            const updatedEvent = {
-                eventName: eventName,
-                stamp64: fileLink,
-                startDate: new Date(startDate),
-                endDate: new Date(endDate),
-                eventVenue: eventVenue,
-                eventDescription: eventDescription,
-                totalAttended: existingEvent.totalAttended,
-            };
-            const result = await Events.findOneAndUpdate(
-                { _id: eventId },
-                { $set: updatedEvent },
-                { new: true, upsert: true, runValidators: true }
-            );
-
-            res.json({ message: "Event updated successfully", event: result });
-        } catch (error) {
-            console.error("Error updating event:", error);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-    }
-);
-
-//Route to add post information to mongo
-eventsRoute.post(
-    "/add-event",
-    upload.single("file"),
-    async (req: Request, res: Response) => {
-        const eventName = req.body.eventName;
-        const startDate = req.body.startDate;
-        const endDate = req.body.endDate;
-        const eventVenue = req.body.eventVenue;
-        const eventDescription = req.body.eventDescription;
-        const file = req.file as any;
-        let fileLink = "";
-
-        if (file && file.location) {
-            fileLink = file.location;
-        } else {
-            return res
-                .status(400)
-                .json({ error: "S3 bucket image upload failed" });
-        }
-
-        const body = req.body;
-        console.log(body);
-
-        const event = {
-            eventName: eventName,
-            stamp64: fileLink,
-            startDate: new Date(startDate),
-            endDate: new Date(endDate),
-            eventVenue: eventVenue,
-            eventDescription: eventDescription,
-            totalAttended: 0,
-        };
-        try {
-            // Inserting event into DB
-            const newEvent = new Events(event);
-            const result = await newEvent.save();
-            console.log(`A document was inserted with id ${result._id}`);
-
-            // Creating the QR code
-            const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport-staging.fly.dev/qr-error/${result._id}&amp;size=100x100`;
-
-            // Updating the event with the QR code
-            result.QRcode = qrCode;
-            const result2 = await result.save();
-        } catch (error) {
-            console.log(error);
-            return res
-                .status(500)
-                .send("Error inserting document into MongoDB.");
-        }
-
-        return res.status(200).send(`Event successfully created`);
-    }
-);
-
-//Route to get all events created
-eventsRoute.get("/get-all-events", async (req: Request, res: Response) => {
-    try {
-        const events: Event[] = await Events.find({}).lean();
-        const result = events ?? [];
-        // console.log(result);
-        if (result && result.length > 0) {
-            result.forEach((event) => {
-                if (
-                    new Date() >= event.startDate &&
-                    new Date() <= event.endDate
-                ) {
-                    event.status = true;
-                } else {
-                    event.status = false;
-                    // console.log(event)
-                }
-            });
-        }
-        res.status(200).send(result);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send("Issue with database");
-    }
-});
-
-//Route to get single evenet
-eventsRoute.get(
-    "/get-single-event/:eventId",
-    async (req: Request, res: Response) => {
-        const eventId = req.params.eventId;
-        try {
-            if (!mongoose.Types.ObjectId.isValid(eventId)) {
-                return res
-                    .status(400)
-                    .json({ "error message": "Invalid event ID" });
-            }
-            const result = await Events.findById(eventId).exec();
-            // console.log(result);
-            return res.status(200).json(result);
-        } catch (error) {
-            return res.status(400).json({ "error message": error });
-        }
-    }
-);
-
+// check an event's status
 eventsRoute.get(
     "/check-event-status/:eventId",
     async (req: Request, res: Response) => {
@@ -280,6 +178,64 @@ eventsRoute.get(
     }
 );
 
+// POST ------------------------------------------------------
+// create an event
+eventsRoute.post(
+    "/add-event",
+    upload.single("file"),
+    async (req: Request, res: Response) => {
+        const eventName = req.body.eventName;
+        const startDate = req.body.startDate;
+        const endDate = req.body.endDate;
+        const eventVenue = req.body.eventVenue;
+        const eventDescription = req.body.eventDescription;
+        const file = req.file as any;
+        let fileLink = "";
+
+        if (file && file.location) {
+            fileLink = file.location;
+        } else {
+            return res
+                .status(400)
+                .json({ error: "S3 bucket image upload failed" });
+        }
+
+        const body = req.body;
+        console.log(body);
+
+        const event = {
+            eventName: eventName,
+            stamp64: fileLink,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            eventVenue: eventVenue,
+            eventDescription: eventDescription,
+            totalAttended: 0,
+        };
+        try {
+            // Inserting event into DB
+            const newEvent = new Events(event);
+            const result = await newEvent.save();
+            console.log(`A document was inserted with id ${result._id}`);
+
+            // Creating the QR code
+            const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport-staging.fly.dev/qr-error/${result._id}&amp;size=100x100`;
+
+            // Updating the event with the QR code
+            result.QRcode = qrCode;
+            const result2 = await result.save();
+        } catch (error) {
+            console.log(error);
+            return res
+                .status(500)
+                .send("Error inserting document into MongoDB.");
+        }
+
+        return res.status(200).send(`Event successfully created`);
+    }
+);
+
+// add user to as attended an event
 eventsRoute.post("/attend-event", async (req: Request, res: Response) => {
     const eventId = req.body.eventId;
     const user = req.body.upi;
@@ -326,33 +282,58 @@ eventsRoute.post("/attend-event", async (req: Request, res: Response) => {
     }
 });
 
-//route to get upcoming event
-eventsRoute.get("/next-upcoming-event", async (req: Request, res: Response) => {
-    try {
-        // Get today's date (with time set to 00:00:00 for consistent date comparison)
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+// PUT ------------------------------------------------------
+// update an event
+eventsRoute.put(
+    "/edit-event",
+    upload.single("file"),
+    async (req: Request, res: Response) => {
+        const eventId = req.body.eventId;
+        const eventName = req.body.eventName;
+        const startDate = req.body.startDate;
+        const endDate = req.body.endDate;
+        const eventVenue = req.body.eventVenue;
+        const eventDescription = req.body.eventDescription;
+        const file = req.file as any;
+        let fileLink;
 
-        // Find the next event with startDate greater than or equal to today
-        const nextEvent = await Events.findOne({ startDate: { $gte: today } })
-            .sort({ startDate: 1 })
-            .exec();
+        try {
+            const existingEvent = await Events.findById(eventId);
+            if (!existingEvent) {
+                return res.status(404).json({ error: "Event not found" });
+            }
 
-        // If no upcoming events found, return an appropriate response
-        if (!nextEvent) {
-            return res
-                .status(404)
-                .json({ message: "No upcoming events found" });
+            if (file && file.location) {
+                fileLink = file.location;
+            } else {
+                fileLink = existingEvent.stamp64;
+            }
+
+            const updatedEvent = {
+                eventName: eventName,
+                stamp64: fileLink,
+                startDate: new Date(startDate),
+                endDate: new Date(endDate),
+                eventVenue: eventVenue,
+                eventDescription: eventDescription,
+                totalAttended: existingEvent.totalAttended,
+            };
+            const result = await Events.findOneAndUpdate(
+                { _id: eventId },
+                { $set: updatedEvent },
+                { new: true, upsert: true, runValidators: true }
+            );
+
+            res.json({ message: "Event updated successfully", event: result });
+        } catch (error) {
+            console.error("Error updating event:", error);
+            res.status(500).json({ error: "Internal Server Error" });
         }
-
-        // Return the next upcoming event
-        res.json({ message: "Next upcoming event", event: nextEvent });
-    } catch (error) {
-        console.error("Error retrieving next upcoming event:", error);
-        res.status(500).json({ error: "Internal Server Error" });
     }
-});
+);
 
+// DELETE ------------------------------------------------------
+// delete an event
 eventsRoute.delete(
     "/delete-event/:eventId",
     async (req: Request, res: Response) => {
