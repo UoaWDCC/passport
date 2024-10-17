@@ -38,7 +38,7 @@ userRoutes.post("/check-user", async (req: Request, res: Response) => {
         const response = await User.findOne({
             accessToken: accessToken,
         }).exec();
-        console.log(response);
+        // console.log(response);
         if (response != undefined && response !== null) {
             res.status(200).json({ user: response, success: true });
         } else {
