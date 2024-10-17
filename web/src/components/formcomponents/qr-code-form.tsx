@@ -44,6 +44,8 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
             setEventName(event.eventName);
             setStartDateTime(event.startDate.split("Z")[0]); // Assuming these fields exist in your API response
             setEndDateTime(event.endDate.split("Z")[0]);
+            setEventVenue(event.eventVenue);
+            setEventDescription(event.eventDescription);
             setStamp64(event.stamp64);
             // Handle image if necessary
             // setImageFile(); - You would need to handle the image data here if needed
@@ -70,7 +72,10 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
             formData.append("startDate", startDate.toISOString());
             formData.append("endDate", endDate.toISOString());
             formData.append("utcOffset", utcOffset.toString());
+            formData.append("eventVenue", eventVenue);
+            formData.append("eventDescription", eventDescription);
             formData.append("file", stamp64[0]);
+            console.log(eventVenue);
 
             try {
                 await axios
@@ -310,7 +315,7 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                     </button>
                 ) : (
                     <button className="qr-submit-button" onClick={submitForm}>
-                        Finish
+                        Create!
                     </button>
                 )}
                 {validSubmit === "error" && (

@@ -77,6 +77,8 @@ eventsRoute.put(
         const eventName = req.body.eventName;
         const startDate = req.body.startDate;
         const endDate = req.body.endDate;
+        const eventVenue = req.body.eventVenue;
+        const eventDescription = req.body.eventDescription;
         const file = req.file as any;
         let fileLink;
 
@@ -97,6 +99,8 @@ eventsRoute.put(
                 stamp64: fileLink,
                 startDate: new Date(startDate),
                 endDate: new Date(endDate),
+                eventVenue: eventVenue,
+                eventDescription: eventDescription,
                 totalAttended: existingEvent.totalAttended,
             };
             const result = await Events.findOneAndUpdate(
@@ -121,6 +125,8 @@ eventsRoute.post(
         const eventName = req.body.eventName;
         const startDate = req.body.startDate;
         const endDate = req.body.endDate;
+        const eventVenue = req.body.eventVenue;
+        const eventDescription = req.body.eventDescription;
         const file = req.file as any;
         let fileLink = "";
 
@@ -140,6 +146,8 @@ eventsRoute.post(
             stamp64: fileLink,
             startDate: new Date(startDate),
             endDate: new Date(endDate),
+            eventVenue: eventVenue,
+            eventDescription: eventDescription,
             totalAttended: 0,
         };
         try {
@@ -203,7 +211,7 @@ eventsRoute.get(
                     .json({ "error message": "Invalid event ID" });
             }
             const result = await Events.findById(eventId).exec();
-            console.log(result);
+            // console.log(result);
             return res.status(200).json(result);
         } catch (error) {
             return res.status(400).json({ "error message": error });
@@ -344,50 +352,6 @@ eventsRoute.get("/next-upcoming-event", async (req: Request, res: Response) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
-eventsRoute.put(
-    "/edit-event",
-    upload.single("file"),
-    async (req: Request, res: Response) => {
-        const eventId = req.body.eventId;
-        const eventName = req.body.eventName;
-        const startDate = req.body.startDate;
-        const endDate = req.body.endDate;
-        const file = req.file as any;
-        let fileLink;
-
-        try {
-            const existingEvent = await Events.findById(eventId);
-            if (!existingEvent) {
-                return res.status(404).json({ error: "Event not found" });
-            }
-
-            if (file && file.location) {
-                fileLink = file.location;
-            } else {
-                fileLink = existingEvent.stamp64;
-            }
-
-            const updatedEvent = {
-                eventName: eventName,
-                stamp64: fileLink,
-                startDate: new Date(startDate),
-                endDate: new Date(endDate),
-                totalAttended: existingEvent.totalAttended,
-            };
-            const result = await Events.findOneAndUpdate(
-                { _id: eventId },
-                { $set: updatedEvent },
-                { new: true, upsert: true, runValidators: true }
-            );
-
-            res.json({ message: "Event updated successfully", event: result });
-        } catch (error) {
-            console.error("Error updating event:", error);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-    }
-);
 
 eventsRoute.delete(
     "/delete-event/:eventId",
