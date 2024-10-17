@@ -1,7 +1,6 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
 import Events from "../db/Events";
-import { MongoClient } from "mongodb";
 import { S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 import mongoose from "mongoose";

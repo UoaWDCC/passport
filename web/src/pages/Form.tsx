@@ -18,7 +18,7 @@ function Form() {
     }, [event]);
 
     const close = () => {
-        navigate(-1); // Navigate back to the previous page
+        navigate(-1);
     };
 
     return (

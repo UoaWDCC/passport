@@ -33,7 +33,6 @@ export default function Events() {
   const [isMobile, setIsMobile] = useState(false);
 
   // Check if mobile
-  // Check if mobile
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
@@ -54,12 +53,13 @@ export default function Events() {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    console.log("delted entered")
+    console.log("delted entered");
     if (selectedEventId) {
       try {
         // Perform the delete request
         await axios.delete(
-          `${import.meta.env.VITE_SERVER_URL
+          `${
+            import.meta.env.VITE_SERVER_URL
           }/api/event/delete-event/${selectedEventId}`
         );
         // Refresh events list
@@ -154,75 +154,66 @@ export default function Events() {
                 <div className="column">Edit/Delete</div>
               </div>
 
-            {events.length ? (
-              <ul className="event-list">
-                {displayedEvents.map((event: Event) => (
-                  <li key={event._id} className="event-item">
-                    <div className="column">{event.eventName}</div>
-                    <div className="column">
-                      <img src={event.QRcode} alt="" className="w-20 mx-auto" />
-                    </div>
-                    <div className="column">
-                      <img
-                        src={event.stamp64}
-                        alt=""
-                        className="w-20 mx-auto"
-                      />
-                    </div>
-                    <div className="column">{event.eventVenue}</div>
-                    <div className="column">{event.eventDescription}</div>
-                    <div className="column">
-                      {event.status ? <p>Active</p> : <p>Inactive</p>}
-                    </div>
-                    <div className="column">{event.totalAttended}</div>
-                    <div className="column">
-                      <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => {
-                      navigate(`/form/${event._id}`);
-                    }}
-                  >
-                    Edit
-                  </button>
-                      <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => {
-                      console.log(event._id)
-                      setSelectedEventId(event._id);
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    Delete
-                  </button>
-                      <DeleteModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    onConfirm={() =>{
-                      handleDelete()}}
-                  />
-                </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <Spinner />
-            )}
-          </>
-        )}
-
-        {/* <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          {eventsToShow < (searchQuery ? filteredEvents.length : events.length) && (
-            <button className="load-more-button" onClick={loadMoreEvents}>
-              LOAD MORE
-            </button>
-          )} */}
+              {events.length ? (
+                <ul className="event-list">
+                  {displayedEvents.map((event: Event) => (
+                    <li key={event._id} className="event-item">
+                      <div className="column">{event.eventName}</div>
+                      <div className="column">
+                        <img
+                          src={event.QRcode}
+                          alt=""
+                          className="w-20 mx-auto"
+                        />
+                      </div>
+                      <div className="column">
+                        <img
+                          src={event.stamp64}
+                          alt=""
+                          className="w-20 mx-auto"
+                        />
+                      </div>
+                      <div className="column">{event.eventVenue}</div>
+                      <div className="column">{event.eventDescription}</div>
+                      <div className="column">
+                        {event.status ? <p>Active</p> : <p>Inactive</p>}
+                      </div>
+                      <div className="column">{event.totalAttended}</div>
+                      <div className="column">
+                        <button
+                          className="bg-blue-500  hover:bg-blue-700 w-3/5 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => {
+                            navigate(`/form/${event._id}`);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="bg-red-500 hover:bg-red-700 mt-1 w-3/5 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => {
+                            console.log(event._id);
+                            setSelectedEventId(event._id);
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          Delete
+                        </button>
+                        <DeleteModal
+                          isOpen={isModalOpen}
+                          onClose={() => setIsModalOpen(false)}
+                          onConfirm={() => {
+                            handleDelete();
+                          }}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Spinner />
+              )}
+            </>
+          )}
 
           <div
             style={{
@@ -232,7 +223,8 @@ export default function Events() {
               height: "100%",
             }}
           >
-            {eventsToShow < (searchQuery ? filteredEvents.length : events.length) && (
+            {eventsToShow <
+              (searchQuery ? filteredEvents.length : events.length) && (
               <button className="load-more-button" onClick={loadMoreEvents}>
                 LOAD MORE
               </button>
