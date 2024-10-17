@@ -128,11 +128,11 @@ export default function Events() {
       <div className="text-gray-800">
         <HamburgerMenu />
         <img src={logo} alt="Logo" className="logo" />
-        <h1 className="title">Event Dashboard</h1>
+        <h1 className="title">Events Dashboard</h1>
 
         <div className="dashboard">
-          <a href="/form" className="create-event-button">
-            Create new event
+          <a href="/form" className="create-event-button font-semibold">
+            Create New Event
           </a>
 
           <SearchBar
@@ -225,7 +225,10 @@ export default function Events() {
           >
             {eventsToShow <
               (searchQuery ? filteredEvents.length : events.length) && (
-              <button className="load-more-button" onClick={loadMoreEvents}>
+              <button
+                className="load-more-button font-semibold"
+                onClick={loadMoreEvents}
+              >
                 LOAD MORE
               </button>
             )}
