@@ -57,9 +57,10 @@
 
 .error-msg {
     text-align: center;
+    font-size: 14px;
     color: red;
-    margin-top: -19px;
-    margin-bottom: 0px;
+    margin-top: 2px;
+    /* margin-bottom: 6px; */
 }
 
 .error-msg-dates {
@@ -71,14 +72,15 @@
 input {
     text-align: left;
     border: none;
-    color: #9b9b9b;
+    color: #000226;
     font-size: 1em;
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
+    color-scheme: dark;
 }
 
 input:focus {
-    color: #9b9b9b;
+    color: #000226;
     outline: none;
 }
 .input-section {
@@ -93,6 +95,7 @@ input:focus {
     flex-direction: row;
     justify-content: space-between;
     font-style: italic;
+    font-size: 0.9em;
     color: #03045e;
 }
 
@@ -101,8 +104,8 @@ input:focus {
 }
 
 .event-inputs {
-    background-color: #d9d9d9;
-    color: #9b9b9b;
+    background-color: #e1e1e1;
+    color: #03045e;
     border-radius: 12px;
     padding: 5.673% 6% 6% 6%;
     height: 10px;

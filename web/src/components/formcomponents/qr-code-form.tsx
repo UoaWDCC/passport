@@ -152,9 +152,9 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
         }
     };
 
-    useEffect(() => {
-        console.log("test", imageFile);
-    }, [imageFile]);
+    // useEffect(() => {
+    //     console.log("test", imageFile);
+    // }, [imageFile]);
 
     const getImageFile = (img: File | null) => {
         setImageFile(img);
@@ -203,22 +203,6 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
             ) : (
                 <h1 className="header">Create Event</h1>
             )}
-            {validSubmit === "error" && (
-                <p className="error-msg">Please fill in the required areas</p>
-            )}
-            {validSubmit === "errorEndBeforeStart" && (
-                <p className="error-msg">
-                    End time cannot be before start time
-                </p>
-            )}
-            {validSubmit === "errorStartDate" && (
-                <p className="error-msg mt-2">
-                    Start date must be today or later
-                </p>
-            )}
-            {validSubmit === "errorEndDate" && (
-                <p className="error-msg">End date must be after start date</p>
-            )}
 
             <div className="input-section">
                 <label className="input-label mt-5" htmlFor="event-name">
@@ -247,6 +231,11 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                         checkValidStartDate(e.target.value);
                     }}
                 />
+                {validSubmit === "errorStartDate" && (
+                    <p className="error-msg">
+                        Start date must be today's date or later
+                    </p>
+                )}
             </div>
 
             <div className="input-section mt-5">
@@ -260,6 +249,16 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                     value={endDateTime}
                     onChange={(e) => checkValidEndDate(e.target.value)}
                 />
+                {validSubmit === "errorEndDate" && (
+                    <p className="error-msg">
+                        End date must be after start date
+                    </p>
+                )}
+                {validSubmit === "errorEndBeforeStart" && (
+                    <p className="error-msg">
+                        End time cannot be before start time
+                    </p>
+                )}
             </div>
 
             <div className="input-section mt-4">
@@ -301,7 +300,7 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                 />
             </div>
 
-            <div className="submit-button-container mt-5 flex justify-center">
+            <div className="submit-button-container mt-5 flex flex-col justify-center">
                 {isEditMode ? (
                     <button
                         className="qr-submit-button"
@@ -313,6 +312,9 @@ const QRCodeForm: React.FC<QRCodeFormProps> = ({ eventId }) => {
                     <button className="qr-submit-button" onClick={submitForm}>
                         Finish
                     </button>
+                )}
+                {validSubmit === "error" && (
+                    <p className="error-msg">Please fill in all fields</p>
                 )}
             </div>
         </div>
