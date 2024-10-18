@@ -147,16 +147,16 @@ const handleResponse = async (
     if (eventId && eventId !== "dashboard" && eventId !== "sign-in") {
       const eventStatus = await checkEventStatus(eventId);
       console.log("Event ID:", eventId);
-      console.log("Event status:", eventStatus);
+      //   console.log("Event status:", eventStatus);
       if (eventStatus.status) {
         await updateStampValues(tokenResponse.access_token);
-        navigate("/qr-success/" + eventId); // Redirect to success page for events
+        // navigate("/qr-success/" + eventId); // Redirect to success page for events
       } else {
         navigate("/qr-error/" + eventId); // Redirect to error page for events
         return;
       }
       try {
-        const response = await axios.post(
+        await axios.post(
           `${import.meta.env.VITE_SERVER_URL}/api/event/attend-event`,
           {
             eventId: eventId,
@@ -164,7 +164,7 @@ const handleResponse = async (
           }
         );
 
-        console.log("Response:", response.data);
+        // console.log("Response:", response.data);
       } catch (error) {
         console.error("Error attending event:", error);
       }
