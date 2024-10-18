@@ -2,174 +2,177 @@
 
 /* Overarching */
 .form-outer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: "Montserrat", sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: #ffffff;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light dark;
+    color: #ffffff;
 }
 
 .form-inner {
-  width: 35%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .background-form {
-  min-height: 100vh;
-  background-color: #03045e;
+    min-height: 100vh;
+    background-color: #03045e;
 }
 
 .form-logo {
-  width: 150px;
+    width: 150px;
 }
 /* QR Code Form */
 
 .qr-code-form {
-  display: flex;
-  flex-direction: column;
-  width: 330px;
-  background-color: #e1ebff;
-  border-radius: 30px;
-  padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    background-color: #e1ebff;
+    border-radius: 30px;
+    padding: 20px;
 }
 
 .form-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 .header {
-  text-align: center;
-  font-size: 2em;
-  color: #03045e;
-  margin-top: 2%;
+    text-align: center;
+    font-size: 2em;
+    color: #03045e;
+    margin-top: 2%;
 }
 
 .error-msg {
-  text-align: center;
-  color: red;
-  margin-top: -19px;
-  margin-bottom: 0px;
+    text-align: center;
+    font-size: 14px;
+    color: red;
+    margin-top: 2px;
+    /* margin-bottom: 6px; */
 }
 
 .error-msg-dates {
-  color: red;
-  margin-top: 0px;
-  margin-bottom: -5px;
+    color: red;
+    margin-top: 0px;
+    margin-bottom: -5px;
 }
 /* Inputs */
 input {
-  text-align: left;
-  border: none;
-  color: #9b9b9b;
-  font-size: 1em;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
+    text-align: left;
+    border: none;
+    color: #000226;
+    font-size: 1em;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color-scheme: dark;
 }
 
 input:focus {
-  color: #9b9b9b;
-  outline: none;
+    color: #000226;
+    outline: none;
 }
 .input-section {
-  display: flex;
-  flex-direction: column;
-  font-size: 1em;
-  width: 300px;
+    display: flex;
+    flex-direction: column;
+    font-size: 1em;
+    width: 300px;
 }
 
 .input-label {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-style: italic;
-  color: #03045e;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-style: italic;
+    font-size: 0.9em;
+    color: #03045e;
 }
 
 #event {
-  width: 90%;
+    width: 90%;
 }
 
 .event-inputs {
-  background-color: #d9d9d9;
-  color: #9b9b9b;
-  border-radius: 12px;
-  padding: 5.673% 6% 6% 6%;
-  height: 10px;
+    background-color: #e1e1e1;
+    color: #03045e;
+    border-radius: 12px;
+    padding: 5.673% 6% 6% 6%;
+    height: 10px;
 }
 
 .event-inputs::placeholder {
-  color: #9b9b9b;
+    color: #9b9b9b;
 }
 
 #stamp {
-  display: none;
+    display: none;
 }
 .visible-stamp {
-  display: flex;
-  align-items: center;
-  background-color: #d9d9d9;
-  border-radius: 12px;
-  padding: 5% 1% 6% 6%;
+    display: flex;
+    align-items: center;
+    background-color: #d9d9d9;
+    border-radius: 12px;
+    padding: 5% 1% 6% 6%;
 }
 .visible-stamp:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 /* Stamp Variable Images And Text */
 .stamp-input-image {
-  width: 8%;
-  margin-right: 4%;
+    width: 8%;
+    margin-right: 4%;
 }
 
 #upload {
-  margin-left: auto;
+    margin-left: auto;
 }
 
 .stamp-input-image:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .stamp-text {
-  padding-top: 1%;
-  color: #9b9b9b;
-  font-size: 1em;
-  font-weight: 500;
-  margin: 0;
+    padding-top: 1%;
+    color: #9b9b9b;
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
 }
 
 #file-size {
-  margin-left: auto;
-  margin-right: 2%;
+    margin-left: auto;
+    margin-right: 2%;
 }
 
 /* Submit */
 .submit-link {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .qr-submit-button {
-  padding: 8px 60px;
-  border-radius: 10px;
-  background-color: #03045e;
-  font-size: 1.5em;
-  border: none;
-  cursor: pointer;
+    padding: 8px 60px;
+    border-radius: 10px;
+    background-color: #03045e;
+    font-size: 1.5em;
+    border: none;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 480px) {
-  .qr-code-form {
-    width: 360px;
-  }
+    .qr-code-form {
+        width: 360px;
+    }
 }
