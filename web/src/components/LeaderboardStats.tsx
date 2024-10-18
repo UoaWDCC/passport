@@ -24,13 +24,13 @@ export default function LeaderboardStats() {
         const response = await fetch(
           `${import.meta.env.VITE_SERVER_URL}/api/user/` + upi
         );
-        
+
         if (!response.ok) {
           throw new Error("Error retrieving data");
         }
         const result = await response.json();
         setData(result);
-        console.log(result)
+        // console.log(result)
       } catch (error) {
         console.error("Error fetching data");
       }
