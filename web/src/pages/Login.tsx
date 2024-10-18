@@ -150,31 +150,21 @@ const handleResponse = async (
       //   console.log("Event status:", eventStatus);
       if (eventStatus.status) {
         await updateStampValues(tokenResponse.access_token);
-        // navigate("/qr-success/" + eventId); // Redirect to success page for events
+        navigate("/qr-error/" + eventId); // Redirect to success page for events
       } else {
         navigate("/qr-error/" + eventId); // Redirect to error page for events
         return;
-      }
-      try {
-        await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/event/attend-event`,
-          {
-            eventId: eventId,
-            upi: userUPI,
-          }
-        );
-
-        // console.log("Response:", response.data);
-      } catch (error) {
-        console.error("Error attending event:", error);
       }
     } else if (eventId === "dashboard" || eventId === "sign-in") {
       await updateStampValues(tokenResponse.access_token);
     }
     console.log("exited event check");
 
+    console.log(eventId);
     // Finally, handle normal page navigation for admins or non-event users
-    NavigateUser(currentPage, navigate);
+    if (eventId == null) {
+      NavigateUser(currentPage, navigate);
+    }
   } catch (error) {
     console.log("Error during user handling:", error);
     if (eventId) {
