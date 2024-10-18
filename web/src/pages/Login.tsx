@@ -140,22 +140,16 @@ const handleResponse = async (
         }
 
         localStorage.setItem("accessToken", tokenResponse.access_token);
-
         // After admin check, handle event status
         if (eventId && eventId !== "dashboard" && eventId !== "sign-in") {
             const eventStatus = await checkEventStatus(eventId);
             console.log("Event ID:", eventId);
-            console.log("Event status:", eventStatus);
-            if (eventStatus.status) {
-                await updateStampValues(tokenResponse.access_token);
-                navigate("/qr-success/" + eventId); // Redirect to success page for events
-            } else {
+            console.log("Event status:", eventStatus.status);
                 navigate("/qr-error/" + eventId); // Redirect to error page for events
                 return;
-            }
         }
-        else if (eventId === "dashboard" || eventId === "sign-in") {
-            await updateStampValues(tokenResponse.access_token);
+        else if (eventId === "sign-in") {
+            navigate("/passport");
         }
         // Finally, handle normal page navigation for admins or non-event users
         NavigateUser(currentPage, navigate);
@@ -193,6 +187,7 @@ const useGoogleSignIn = (currentPage: string, setLoading: (loading: boolean) => 
 
                 // Checking if email is in domain and user is in WDCC
                 const eventId = location.pathname.split('/').pop()
+                console.log("Event ID:", eventId);
 
                 if (
                     userInfo.data.email.endsWith("aucklanduni.ac.nz") &&
