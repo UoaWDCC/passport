@@ -9,21 +9,20 @@ import GetLeaderboardStats from "@components/LeaderboardStats.tsx";
 import axios from "axios";
 import PopUpNotif from "@components/PopUpNotif";
 import ErrorPage from "@pages/DesktopErrorPage.tsx";
+import updateStampValues from "@components/GetTotalStamps";
 
 type PageComponent = React.ComponentType<any> | (() => ReactElement);
-
 
 export default function Passport() {
     const userData = GetLeaderboardStats();
 
     // initialise index and loading state
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [events, setEvents] = useState([])
-    const [userStamps, setUserStamps] = useState<any[]>([])
+    const [events, setEvents] = useState([]);
+    const [userStamps, setUserStamps] = useState<any[]>([]);
     const [loading, setLoading] = useState(true); // Add loading state
     const [isPopUpVisible, setIsPopUpVisible] = useState(true);
     const [isMobile, setIsMobile] = useState(true);
-
 
     // chceck if user on mobile
     useEffect(() => {
@@ -39,18 +38,21 @@ export default function Passport() {
         };
     }, []);
 
-
     //getting all events
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/event/get-all-events`)
-                    .then((res) =>{
+                await axios
+                    .get(
+                        `${
+                            import.meta.env.VITE_SERVER_URL
+                        }/api/event/get-all-events`
+                    )
+                    .then((res) => {
                         setEvents(res.data);
-                    })
-                
+                    });
             } catch (error) {
-                console.error('Error fetching events:', error);
+                console.error("Error fetching events:", error);
             }
         };
 
@@ -61,15 +63,21 @@ export default function Passport() {
             setIsPopUpVisible(false);
         }
 
+        const updateStamps = async () => {
+            await updateStampValues(localStorage.getItem("accessToken"));
+        };
+
+        updateStamps();
     }, []);
 
     //getting all stamps that user has collected
     useEffect(() => {
         const fetchStamps = async () => {
             if (events.length > 0 && userData.eventList?.length > 0) {
-                const stamps = userData.eventList.map(eventId => events.find(event => (event as any)._id === eventId));
+                const stamps = userData.eventList.map((eventId) =>
+                    events.find((event) => (event as any)._id === eventId)
+                );
                 setUserStamps(stamps);
-
             }
             setLoading(false); // Set loading to false once the data is fetched
         };
@@ -129,31 +137,43 @@ export default function Passport() {
         return <ErrorPage />;
     }
 
-
-
     return (
         <CheckLoggedIn>
-            <div {...swipeHandlers} className="background flex flex-col h-screen justify-center items-center ">
+            <div
+                {...swipeHandlers}
+                className="background flex flex-col h-screen justify-center items-center "
+            >
                 <HamburgerMenu />
                 <div className=" flex items-start w-88">
                     <div className="pt-3 text-left flex item-start">
                         <h1 className="text-2xl text-blue-950">
-                            <span className="italic">Welcome</span> <span className="font-semibold">{userData.firstName}</span>
+                            <span className="italic">Welcome</span>{" "}
+                            <span className="font-semibold">
+                                {userData.firstName}
+                            </span>
                         </h1>
                     </div>
                 </div>
                 <div>
                     <div className="border-b-4 welcome-line w-88 mb-1 mt-3"></div>
                     <div className="text-center text-blue-950">
-                        <span className="text-4xl font-semibold">{userData.eventList.length}</span>{" "}
+                        <span className="text-4xl font-semibold">
+                            {userData.eventList.length}
+                        </span>{" "}
                         <span className="text-xl">
-                            {userData.totalStamps === 1 ? "Stamp Collected" : "Stamps Collected"}
+                            {userData.totalStamps === 1
+                                ? "Stamp Collected"
+                                : "Stamps Collected"}
                         </span>
                     </div>
                     <div className="border-b-4 welcome-line w-88 mb-4 mt-1"></div>
                 </div>
                 {isPopUpVisible && <PopUpNotif events={events} />}
-                {typeof CurrentView === "function" ? <CurrentView /> : CurrentView}
+                {typeof CurrentView === "function" ? (
+                    <CurrentView />
+                ) : (
+                    CurrentView
+                )}
                 <p>Page {currentIndex + 1}</p>
             </div>
         </CheckLoggedIn>
