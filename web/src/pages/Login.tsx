@@ -231,7 +231,7 @@ const useGoogleSignIn = (
                 navigate
               );
             } catch (error) {
-              console.log(error);
+              console.log("Error fetching user:", error);
             }
           };
 
