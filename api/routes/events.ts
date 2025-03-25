@@ -218,7 +218,7 @@ eventsRoute.post(
             console.log(`A document was inserted with id ${result._id}`);
 
             // Creating the QR code
-            const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://wdcc-passport-staging.fly.dev/qr-error/${result._id}&amp;size=100x100`;
+            const qrCode = `https://api.qrserver.com/v1/create-qr-code/?data=https://passport.wdcc.co.nz/qr-error/${result._id}&amp;size=100x100`;
 
             // Updating the event with the QR code
             result.QRcode = qrCode;
