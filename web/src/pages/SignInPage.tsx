@@ -60,7 +60,7 @@ const SignInPage: React.FC = () => {
                 <p className={styles.text}>Or</p>
                 <a
                     className={styles.link}
-                    href="https://forms.gle/YX8RAdXGF4rTN3e27"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSf9p1n1GpuuFxXbhx_7iWDQkDqRpxVDAjUOeyyzYeavC6d48A/viewform"
                 >
                     Register Here
                 </a>
