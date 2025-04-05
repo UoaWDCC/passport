@@ -12,7 +12,7 @@ const SignInErrorPage: React.FC = () => {
         <div className={styles.bottomsection}>
             <p className={styles.errorbig}>OOPS!</p>
             <p className={styles.errorsmall}>Looks like you're not registered with WDCC :(</p>
-          <a className={styles2.link} href="https://forms.gle/YX8RAdXGF4rTN3e27">Register Here</a>
+          <a className={styles2.link} href="https://docs.google.com/forms/d/e/1FAIpQLSf9p1n1GpuuFxXbhx_7iWDQkDqRpxVDAjUOeyyzYeavC6d48A/viewform">Register Here</a>
         </div>
       </div>
     );
