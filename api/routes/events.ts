@@ -65,7 +65,7 @@ eventsRoute.get(
 // get all events
 eventsRoute.get("/get-all-events", async (req: Request, res: Response) => {
     try {
-        const events: Event[] = await Events.find({}).lean();
+        const events: Event[] = (await Events.find({}).lean()) as Event[];
         const result = events ?? [];
         // console.log(result);
         if (result && result.length > 0) {
@@ -181,7 +181,7 @@ eventsRoute.get(
 // create an event
 eventsRoute.post(
     "/add-event",
-    upload.single("file"),
+    upload.single("file") as any,
     async (req: Request, res: Response) => {
         const eventName = req.body.eventName;
         const startDate = req.body.startDate;
@@ -285,7 +285,7 @@ eventsRoute.post("/attend-event", async (req: Request, res: Response) => {
 // update an event
 eventsRoute.put(
     "/edit-event",
-    upload.single("file"),
+    upload.single("file") as any,
     async (req: Request, res: Response) => {
         const eventId = req.body.eventId;
         const eventName = req.body.eventName;
