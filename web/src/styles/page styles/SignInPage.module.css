@@ -7,12 +7,12 @@
     height: 100%;
     background-color: #03045e;
     width: 100vw;
-    height: 100vh;
+    height: 100svh;
 
   }
-  
+
   .topsection {
-    background-color: #03045e; 
+    background-color: #03045e;
     color: white;
     display: flex;
     text-align: center;
@@ -20,7 +20,7 @@
     justify-content: center;
     height: 55%;
     flex-direction: column;
-    
+
   }
 
   .h1{
@@ -39,7 +39,7 @@
   }
 
   .bottomsection {
-    background-color: #e1ebff; 
+    background-color: #e1ebff;
     display: flex;
     flex-direction: column;
     align-items: center;

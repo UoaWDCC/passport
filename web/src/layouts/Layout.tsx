@@ -7,7 +7,7 @@ interface LayoutProps {
 
 export default function Layout({ children, className }: LayoutProps) {
   const mergedClassName = twMerge(
-    'w-screen h-screen flex flex-col justify-center items-center bg-base-100',
+    'w-screen h-svh flex flex-col justify-center items-center bg-base-100 overflow-hidden',
     className
   );
   return <div className={mergedClassName}>{children}</div>;

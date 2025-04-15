@@ -36,7 +36,7 @@ export default function Leaderboard() {
 
   return (
     <CheckLoggedIn>
-      <div className="leaderboard-main h-screen flex flex-col items-center justify-center">
+      <div className="leaderboard-main h-svh flex flex-col items-center justify-center">
         <HamburgerMenu />
         <div className="flex items-center space-x-4">
           <ProgressBar height={height} />
