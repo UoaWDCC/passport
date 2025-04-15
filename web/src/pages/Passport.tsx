@@ -144,7 +144,7 @@ export default function Passport() {
                 className="background flex flex-col h-svh justify-center items-center "
             >
                 <HamburgerMenu />
-                <div className=" flex items-start w-88">
+                <div className="flex items-start w-88">
                     <div className="pt-3 text-left flex item-start">
                         <h1 className="text-2xl text-blue-950">
                             <span className="italic">Welcome</span>{" "}

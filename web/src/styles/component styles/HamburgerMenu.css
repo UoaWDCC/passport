@@ -1,13 +1,16 @@
 .hamburger-menu {
-    width: 22em;
-    /* height: 6em; */
-    margin-bottom: 0;
+    width: 90%;
+    height: 6.1em; /* Totally a hack */
     transition: background-color 0.2s ease;
     border-radius: 10px;
 }
 
 .hamburger-menu.open {
     background-color: #03045e;
+}
+
+.hamburger-icon {
+    padding-left: 0.2em;
 }
 
 /* Hamburger Button */
@@ -33,13 +36,13 @@
 }
 
 .open .line:nth-child(3) {
-    transform: rotate(45deg) translate(-6px, -6px);
+    transform: rotate(45deg) translate(-6px, -7px);
 }
 
 /* Menu Items */
 .menu-items.open {
     display: block;
-    padding-left: 2em;
+    padding-left: 1em;
 }
 
 .menu-items a {
