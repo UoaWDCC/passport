@@ -11,7 +11,7 @@ function CongratsPage() {
   const prizes = Math.floor(height/3); // To be updated when it gets calced in Mongo
   return (
     <CheckLoggedIn>
-      <div className="background flex flex-col h-screen justify-center items-center ">
+      <div className="background flex flex-col h-svh justify-center items-center ">
         <div className="pb-30">
           <div className="flex item-start ">
             <img src={congrats_present} className=" mx-auto" />

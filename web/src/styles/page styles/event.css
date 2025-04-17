@@ -2,7 +2,7 @@
 
 body {
   background-color: #e1ebff;
-  min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
   padding: 0;
   height: auto;
@@ -29,8 +29,8 @@ body {
   margin: auto;
   position: relative;
   flex-grow: 1;
-  
-  
+
+
 }
 
 .create-event-button {
@@ -98,8 +98,8 @@ body {
 }
 
 .load-more-button {
-  display: block; 
-  margin: 10px auto; 
+  display: block;
+  margin: 10px auto;
   background-color: #03045e;
   color: white;
   padding: 10px 20px;
@@ -112,7 +112,7 @@ body {
 
 .search-bar {
   margin-bottom: 20px;
-  
+
 }
 
 .search-input {

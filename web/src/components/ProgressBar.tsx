@@ -15,7 +15,7 @@ export default function ProgressBar({ height}: { height: number }) {
             width: "36px", // Adjust this value
             height: `${height * 180}px`, // max: 540px (108 per height unit)
           }}
-        ></div>
+        />
         <img
           src={barLines}
           alt=""

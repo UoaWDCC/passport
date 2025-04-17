@@ -127,7 +127,7 @@ export default function Passport() {
     if (loading) {
         return (
             <div
-                className="background flex flex-col h-screen justify-center items-center"
+                className="background flex flex-col h-svh justify-center items-center"
                 style={{ backgroundColor: "#e1ebff" }}
             ></div>
         );
@@ -141,10 +141,10 @@ export default function Passport() {
         <CheckLoggedIn>
             <div
                 {...swipeHandlers}
-                className="background flex flex-col h-screen justify-center items-center "
+                className="background flex flex-col h-svh justify-center items-center "
             >
                 <HamburgerMenu />
-                <div className=" flex items-start w-88">
+                <div className="flex items-start w-88">
                     <div className="pt-3 text-left flex item-start">
                         <h1 className="text-2xl text-blue-950">
                             <span className="italic">Welcome</span>{" "}

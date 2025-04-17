@@ -5,13 +5,13 @@
     justify-content: center;
     text-align: center;
     padding: 20px;
-    height: 100vh;
-    background-color: #e1ebff; 
+    height: 100svh;
+    background-color: #e1ebff;
 }
 
 .error-title {
     font-size: 48px;
-    color: #0466c8; 
+    color: #0466c8;
     margin-bottom: 10px;
     font-weight: bold;
 }
@@ -19,6 +19,6 @@
 
 .error-message {
     font-size: 18px;
-    color: #3a86ff; 
+    color: #3a86ff;
     margin-bottom: 20px;
 }
